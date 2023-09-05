@@ -12,7 +12,6 @@ export const trailingSlash = 'never'
 export async function load() {
   const client = getClient();
   const groq = `*[_type == "config"]{
-    locations,
     "socials": socials_group{
       name,
       "links": socials_links[]{
@@ -21,7 +20,6 @@ export async function load() {
         "icon": icon.asset->url
       }
     },
-    "borderRadius": border_radius
   }`;
   const data = await client.fetch(groq);
   const configData = data[0] as Config;

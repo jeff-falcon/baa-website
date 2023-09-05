@@ -16,14 +16,6 @@ export interface Credit {
 	credit: string;
 }
 
-export interface MultiHero {
-	_type: 'multi_hero';
-	name: string;
-	title?: string;
-	subtitle?: string;
-	heros: Hero[];
-}
-
 export interface Project {
 	_type: 'project';
 	name: string;
@@ -58,19 +50,49 @@ export interface ProjectGrid {
 	}
 	projects: Project[];
 }
+export interface Artist {
+	_type: 'artist';
+	name: string;
+	nickname: string;
+	slug: string;
+	tags: string[];
+	location: string;
+	bio: InputValue;
+	clients: string;
+	links: ArtistLink[];
+	featured: Project[];
+	portfolio?: Project;
+	projects: Project[];
+}
+
+export interface ArtistLink {
+	title: string;
+	url?: string;
+	username?: string;
+}
+
+export interface ArtistsGrid {
+	_type: 'artists_grid';
+	name: string;
+	artists: Artist[];
+}
 export interface Hero {
 	_type: 'hero';
 	name: string;
 	subtitle?: string;
-	kind?: 'image' | 'video-bg';
-	image_desktop?: CloudinaryImage;
-	image_mobile?: CloudinaryImage;
-	videoBgSrc?: string;
-	videoBgSrcHd?: string;
-	project?: Project;
+	artists: HeroArtist[];
+	scrollInstructions: string;
 }
 
-export type PageComponents = Array<ProjectGrid | LogoGrid | ProjectMedia | TextOnly | ColumnedText | ClientList | Form>
+export interface HeroArtist {
+	name: string;
+	kind?: 'image' | 'video-bg';
+	image?: CloudinaryImage;
+	videoBgSrc?: string;
+	videoBgSrcHd?: string;
+}
+
+export type PageComponents = Array<ArtistsGrid | ColumnedText>
 
 export interface Page {
 	_type: 'page';
@@ -78,9 +100,8 @@ export interface Page {
 	name: string;
 	bgColor?: string,
 	slug: string;
-	footerHasContactForm: boolean;
 	metaDescription?: string;
-	heros?: MultiHero;
+	hero?: Hero;
 	components?: PageComponents;
 }
 
@@ -121,8 +142,6 @@ export interface Location {
 export interface Config {
 	_type: 'config';
 	socials: { name: string, links: Social[] }
-	locations: Location[],
-	borderRadius: number
 }
 
 export interface LogoGrid {

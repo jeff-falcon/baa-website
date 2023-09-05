@@ -26,11 +26,9 @@
 		dispatch('isPlaying', true);
 		startedPlaying = true;
 		wasPlaying = true;
-		console.log('video playing');
 	}
 	function onPaused() {
 		dispatch('isPlaying', false);
-		console.log('video paused');
 	}
 
 	$: if (isIntersecting && !shouldReveal) {
@@ -40,11 +38,9 @@
 	$: if ((isIntersecting || !isIntersecting) && startedPlaying) {
 		if (isIntersecting && wasPlaying) {
 			vjsPlayer?.play();
-			console.log('resume player on intersect', { isIntersecting });
 		} else if (!isIntersecting) {
 			wasPlaying = vjsPlayer?.paused() === false ?? false;
 			vjsPlayer?.pause();
-			console.log('pause player on !intersect', { isIntersecting });
 		}
 	}
 
@@ -68,9 +64,6 @@
 			autoplay: shouldAutoPlay
 		});
 		player.debug(true);
-		player.on('load', () => {
-			console.log('loaded video');
-		});
 		player.on('playing', onPlaying);
 		player.on('pause', onPaused);
 		player.on('volumechange', () => {

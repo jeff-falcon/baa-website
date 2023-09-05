@@ -8,9 +8,6 @@
 	export let config: Config;
 	export let hasContactForm = false;
 	export let hasDivider = false;
-
-	const style =
-		config.borderRadius != null ? `--input-border-radius: ${config.borderRadius}px` : '';
 </script>
 
 <footer
@@ -19,7 +16,6 @@
 	class:hasDivider
 	class:hasContactForm
 	class:isDisabled={$isMenuOpenComplete}
-	{style}
 >
 	{#if hasContactForm}
 		<div class="contact">
@@ -41,13 +37,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="locations">
-		{#each config.locations as location (location.name)}
-			<Location {location} />
-		{/each}
-	</div>
 	<div class="credits">
-		<p class="copyright">© {new Date().getFullYear()} Bespoke Digital</p>
+		<p class="copyright">© {new Date().getFullYear()} BAA</p>
 		<p class="tanka"><a href="https://tankadesign.com" target="_blank">Site by TANKA</a></p>
 	</div>
 </footer>

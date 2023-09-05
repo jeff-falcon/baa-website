@@ -53,16 +53,13 @@
 			on:focus={(e) => (isFocused = true)}
 			on:blur={(e) => {
 				isFocused = false;
-				console.log('blur:', `|${e.currentTarget.value}|`);
 				onChange(e.currentTarget.value);
 				dispatch('blur', inputValue);
 			}}
 			on:change={(e) => {
-				console.log('change:', `|${e.currentTarget.value}|`, e);
 				onChange(e.currentTarget.value);
 			}}
 			on:input={(e) => {
-				console.log('input:', `|${e.currentTarget.value}|`);
 				onChange(e.currentTarget.value);
 			}}
 		/>

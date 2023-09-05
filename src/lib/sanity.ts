@@ -1,8 +1,8 @@
 import { createClient } from '@sanity/client';
 import { SANITY_TOKEN, SANITY_DATASET, SANITY_PROJECT_ID } from '$env/static/private';
-import type { TextOnly, ClientList, ColumnedText, Form, LogoGrid, Page, PageComponents, Project, ProjectGrid } from '$lib/types';
+import type { Artist, ArtistsGrid, ColumnedText, Page, PageComponents, Project } from '$lib/types';
 import { type HttpError, error } from '@sveltejs/kit';
-import { parseMultiHeroFromData, parseProjectFromData, parseProjectMediaFromData } from './parse';
+import { parseArtistFromData, parseHeroFromData, parseProjectFromData, parseProjectMediaFromData } from './parse';
 
 export function getClient() {
 	return client;
@@ -18,19 +18,10 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 		"slug": slug.current,
 		description,
 		"bgColor": bg_color,
-		"footerHasContactForm": footer_contact,
-		"hero": hero->{
-			_type == 'hero' => @{..., project->},
-			_type == 'multi_hero' => @{..., heros[]->{..., project->}},
-		},
+		hero->,
 		components[]{
-			_type == 'logo_grid_ref' => @->{..., "desktop": desktop.asset->url, "mobile": mobile.asset->url, "desktopMaxWidth": desktop_max_width, "mobileMaxWidth": mobile_max_width},
-			_type == 'projects' => @->{...,projects[]->},
-			_type == 'project_media_ref' => @->,
-			_type == 'text_only_ref' => @->{..., "bgColor": background_color},
-			_type == 'columned_text_ref' => @->{..., "borderedTitle": bordered_title, "bgColor": background_color},
-			_type == 'client_list_ref' => @->{..., "bgColor": background_color},
-			_type == 'form_ref' => @->{..., "bgColor": background_color},
+			_type == 'artists_grid_ref' => @->{...},
+			_type == 'columned_text_ref' => @->{..., "bgColor": background_color},
 		}
 	}`;
 	try {
@@ -45,9 +36,8 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 			bgColor: pageData.bgColor?.value,
 			slug: pageData.slug,
 			metaDescription: pageData.description,
-			footerHasContactForm: Boolean(pageData.footerHasContactForm ?? true),
-			heros: parseMultiHeroFromData(pageData.hero),
-			components: await getComponents(pageData.components)
+			hero: parseHeroFromData(pageData.hero),
+			components: getComponents(pageData.components)
 		};
 
 		return page;
@@ -57,49 +47,26 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 	}
 }
 
-async function getComponents(components: any): Promise<PageComponents> {
+function getComponents(components: any): PageComponents {
 	if (!components) return []
 	const comps: PageComponents = []
 	for (const component of components) {
-		if (component._type === 'project_grid') {
-			const projects: Project[] = []
-			if (component.projects && Array.isArray(component.projects)) {
-				for (const project of component.projects) {
-					const p = await parseProjectFromData(project)
-					if (p) projects.push(p)
+		if (component._type === 'artists_grid') {
+			const artists: Artist[] = []
+			if (component.artists && Array.isArray(component.artists)) {
+				for (const artist of component.artists) {
+					const p = parseArtistFromData(artist)
+					if (p) artists.push(p)
 				}
 			}
-			const grid: ProjectGrid = {
-				_type: 'project_grid',
+			const grid: ArtistsGrid = {
+				_type: 'artists_grid',
 				name: component.name,
-				title: component.title,
-				moreLink: component.more_link?.url ? {
-					buttonTitle: component.more_link.button_title,
-					url: component.more_link.url
-				} : undefined,
-				useFeature: component.feature_first ?? false,
-				projects
+				artists
 			};
 			comps.push(grid);
-		} else if (component._type === 'project_media') {
-			const p = await parseProjectMediaFromData(component);
-			if (p) comps.push(p)
-		} else if (component._type === 'logo_grid') {
-			comps.push(component as LogoGrid);
-		} else if (component._type === 'text_only') {
-			comps.push(component as TextOnly);
 		} else if (component._type === 'columned_text') {
 			comps.push(component as ColumnedText);
-		} else if (component._type === 'client_list') {
-			const clients: ClientList = {
-				_type: 'client_list',
-				title: component.title,
-				clients: component.clients.replace(/\n\s*\n+/g, '\n').split('\n'),
-				bgColor: component.bg_color
-			}
-			comps.push(clients)
-		} else if (component._type === 'form') {
-			comps.push(component as Form);
 		} else {
 			console.log('unknown component', component);
 		}

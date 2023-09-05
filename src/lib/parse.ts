@@ -1,4 +1,4 @@
-import type { Project, ProjectMedia, CloudinaryImage, Hero, MultiHero } from '$lib/types';
+import type { Project, ProjectMedia, CloudinaryImage, Hero, Artist, HeroArtist } from '$lib/types';
 import { bgColor } from './store';
 
 export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false) {
@@ -34,7 +34,7 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 	return img;
 }
 
-export async function parseProjectMediaFromData(project: any): Promise<ProjectMedia | undefined> {
+export function parseProjectMediaFromData(project: any): ProjectMedia | undefined {
 	if (project?._type !== 'project_media') return undefined;
 	const useOriginalQuality = project.use_original_quality ?? false;
 	const image = parseCloudinaryImage(project.image, project.image_mobile, useOriginalQuality);
@@ -51,6 +51,25 @@ export async function parseProjectMediaFromData(project: any): Promise<ProjectMe
 		autoplay: project.autoplay ?? false,
 	};
 	return media;
+}
+
+export function parseArtistFromData(data: any) {
+	if (data?._type !== 'artist') return undefined;
+	const artist: Artist = {
+		_type: 'artist',
+		name: data.name,
+		slug: data.slug,
+		bio: data.bio,
+		clients: data.clients,
+		links: data.links,
+		featured: data.featured?.map((p: any) => parseProjectFromData(p)),
+		portfolio: parseProjectFromData(data.portfolio),
+		projects: data.projects?.map((p: any) => parseProjectFromData(p)),
+		nickname: data.nickname,
+		tags: data.tags,
+		location: data.location
+	}
+	return artist;
 }
 
 export function parseProjectFromData(data: any) {
@@ -75,30 +94,25 @@ export function parseProjectFromData(data: any) {
 	return project;
 }
 
-export function parseHeroFromData(data: any, title?: string, subtitle?: string) {
+export function parseHeroFromData(data: any) {
 	if (Boolean(data?._type) === false) return undefined;
 	const hero: Hero = {
 		_type: 'hero',
-		name: title || data.title,
-		subtitle: subtitle || data.subtitle,
-		image_desktop: parseCloudinaryImage(data.image_desktop),
-		image_mobile: parseCloudinaryImage(data.image_mobile),
-		kind: data.kind,
-		videoBgSrc: data.thumb_vimeo_src,
-		videoBgSrcHd: data.thumb_vimeo_src_hd,
-		project: data.project ? parseProjectFromData(data.project) : undefined
+		name: data.title,
+		subtitle: data.subtitle,
+		artists: data.artists?.map((a: any) => parseHeroArtistFromData(a)),
+		scrollInstructions: data.scroll_instructions
 	}
 	return hero;
 }
 
-export function parseMultiHeroFromData(data: any) {
-	if (Boolean(data?._type) === false) return undefined;
-	const isMultiHero = data?._type === 'multi_hero';
-	const hero: MultiHero = {
-		_type: 'multi_hero',
-		name: data.title,
-		subtitle: data.subtitle,
-		heros: isMultiHero ? data.heros.map((h: any) => parseHeroFromData(h, data.override_title ? data.title : '', data.override_title ? data.subtitle : '')) : [parseHeroFromData(data)]
+export function parseHeroArtistFromData(data: any) {
+	const artist: HeroArtist = {
+		name: data.artist,
+		image: parseCloudinaryImage(data.image_desktop, data.image_mobile),
+		kind: data.kind === 'video-bg' ? 'video-bg' : 'image',
+		videoBgSrc: data.thumb_vimeo_src,
+		videoBgSrcHd: data.thumb_vimeo_src_hd,
 	}
-	return hero;
+	return artist
 }

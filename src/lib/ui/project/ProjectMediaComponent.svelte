@@ -9,6 +9,7 @@
 	export let cover = false;
 	export let fillContainer = false;
 	export let scaleOnReveal = true;
+	export let fadeOnReveal = true;
 	export let isFullWidth = true;
 
 	let figureEl: HTMLElement;
@@ -21,24 +22,9 @@
 	$: isVideoPlayer = media.kind === 'video-player' && Boolean(media.videoPlayerSrc) && !hasVideoId;
 	$: isVideoEmbed = media.kind === 'video-bg' && Boolean(videoBgSrc) && hasVideoId;
 
-	$: {
-		if (typeof window !== 'undefined') {
-			console.log({
-				isVideoPlaying,
-				isBgVideo,
-				isIntersecting,
-				isVideoEmbed,
-				videoBgSrc,
-				hasVideoId,
-				media
-			});
-		}
-	}
-
 	function onVideoPlaying(e: { detail: boolean }) {
 		window.requestAnimationFrame(() => {
 			isVideoPlaying = e.detail;
-			console.log({ isVideoPlaying, isBgVideo, isIntersecting });
 		});
 	}
 </script>
@@ -65,6 +51,7 @@
 			bind:this={figureEl}
 			class:isIntersecting
 			class:scaleOnReveal
+			class:fadeOnReveal
 			class:fillContainer={!cover && fillContainer}
 			data-is-video-playing={isVideoPlaying}
 			data-has-video-id={hasVideoId}
@@ -167,11 +154,13 @@
 		transform: scale(1.15);
 	}
 	.media:not(.isBgVideo) img {
-		opacity: 0;
 		transform-origin: center top;
 		transition: 1.5s linear opacity, 5s transform var(--ease-out-cubic);
 	}
-	.media:not(.isBgVideo).isIntersecting img {
+	.media.fadeOnReveal:not(.isBgVideo) img {
+		opacity: 0;
+	}
+	.media:not(.isBgVideo).isIntersecting.fadeOnReveal img {
 		opacity: 1;
 	}
 	.media.scaleOnReveal:not(.isBgVideo).isIntersecting img {
