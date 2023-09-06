@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import { getClient } from '$lib/sanity';
 import type { Project, ProjectMedia, ProjectMediaPair } from '$lib/types';
 import { error, type HttpError } from '@sveltejs/kit';
-import { parseCloudinaryImage, parseProjectFromData, parseProjectMediaFromData } from '$lib/parse';
+import { parseCloudinaryImage, parseProjectMediaFromData } from '$lib/parse';
 
 export const load: PageServerLoad = async ({ params }): Promise<{ project?: Project } | HttpError> => {
 	if (params.page === 'work') {
