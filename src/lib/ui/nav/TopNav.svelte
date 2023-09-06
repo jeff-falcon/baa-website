@@ -64,6 +64,7 @@
 	$: isMenuOpen = $menuState === 'open';
 	$: isOverCurrent = currentLinkHover?.getAttribute('href') === currentRoute;
 	$: mobileNavStyle = $bgColor ? `--bg-color: ${$bgColor};` : '';
+	$: isOverLightSolid = false;
 
 	function toggleMenu() {
 		menuState.update((state) => {
@@ -163,7 +164,14 @@
 
 <svelte:window bind:scrollY />
 
-<header class:isMenuOpen id="global-header" class="gutter" class:hasBg {style}>
+<header
+	class:isMenuOpen
+	class:isOverLightSolid
+	id="global-header"
+	class="gutter"
+	class:hasBg
+	{style}
+>
 	<div class="logo">
 		<a href="/">
 			<BAALogo />
@@ -272,6 +280,8 @@
 
 <style>
 	header {
+		--text-color: var(--text-light);
+		--text-color-40: var(--text-light-40);
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -282,6 +292,10 @@
 		align-items: center;
 		color: var(--text-color);
 		z-index: var(--level10);
+	}
+	header.isOverLightSolid {
+		--text-color: var(--text-dark);
+		--text-color-40: var(--text-dark-40);
 	}
 	header:after {
 		content: '';
@@ -294,13 +308,12 @@
 		opacity: 0;
 		transition: var(--bg-color-timing) var(--ease-in-out-sine);
 		transition-property: opacity, background-color;
-		background: rgba(38, 38, 38, 0.8);
+		background: rgba(38, 38, 38, 0.6);
 		backdrop-filter: blur(14px);
 		-webkit-backdrop-filter: blur(14px);
 	}
 	header.hasBg:after {
 		opacity: 1;
-		background: var(--bg-color);
 	}
 	.right {
 		display: flex;

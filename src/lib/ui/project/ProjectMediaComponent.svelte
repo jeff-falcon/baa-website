@@ -12,15 +12,17 @@
 	export let fadeOnReveal = true;
 	export let isFullWidth = true;
 
+	console.log(media);
+
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
 	let isVideoPlaying = false;
-	$: videoBgSrc = isFullWidth ? media.videoBgSrcHd || media.videoBgSrc : media.videoBgSrc;
+	$: videoBgSrc = (isFullWidth ? media.videoBgSrcHd || media.videoBgSrc : media.videoBgSrc) || '';
 	$: isBgVideo = media.kind === 'video-bg' && Boolean(videoBgSrc);
 	$: isStaticImage = media.kind === 'image' && Boolean(media.image?.url);
 	$: hasVideoId = !isNaN(Number(videoBgSrc));
 	$: isVideoPlayer = media.kind === 'video-player' && Boolean(media.videoPlayerSrc) && !hasVideoId;
-	$: isVideoEmbed = media.kind === 'video-bg' && Boolean(videoBgSrc) && hasVideoId;
+	$: isVideoEmbed = isBgVideo && hasVideoId;
 
 	function onVideoPlaying(e: { detail: boolean }) {
 		window.requestAnimationFrame(() => {

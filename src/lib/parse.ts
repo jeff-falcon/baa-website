@@ -44,12 +44,13 @@ export function parseProjectMediaFromData(project: any): ProjectMedia | undefine
 		name: project.name as string,
 		image,
 		kind: project.kind as ProjectMedia['kind'],
-		videoPlayerSrc: project.vimeo_player_src as string,
-		videoBgSrc: project.thumb_vimeo_src as string,
-		videoBgSrcHd: project.thumb_vimeo_src_hd as string,
+		videoPlayerSrc: project.vimeo_player_src as string || '',
+		videoBgSrc: project.thumb_vimeo_src as string || '',
+		videoBgSrcHd: project.thumb_vimeo_src_hd as string || '',
 		useOriginalQuality,
 		autoplay: project.autoplay ?? false,
 	};
+	console.log(media)
 	return media;
 }
 
@@ -57,14 +58,15 @@ export function parseArtistFromData(data: any) {
 	if (data?._type !== 'artist') return undefined;
 	const artist: Artist = {
 		_type: 'artist',
+		_id: data._id,
 		name: data.name,
 		slug: data.slug,
 		bio: data.bio,
 		clients: data.clients,
 		links: data.links,
-		featured: data.featured?.map((p: any) => parseProjectFromData(p)),
+		featured: data.featured?.map((p: any) => parseProjectMediaFromData(p)).filter((p: any) => p),
 		portfolio: parseProjectFromData(data.portfolio),
-		projects: data.projects?.map((p: any) => parseProjectFromData(p)),
+		projects: data.projects?.map((p: any) => parseProjectFromData(p)).filter((p: any) => p),
 		nickname: data.nickname,
 		tags: data.tags,
 		location: data.location

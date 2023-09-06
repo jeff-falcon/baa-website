@@ -178,27 +178,36 @@
 	.arrow {
 		white-space: nowrap;
 	}
+	.title {
+		text-transform: uppercase;
+		font-weight: bold;
+		font-size: var(--24pt);
+		line-height: 1.24;
+	}
+	.subtitle {
+		font-size: var(--16pt);
+		line-height: 1.24;
+	}
 	@media (min-width: 720px) {
+		.info {
+			padding-bottom: 40px;
+		}
 		.wrap {
 			display: grid;
 			grid-template-columns: repeat(12, 1fr);
 			gap: 0 var(--gutter-lg);
 			align-items: start;
-			padding-bottom: 72px;
 		}
 		.title {
 			grid-column: 1 / span 7;
 			grid-row: 1;
 			font-size: var(--48pt);
-			text-transform: uppercase;
 			line-height: 1.12;
-			font-weight: bold;
 		}
 		.subtitle {
 			grid-column: 9 / span 4;
 			grid-row: 1;
 			font-size: var(--20pt);
-			line-height: 1.24;
 			margin: 0;
 		}
 		.hero :global(+ section.text-only) {

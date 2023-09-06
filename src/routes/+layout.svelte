@@ -7,7 +7,7 @@
 	// import 'swiper/css/modules/navigation';
 	import Footer from '$lib/ui/nav/Footer.svelte';
 	import type { LayoutData } from './$types';
-	import { footerHasContactForm, isMenuOpenComplete, inputBorderIsRounded } from '$lib/store';
+	import { isMenuOpenComplete } from '$lib/store';
 
 	export let data: LayoutData;
 </script>
@@ -18,7 +18,7 @@
 	<slot />
 </main>
 
-<Footer config={data.config} hasContactForm={$footerHasContactForm} />
+<Footer config={data.config} />
 
 <svg viewBox="0 0 100 100" height="0" width="0">
 	<defs>

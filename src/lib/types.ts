@@ -52,6 +52,7 @@ export interface ProjectGrid {
 }
 export interface Artist {
 	_type: 'artist';
+	_id: string;
 	name: string;
 	nickname: string;
 	slug: string;
@@ -60,7 +61,7 @@ export interface Artist {
 	bio: InputValue;
 	clients: string;
 	links: ArtistLink[];
-	featured: Project[];
+	featured?: ProjectMedia[];
 	portfolio?: Project;
 	projects: Project[];
 }

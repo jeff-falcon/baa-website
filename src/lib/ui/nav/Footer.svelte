@@ -1,45 +1,27 @@
 <script lang="ts">
 	import { isMenuOpenComplete } from '$lib/store';
 	import type { Config } from '$lib/types';
-	import Contact from '../form/Contact.svelte';
-	import NewsletterSignup from '../form/NewsletterSignup.svelte';
-	import Location from './Location.svelte';
 
 	export let config: Config;
-	export let hasContactForm = false;
 	export let hasDivider = false;
 </script>
 
-<footer
-	class="gutter"
-	id="footer"
-	class:hasDivider
-	class:hasContactForm
-	class:isDisabled={$isMenuOpenComplete}
->
-	{#if hasContactForm}
-		<div class="contact">
-			<Contact />
-		</div>
-	{/if}
-	<div class="signup-socials-row">
-		<div class="newsletter">
-			<NewsletterSignup />
-		</div>
+<footer class="gutter" id="footer" class:hasDivider class:isDisabled={$isMenuOpenComplete}>
+	<div class="bottom-row">
 		<div class="socials">
-			<h3 class="title">{config.socials.name}</h3>
 			<div class="links">
 				{#each config.socials.links as link}
 					<a href={link.url} target="_blank">
+						<span class="name">{link.name}</span>
 						<img src={link.icon} width="16" height="16" alt={link.name} />
 					</a>
 				{/each}
 			</div>
 		</div>
-	</div>
-	<div class="credits">
-		<p class="copyright">© {new Date().getFullYear()} BAA</p>
-		<p class="tanka"><a href="https://tankadesign.com" target="_blank">Site by TANKA</a></p>
+		<div class="credits">
+			<p class="copyright">© {new Date().getFullYear()} BAA Inc.</p>
+			<p class="tanka"><a href="https://tankadesign.com" target="_blank">Site by TANKA</a></p>
+		</div>
 	</div>
 </footer>
 
@@ -54,26 +36,18 @@
 		padding-top: 40px;
 		border-top: 1px solid var(--text-color-15);
 	}
-	.signup-socials-row {
+	.bottom-row {
 		border-top: 1px solid var(--text-color-15);
-		padding-top: 40px;
-	}
-	.contact + .signup-socials-row {
-		margin-top: 48px;
+		padding-top: var(--24pt);
+		padding-bottom: var(--24pt);
+		display: flex;
+		justify-content: space-between;
 	}
 	footer :global(h3.title) {
 		font-size: var(--18pt);
 		line-height: var(--24pt);
 		font-weight: bold;
 		margin: 0 0 var(--24pt);
-	}
-	.locations {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 48px var(--gutter-sm);
-		margin-top: 48px;
-		padding-top: 48px;
-		border-top: 1px solid var(--text-color-15);
 	}
 
 	.credits .tanka a {
@@ -89,8 +63,7 @@
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
-		margin-top: 68px;
-		margin-bottom: 32px;
+		gap: 16px;
 	}
 	.credits p {
 		margin: 0;
@@ -115,74 +88,41 @@
 		justify-content: center;
 		transition: border-color 180ms linear;
 	}
+	.socials .links a .name {
+		font-size: var(--16pt);
+		font-weight: bold;
+		color: var(--text-dark);
+		display: none;
+	}
 	:global(.bg-is-light) .socials .links a img {
 		filter: invert(1);
 	}
 	.socials .links a:hover {
 		border-color: var(--text-color);
 	}
-	.newsletter {
-		margin-bottom: 40px;
-	}
 	@media (min-width: 720px) {
 		footer {
 			margin-top: 128px;
-		}
-		.signup-socials-row {
-			display: grid;
-			grid-template-columns: repeat(12, 1fr);
-			gap: 0 var(--gutter-lg);
-		}
-		.newsletter {
-			grid-column: 1 / span 7;
-			margin-bottom: 0;
-		}
-		.newsletter :global(.sign-up-form form) {
-			display: flex;
-			flex-direction: row;
-			gap: 16px;
-		}
-		.newsletter :global(.sign-up-form .textfield-container) {
-			width: 100%;
-			max-width: 376px;
-		}
-		.newsletter :global(button) {
-			width: auto;
-			padding-left: 40px;
-			padding-right: 40px;
-			white-space: nowrap;
 		}
 		.socials {
 			grid-column: 9 / span 4;
 			width: min-content;
 			justify-self: end;
 		}
-		.locations {
-			grid-template-columns: repeat(4, 1fr);
-			gap: 48px var(--gutter-lg);
+		.socials .links {
+			gap: 32px;
 		}
-		.contact {
-			display: grid;
-			grid-template-columns: repeat(12, 1fr);
-			gap: var(--gutter-lg);
+		.socials .links a {
+			border: 0;
+			border-radius: 0;
+			width: auto;
+			height: auto;
 		}
-		.contact :global(.contact-form) {
-			grid-column: 1 / span 12;
+		.socials .links a img {
+			display: none;
 		}
-	}
-	/* @media (min-width: 860px) {
-		.contact :global(.contact-form) {
-			grid-column: 1 / span 9;
+		.socials .links a .name {
+			display: inline-block;
 		}
 	}
-	@media (min-width: 1100px) {
-		.contact :global(.contact-form) {
-			grid-column: 1 / span 8;
-		}
-	}
-	@media (min-width: 1280px) {
-		.contact :global(.contact-form) {
-			grid-column: 1 / span 6;
-		}
-	} */
 </style>
