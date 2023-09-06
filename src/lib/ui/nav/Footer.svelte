@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { isMenuOpenComplete } from '$lib/store';
+	import { isFooterLight, isMenuOpenComplete } from '$lib/store';
 	import type { Config } from '$lib/types';
 
 	export let config: Config;
 	export let hasDivider = false;
 </script>
 
-<footer class="gutter" id="footer" class:hasDivider class:isDisabled={$isMenuOpenComplete}>
+<footer
+	class="gutter"
+	id="footer"
+	class:hasDivider
+	class:isDisabled={$isMenuOpenComplete}
+	class:isLight={$isFooterLight}
+>
 	<div class="bottom-row">
 		<div class="socials">
 			<div class="links">
@@ -48,6 +54,12 @@
 		line-height: var(--24pt);
 		font-weight: bold;
 		margin: 0 0 var(--24pt);
+	}
+	footer.isLight {
+		background: var(--bg-light);
+		color: var(--text-dark);
+		--text-color-15: var(--text-dark-15);
+		margin-top: 0;
 	}
 
 	.credits .tanka a {

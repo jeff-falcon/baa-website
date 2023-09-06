@@ -67,8 +67,14 @@ export interface Artist {
 	projects: Array<ProjectTrio | ProjectPair | Project>;
 }
 
+
 export interface ArtistLink {
-	title: string;
+	name: 'instagram' |
+	'behance' |
+	'linkedin' |
+	'facebook' |
+	'twitter' |
+	'website';
 	url?: string;
 	username?: string;
 }

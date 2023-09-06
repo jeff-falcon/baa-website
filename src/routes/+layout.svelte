@@ -52,4 +52,7 @@
 	main.isDisabled {
 		visibility: hidden;
 	}
+	svg {
+		display: block;
+	}
 </style>

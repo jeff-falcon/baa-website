@@ -23,15 +23,21 @@
 	--bg-light: #e6e4df;
 	--bg-light-green: #e9f1cf;
 	--bg-default: var(--bg-dark);
-	--bg-rust: #6d3434;
-	--bg-olive: #3f4239;
+
 	--text-light: #fefefe;
 	--text-light-60: hsla(0, 0%, 100%, 0.6);
 	--text-light-40: hsla(0, 0%, 100%, 0.4);
 	--text-light-30: hsla(0, 0%, 100%, 0.3);
 	--text-light-15: hsla(0, 0%, 100%, 0.15);
 	--text-light-5: hsla(0, 0%, 100%, 0.05);
+
 	--text-dark: var(--bg-dark);
+	--text-dark-60: hsla(0, 0%, 15%, 0.6);
+	--text-dark-40: hsla(0, 0%, 15%, 0.5);
+	--text-dark-30: hsla(0, 0%, 15%, 0.4);
+	--text-dark-15: hsla(0, 0%, 15%, 0.25);
+	--text-dark-5: hsla(0, 0%, 15%, 0.25);
+
 	--text-highlight: #ebffbf;
 	--gray-mid: #373636;
 	--blue: #284aac;
@@ -93,11 +99,11 @@ body {
 
 body.bg-is-light {
 	--text-color: var(--bg-dark);
-	--text-color-60: hsla(0, 0%, 15%, 0.6);
-	--text-color-40: hsla(0, 0%, 15%, 0.5);
-	--text-color-30: hsla(0, 0%, 15%, 0.4);
-	--text-color-15: hsla(0, 0%, 15%, 0.25);
-	--text-color-5: hsla(0, 0%, 15%, 0.25);
+	--text-color-60: var(--text-dark-60);
+	--text-color-40: var(--text-dark-40);
+	--text-color-30: var(--text-dark-30);
+	--text-color-15: var(--text-dark-15);
+	--text-color-5: var(--text-dark-5);
 	--error-text: #c72797;
 }
 
