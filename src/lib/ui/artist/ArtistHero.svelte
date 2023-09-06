@@ -165,6 +165,9 @@
 			font-size: var(--14pt);
 			line-height: var(--16pt);
 		}
+		.name-client .name {
+			font-size: var(--20pt);
+		}
 	}
 	@media (min-width: 1024px) {
 		.title {

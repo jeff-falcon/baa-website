@@ -100,7 +100,7 @@
 		font-size: var(--14pt);
 		opacity: 0.6;
 		line-height: var(--16pt);
-		font-weight: normal;
+		font-weight: bold;
 		display: inline;
 		white-space: nowrap;
 		margin: 0;
