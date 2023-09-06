@@ -50,7 +50,6 @@ export function parseProjectMediaFromData(project: any): ProjectMedia | undefine
 		useOriginalQuality,
 		autoplay: project.autoplay ?? false,
 	};
-	console.log(media)
 	return media;
 }
 
@@ -76,7 +75,7 @@ export function parseArtistFromData(data: any) {
 
 export function parseArtistProjectsFromData(data: any) {
 	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any) => {
-		if (p._type === 'project_trio') {
+		if (p?._type === 'project_trio') {
 			const top = parseProjectFromData(p.top)
 			const bottom = parseProjectFromData(p.bottom)
 			const side = parseProjectFromData(p.side)
@@ -90,7 +89,7 @@ export function parseArtistProjectsFromData(data: any) {
 				}
 				return trio
 			}
-		} else if (p._type === 'project_pair') {
+		} else if (p?._type === 'project_pair') {
 			const left = parseProjectFromData(p.left)
 			const right = parseProjectFromData(p.right)
 			if (left && right) {
@@ -101,7 +100,7 @@ export function parseArtistProjectsFromData(data: any) {
 				}
 				return pair;
 			}
-		} else {
+		} else if (p?._type === 'project') {
 			return parseProjectFromData(p)
 		}
 		return null

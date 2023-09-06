@@ -111,7 +111,7 @@ function getComponents(components: any): PageComponents {
 	if (!components) return []
 	const comps: PageComponents = []
 	for (const component of components) {
-		if (component._type === 'artists_grid') {
+		if (component?._type === 'artists_grid') {
 			const artists: Artist[] = []
 			if (component.artists && Array.isArray(component.artists)) {
 				for (const artist of component.artists) {
@@ -125,7 +125,7 @@ function getComponents(components: any): PageComponents {
 				artists
 			};
 			comps.push(grid);
-		} else if (component._type === 'columned_text') {
+		} else if (component?._type === 'columned_text') {
 			comps.push(component as ColumnedText);
 		} else {
 			console.log('unknown component', component);
