@@ -83,7 +83,7 @@ export function parseProjectFromData(data: any) {
 		title: data.title || data.name,
 		metaDescription: data.meta_description,
 		shortName: data.short_name || data.title || data.name || '',
-		slug: data.slug.current ?? '',
+		slug: data.slug ?? '',
 		description: data.description,
 		descriptionIntro: data.description_intro,
 		client: data.client,

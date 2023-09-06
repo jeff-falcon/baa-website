@@ -3,6 +3,7 @@
 	import { bgColor, pageHasHero } from '$lib/store';
 	import { onMount } from 'svelte';
 	import { getContrastYIQFromColor } from '$lib/color';
+	import ArtistPage from '$lib/ui/artist/ArtistPage.svelte';
 
 	export let data: PageData;
 
@@ -26,12 +27,6 @@
 	{/if}
 </svelte:head>
 
-<section class="intro gutter">
-	<h1>{data.artist?.name}</h1>
-</section>
-
-<style>
-	.intro {
-		padding-top: 8rem;
-	}
-</style>
+{#if data.artist}
+	<ArtistPage data={data.artist} />
+{/if}

@@ -78,6 +78,20 @@ export interface ArtistsGrid {
 	name: string;
 	artists: Artist[];
 }
+
+export interface ArtistHero {
+	_type: 'hero';
+	_id: string;
+	name: string;
+	subtitle?: string;
+	kind?: 'image' | 'video-bg';
+	image_desktop?: CloudinaryImage;
+	image_mobile?: CloudinaryImage;
+	videoBgSrc?: string;
+	videoBgSrcHd?: string;
+	project?: Project;
+}
+
 export interface Hero {
 	_type: 'hero';
 	name: string;

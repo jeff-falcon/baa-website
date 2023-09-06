@@ -413,6 +413,8 @@
 		color: var(--text-color);
 		width: min-content;
 		white-space: nowrap;
+		text-transform: uppercase;
+		font-weight: bold;
 	}
 	.v-menu a:hover,
 	.v-menu a:focus,
@@ -434,5 +436,13 @@
 	}
 	.bg-is-light .socials a {
 		filter: invert(1);
+	}
+	@media (min-width: 720px) {
+		.v-menu {
+			gap: 72px;
+		}
+		.v-menu a {
+			font-size: var(--36pt);
+		}
 	}
 </style>

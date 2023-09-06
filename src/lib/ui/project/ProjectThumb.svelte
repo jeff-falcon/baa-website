@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { Project, ProjectMedia } from '$lib/types';
 	import ProjectMediaComponent from '$lib/ui/project/ProjectMediaComponent.svelte';
+	import ArrowButton from '../button/ArrowButton.svelte';
 
 	export let project: Project;
+	export let url: string;
 	export let size: 'half' | 'full' = 'half';
 
 	$: isFull = size === 'full';
@@ -22,16 +24,23 @@
 	$: name = project.shortName || project.title;
 </script>
 
-<article class="project" class:isFull data-media={JSON.stringify(media)}>
-	<a href="/work/{project.slug}/">
+<article class="project" class:isFull data-slug={project.slug}>
+	<a href={url}>
 		<div class="thumbnail">
 			<ProjectMediaComponent {media} cover={true} isFullWidth={isFull} />
 		</div>
-		<div class="info">
-			<h2 class="title">{name}</h2>
-			{#if project.client}
-				<h3 class="subtitle">{project.client}</h3>
-			{/if}
+		<div class="info gutter">
+			<div class="wrap">
+				<div class="title-sub">
+					<h2 class="title">{name}</h2>
+					{#if project.client}
+						<h3 class="subtitle">{project.client}</h3>
+					{/if}
+				</div>
+				<div class="arrow">
+					<ArrowButton isTitleHiddenOnMobile={true} isOverSolid={false} />
+				</div>
+			</div>
 		</div>
 	</a>
 </article>
@@ -46,16 +55,38 @@
 	.project a {
 		display: block;
 		text-decoration: none;
-	}
-	.thumbnail {
 		padding-top: var(--aspect-pct);
 		position: relative;
+		background: var(--bg-dark);
+	}
+	.thumbnail {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		opacity: 0.7;
 	}
 	.info {
-		margin-top: var(--18pt);
+		position: absolute;
+		z-index: 1;
+		bottom: 0;
+		width: 100%;
+	}
+	.info .wrap {
+		padding-top: var(--20pt);
+		border-top: 1px solid var(--text-light-40);
+		align-items: flex-start;
+		justify-content: space-between;
+		display: flex;
+		padding-bottom: var(--24pt);
+	}
+	.info .title-sub {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: 0;
+		min-height: 3rem;
 	}
 	.info .title {
 		font-size: var(--18pt);
