@@ -55,6 +55,7 @@ export interface Artist {
 	_id: string;
 	name: string;
 	nickname: string;
+	metaDescription?: string;
 	slug: string;
 	tags: string[];
 	location: string;

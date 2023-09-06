@@ -1,0 +1,37 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { bgColor, pageHasHero } from '$lib/store';
+	import { onMount } from 'svelte';
+	import { getContrastYIQFromColor } from '$lib/color';
+
+	export let data: PageData;
+
+	onMount(() => {
+		pageHasHero.set(false);
+		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
+		const color = defaultBg;
+		bgColor.set(color);
+		document.body.style.setProperty('--page-bg-color', color);
+		document.body.className = `bg-is-${
+			getContrastYIQFromColor($bgColor) === 'white' ? 'dark' : 'light'
+		}`;
+		document.body.style.backgroundColor = $bgColor;
+	});
+</script>
+
+<svelte:head>
+	<title>{data.artist?.name} | Artists | BAA</title>
+	{#if data.artist?.metaDescription}
+		<meta name="description" content={data.artist.metaDescription} />
+	{/if}
+</svelte:head>
+
+<section class="intro gutter">
+	<h1>{data.artist?.name}</h1>
+</section>
+
+<style>
+	.intro {
+		padding-top: 8rem;
+	}
+</style>
