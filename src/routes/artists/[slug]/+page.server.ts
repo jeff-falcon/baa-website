@@ -16,9 +16,44 @@ export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artis
 				"slug": slug.current,
 			},
 			"featured": featured[]->,
-			"projects": projects[]->{
-				...,
-				"slug": slug.current,
+			projects[]{
+				_type == 'project' => @->{
+					...,
+					"tags": tags[]->prefLabel,
+					"slug": slug.current,
+				},
+				_type == 'project_pair' => {
+					_type,
+					left->{
+						...,
+						"tags": tags[]->prefLabel,
+						"slug": slug.current,
+					},
+					right->{
+						...,
+						"tags": tags[]->prefLabel,
+						"slug": slug.current,
+					}
+				},
+				_type == 'project_trio' => {
+					_type,
+					align,
+					top->{
+						...,
+						"tags": tags[]->prefLabel,
+						"slug": slug.current,
+					},
+					bottom->{
+						...,
+						"tags": tags[]->prefLabel,
+						"slug": slug.current,
+					},
+					side->{
+						...,
+						"tags": tags[]->prefLabel,
+						"slug": slug.current,
+					},
+				},
 			},
 			"tags": tags[]->prefLabel,
 		}`;
@@ -27,6 +62,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artis
 	if (!data) return error(404, 'Artist not found');
 
 	const projectData = data[0];
+	console.log(projectData)
 
 	const artist = parseArtistFromData(projectData)
 

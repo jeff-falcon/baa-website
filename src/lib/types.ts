@@ -64,7 +64,7 @@ export interface Artist {
 	links: ArtistLink[];
 	featured?: ProjectMedia[];
 	portfolio?: Project;
-	projects: Project[];
+	projects: Array<ProjectTrio | ProjectPair | Project>;
 }
 
 export interface ArtistLink {
@@ -90,6 +90,20 @@ export interface ArtistHero {
 	videoBgSrc?: string;
 	videoBgSrcHd?: string;
 	project?: Project;
+}
+
+export interface ProjectTrio {
+	_type: 'project_trio';
+	align: 'left' | 'right';
+	top: Project;
+	bottom: Project;
+	side: Project;
+}
+
+export interface ProjectPair {
+	_type: 'project_pair';
+	left: Project;
+	right: Project;
 }
 
 export interface Hero {

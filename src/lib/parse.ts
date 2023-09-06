@@ -1,4 +1,4 @@
-import type { Project, ProjectMedia, CloudinaryImage, Hero, Artist, HeroArtist } from '$lib/types';
+import type { Project, ProjectMedia, CloudinaryImage, Hero, Artist, HeroArtist, ProjectPair, ProjectTrio } from '$lib/types';
 import { bgColor } from './store';
 
 export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false) {
@@ -66,12 +66,47 @@ export function parseArtistFromData(data: any) {
 		links: data.links,
 		featured: data.featured?.map((p: any) => parseProjectMediaFromData(p)).filter((p: any) => p),
 		portfolio: parseProjectFromData(data.portfolio),
-		projects: data.projects?.map((p: any) => parseProjectFromData(p)).filter((p: any) => p),
+		projects: parseArtistProjectsFromData(data.projects),
 		nickname: data.nickname,
 		tags: data.tags,
 		location: data.location
 	}
 	return artist;
+}
+
+export function parseArtistProjectsFromData(data: any) {
+	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any) => {
+		if (p._type === 'project_trio') {
+			const top = parseProjectFromData(p.top)
+			const bottom = parseProjectFromData(p.bottom)
+			const side = parseProjectFromData(p.side)
+			if (top && bottom && side) {
+				const trio: ProjectTrio = {
+					_type: 'project_trio',
+					align: p.align,
+					top,
+					bottom,
+					side
+				}
+				return trio
+			}
+		} else if (p._type === 'project_pair') {
+			const left = parseProjectFromData(p.left)
+			const right = parseProjectFromData(p.right)
+			if (left && right) {
+				const pair: ProjectPair = {
+					_type: 'project_pair',
+					left,
+					right
+				}
+				return pair;
+			}
+		} else {
+			return parseProjectFromData(p)
+		}
+		return null
+	}).filter((p: any) => p)
+	return projects ?? []
 }
 
 export function parseProjectFromData(data: any) {
