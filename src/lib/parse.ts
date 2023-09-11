@@ -4,6 +4,19 @@ import { bgColor } from './store';
 export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false) {
 	if (!image) return undefined;
 	const originalUrl = image.derived?.[0]?.secure_url ?? image.secure_url;
+	if (image.format === 'gif') {
+		const url = image.secure_url.replace(/\.gif$/, '.webp').replace(/\/upload\/v/, '/upload/fl_awebp/v');
+		return {
+			url,
+			sizes: {
+				sm: url,
+				md: url,
+				lg: url
+			},
+			width: image.width,
+			height: image.height
+		}
+	}
 	const url: string =
 		image.derived?.[0]?.secure_url ??
 		image.secure_url.replace(/\/upload\/v/, '/upload/f_auto,q_auto:best/v');
@@ -65,7 +78,7 @@ export function parseArtistFromData(data: any) {
 		links: data.links,
 		featured: data.featured?.map((p: any) => parseProjectMediaFromData(p)).filter((p: any) => p),
 		portfolio: parseProjectFromData(data.portfolio),
-		projects: parseArtistProjectsFromData(data.projects),
+		projects: parseArtistProjectsFromData(data.slug, data.projects),
 		nickname: data.nickname,
 		tags: data.tags,
 		location: data.location
@@ -73,13 +86,16 @@ export function parseArtistFromData(data: any) {
 	return artist;
 }
 
-export function parseArtistProjectsFromData(data: any) {
+export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any) => {
 		if (p?._type === 'project_trio') {
 			const top = parseProjectFromData(p.top)
 			const bottom = parseProjectFromData(p.bottom)
 			const side = parseProjectFromData(p.side)
 			if (top && bottom && side) {
+				top.slug = parseProjectSlug(artistSlug, top.slug)
+				bottom.slug = parseProjectSlug(artistSlug, bottom.slug)
+				side.slug = parseProjectSlug(artistSlug, side.slug)
 				const trio: ProjectTrio = {
 					_type: 'project_trio',
 					align: p.align,
@@ -93,6 +109,8 @@ export function parseArtistProjectsFromData(data: any) {
 			const left = parseProjectFromData(p.left)
 			const right = parseProjectFromData(p.right)
 			if (left && right) {
+				left.slug = parseProjectSlug(artistSlug, left.slug)
+				right.slug = parseProjectSlug(artistSlug, right.slug)
 				const pair: ProjectPair = {
 					_type: 'project_pair',
 					left,
@@ -101,7 +119,11 @@ export function parseArtistProjectsFromData(data: any) {
 				return pair;
 			}
 		} else if (p?._type === 'project') {
-			return parseProjectFromData(p)
+			const project = parseProjectFromData(p)
+			if (project) {
+				project.slug = parseProjectSlug(artistSlug, project.slug)
+			}
+			return project
 		}
 		return null
 	}).filter((p: any) => p)
@@ -151,4 +173,11 @@ export function parseHeroArtistFromData(data: any) {
 		videoBgSrcHd: data.thumb_vimeo_src_hd,
 	}
 	return artist
+}
+
+export function parseProjectSlug(artistSlug: string, projectSlug: string) {
+	if (projectSlug.startsWith(artistSlug + '-')) {
+		return projectSlug.slice(artistSlug.length + 1);
+	}
+	return projectSlug;
 }

@@ -114,49 +114,51 @@
 </section>
 
 <style>
-	.projects {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-	}
-	.projects .pair,
-	.projects .trio {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		grid-column: 1 / span 2;
-	}
-	.projects .trio.left :global(.project:nth-of-type(1)) {
-		grid-column: 2 / span 1;
-		grid-row: 1;
-	}
-	.projects .trio.left :global(.project:nth-of-type(2)) {
-		grid-column: 2 / span 1;
-		grid-row: 2;
-	}
-	.projects .trio.left :global(.project:nth-of-type(3)) {
-		grid-column: 1 / span 1;
-	}
-	.projects .trio.right :global(.project:nth-of-type(1)) {
-		grid-column: 1 / span 1;
-		grid-row: 1;
-	}
-	.projects .trio.right :global(.project:nth-of-type(2)) {
-		grid-column: 1 / span 1;
-		grid-row: 2;
-	}
-	.projects .trio.right :global(.project:nth-of-type(3)) {
-		grid-column: 2 / span 1;
-	}
-	.projects .trio :global(.project:nth-of-type(3)) {
-		grid-row: 1 / span 2;
-		position: relative;
-	}
-	.projects .trio :global(.project:nth-of-type(3) a) {
-		padding-top: 0;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+	@media (min-width: 720px) {
+		.projects {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.projects .pair,
+		.projects .trio {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-column: 1 / span 2;
+		}
+		.projects .trio.left :global(.project:nth-of-type(1)) {
+			grid-column: 2 / span 1;
+			grid-row: 1;
+		}
+		.projects .trio.left :global(.project:nth-of-type(2)) {
+			grid-column: 2 / span 1;
+			grid-row: 2;
+		}
+		.projects .trio.left :global(.project:nth-of-type(3)) {
+			grid-column: 1 / span 1;
+		}
+		.projects .trio.right :global(.project:nth-of-type(1)) {
+			grid-column: 1 / span 1;
+			grid-row: 1;
+		}
+		.projects .trio.right :global(.project:nth-of-type(2)) {
+			grid-column: 1 / span 1;
+			grid-row: 2;
+		}
+		.projects .trio.right :global(.project:nth-of-type(3)) {
+			grid-column: 2 / span 1;
+		}
+		.projects .trio :global(.project:nth-of-type(3)) {
+			grid-row: 1 / span 2;
+			position: relative;
+		}
+		.projects .trio :global(.project:nth-of-type(3) a) {
+			padding-top: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
 	}
 	.links {
 		list-style: none;

@@ -32,7 +32,7 @@ export interface Project {
 	image?: CloudinaryImage;
 	videoBgSrc?: string;
 	videoBgSrcHd?: string;
-	media?: Array<ProjectMedia | ProjectMediaPair>;
+	media?: Array<ProjectMedia | ProjectMediaPair | ProjectMediaTrio>;
 	bgColor?: string
 	tags?: string[];
 	relatedProjects?: Project[];
@@ -158,6 +158,14 @@ export interface ProjectMediaPair {
 	_type: 'item_pair';
 	left: ProjectMedia;
 	right: ProjectMedia;
+}
+
+export interface ProjectMediaTrio {
+	_type: 'item_trio';
+	top: ProjectMedia;
+	bottom: ProjectMedia;
+	side: ProjectMedia;
+	align: 'left' | 'right';
 }
 
 export interface Social {

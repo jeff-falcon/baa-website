@@ -3,7 +3,6 @@
 	import VimeoBG from '$lib/ui/video/VimeoBG_VJS.svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import VimeoPlayer from '../video/VimeoPlayer.svelte';
-	import VimeoEmbed from '../video/VimeoEmbed.svelte';
 
 	export let media: ProjectMedia;
 	export let cover = false;
@@ -11,8 +10,7 @@
 	export let scaleOnReveal = true;
 	export let fadeOnReveal = true;
 	export let isFullWidth = true;
-
-	console.log(media);
+	export let title = '';
 
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
@@ -20,9 +18,7 @@
 	$: videoBgSrc = (isFullWidth ? media.videoBgSrcHd || media.videoBgSrc : media.videoBgSrc) || '';
 	$: isBgVideo = media.kind === 'video-bg' && Boolean(videoBgSrc);
 	$: isStaticImage = media.kind === 'image' && Boolean(media.image?.url);
-	$: hasVideoId = !isNaN(Number(videoBgSrc));
-	$: isVideoPlayer = media.kind === 'video-player' && Boolean(media.videoPlayerSrc) && !hasVideoId;
-	$: isVideoEmbed = isBgVideo && hasVideoId;
+	$: isVideoPlayer = media.kind === 'video-player' && Boolean(media.videoPlayerSrc);
 
 	function onVideoPlaying(e: { detail: boolean }) {
 		window.requestAnimationFrame(() => {
@@ -33,7 +29,10 @@
 
 {#if isVideoPlayer}
 	{@const src = media.videoPlayerSrc ?? ''}
-	<div class="video-player">
+	<div class="video-player gutter">
+		{#if title}
+			<h1 class="title">{title}</h1>
+		{/if}
 		<VimeoPlayer
 			id="media-{media._key}"
 			{src}
@@ -42,7 +41,7 @@
 			autoplay={media.autoplay}
 		/>
 	</div>
-{:else if isStaticImage || isBgVideo || isVideoEmbed}
+{:else if isStaticImage || isBgVideo}
 	<IntersectionObserver element={figureEl} bind:intersecting={isIntersecting} once={true}>
 		<figure
 			class="media"
@@ -56,12 +55,11 @@
 			class:fadeOnReveal
 			class:fillContainer={!cover && fillContainer}
 			data-is-video-playing={isVideoPlaying}
-			data-has-video-id={hasVideoId}
-			data-is-video-embed={isVideoEmbed}
 		>
-			{#if isVideoEmbed}
-				<VimeoEmbed vimeoId={Number(videoBgSrc)} title={media.name} />
-			{:else if isBgVideo}
+			{#if title}
+				<h1 class="title">{title}</h1>
+			{/if}
+			{#if isBgVideo}
 				<VimeoBG
 					id="media-{media._key}"
 					src={videoBgSrc || ''}
@@ -70,7 +68,7 @@
 					on:isPlaying={onVideoPlaying}
 				/>
 			{/if}
-			{#if !isVideoEmbed && media.image}
+			{#if media.image}
 				{#if media.image.sizes}
 					<picture>
 						<source srcset={media.image.sizes.sm} media="(max-width: 719px)" />
@@ -103,6 +101,7 @@
 	.media {
 		padding: 0;
 		margin: 0;
+		position: relative;
 	}
 	.media img {
 		display: block;
@@ -111,6 +110,20 @@
 		position: relative;
 		z-index: 0;
 		height: auto;
+	}
+	.video-player {
+		margin-top: var(--gutter-sm);
+		margin-bottom: var(--gutter-sm);
+	}
+	.video-player .title {
+		margin-top: 0;
+	}
+	figure .title {
+		position: absolute;
+		bottom: 24px;
+		left: var(--gutter-sm);
+		z-index: 2;
+		margin: 0;
 	}
 	picture {
 		position: relative;
@@ -167,5 +180,15 @@
 	}
 	.media.scaleOnReveal:not(.isBgVideo).isIntersecting img {
 		transform: scale(1);
+	}
+	@media (min-width: 720px) {
+		.video-player {
+			margin-bottom: var(--gutter-lg);
+			margin-top: var(--gutter-lg);
+		}
+		figure .title {
+			bottom: 32px;
+			left: var(--gutter-lg);
+		}
 	}
 </style>

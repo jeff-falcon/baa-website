@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { page, navigating } from '$app/stores';
-	import { isMenuOpenComplete, menuState, pageHasHero, bgColor } from '$lib/store';
+	import {
+		isMenuOpenComplete,
+		menuState,
+		pageHasHero,
+		bgColor,
+		currentArtist,
+		currentProject
+	} from '$lib/store';
 	import type { Config } from '$lib/types';
 	import BAALogo from '$lib/ui/logos/BAALogo.svelte';
-	import InstagramLogo from '$lib/ui/logos/InstagramLogo.svelte';
 
 	import anime from 'animejs';
 	import { cubicIn, cubicOut, expoOut, linear, sineInOut } from 'svelte/easing';
@@ -46,6 +52,8 @@
 			}, 150);
 		}
 	}
+
+	$: hasArtist = Boolean($currentArtist && $currentProject);
 
 	$: menuLinks = [
 		{
@@ -172,10 +180,30 @@
 	class:hasBg
 	{style}
 >
-	<div class="logo">
-		<a href="/">
+	<div class="logo" class:hasArtist>
+		<a href="/" class="baa">
 			<BAALogo />
 		</a>
+		{#if hasArtist}
+			<div class="artist-info">
+				{#if $currentProject}
+					<div class="pipe" transition:fade|global={{ duration: 500 }} />
+					<a
+						class="artist"
+						href="/artists/{$currentArtist?.slug}/"
+						in:fly|global={{ duration: 600, easing: cubicOut, x: '-40px', opacity: 0 }}
+						out:fly|global={{ duration: 400, easing: linear, x: 0, opacity: 0 }}
+					>
+						{$currentArtist?.name}
+					</a>
+					<!-- <div class="project" transition:fade|global={{ duration: 500, delay: 100 }}>
+						{$currentProject.title}
+					</div> -->
+				{:else}
+					<div class="artist">{$currentArtist?.name}</div>
+				{/if}
+			</div>
+		{/if}
 	</div>
 	<div class="right">
 		<button class="menu-btn" on:click={toggleMenu}>
@@ -437,12 +465,78 @@
 	.bg-is-light .socials a {
 		filter: invert(1);
 	}
+	.logo {
+		position: relative;
+	}
+	.logo a {
+		position: relative;
+		display: block;
+	}
+	.logo .baa {
+		display: block;
+		transition: var(--ease-in-out-cubic) transform 600ms;
+	}
+	.logo.hasArtist .baa {
+		transform: translateY(-8px);
+	}
+	.artist-info {
+		position: absolute;
+		top: 20px;
+		left: 0;
+		overflow: hidden;
+	}
+	.artist {
+		text-transform: uppercase;
+		font-size: 1rem;
+		font-weight: bold;
+		line-height: 1.12;
+	}
 	@media (min-width: 720px) {
 		.v-menu {
 			gap: 72px;
 		}
 		.v-menu a {
 			font-size: var(--36pt);
+		}
+		.logo,
+		.artist-info {
+			display: flex;
+			flex-direction: row;
+			align-items: baseline;
+		}
+		.logo {
+			gap: 16px;
+			position: relative;
+		}
+
+		.logo .baa {
+			transition: none;
+		}
+		.logo.hasArtist .baa {
+			transform: 0;
+		}
+		.artist-info {
+			gap: 8px;
+			top: -8px;
+			left: 86px;
+			overflow: hidden;
+		}
+		.artist-info .pipe {
+			display: block;
+			left: 0;
+			top: 6px;
+			width: 1px;
+			height: 36px;
+			position: absolute;
+			background: var(--text-color-40);
+		}
+		.artist {
+			font-size: 2.375rem;
+			padding-left: 16px;
+		}
+		.artist:hover {
+			text-decoration-thickness: 1px;
+			text-underline-offset: 6px;
 		}
 	}
 </style>

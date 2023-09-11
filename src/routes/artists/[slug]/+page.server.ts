@@ -5,7 +5,7 @@ import { error, type HttpError } from '@sveltejs/kit';
 import { parseArtistFromData } from '$lib/parse';
 
 export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artist } | HttpError> => {
-	console.log('loading work/' + params.slug);
+	console.log('loading artists/' + params.slug);
 
 	const client = getClient();
 	const groq = `*[_type == "artist" && slug.current == "${params.slug}"]{
@@ -62,7 +62,6 @@ export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artis
 	if (!data) return error(404, 'Artist not found');
 
 	const projectData = data[0];
-	console.log(projectData)
 
 	const artist = parseArtistFromData(projectData)
 

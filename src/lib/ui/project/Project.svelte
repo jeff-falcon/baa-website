@@ -1,17 +1,17 @@
 <script lang="ts">
 	import ProjectMediaComponent from '$lib/ui/project/ProjectMediaComponent.svelte';
 	import { PortableText } from '@portabletext/svelte';
-	import type { Project, ProjectGrid } from '$lib/types';
-	import { fly, type FlyParams } from 'svelte/transition';
+	import type { Project, ProjectGrid, Artist } from '$lib/types';
+	import type { fly, FlyParams } from 'svelte/transition';
 	import { cubicOut, expoOut } from 'svelte/easing';
 	import ProjectGridComponent from './ProjectGrid.svelte';
 	import { getContrastYIQFromColor } from '$lib/color';
 
 	export let project: Project;
+	export let artist: Artist | undefined = undefined;
 
 	const flyProps: FlyParams = { opacity: 0, y: 30, easing: expoOut, duration: 1500 };
 
-	$: hasDescription = project.description || project.descriptionIntro;
 	$: relatedProjects =
 		project.showRelatedProjects && (project.relatedProjects?.length || 0)
 			? <ProjectGrid>{
@@ -26,6 +26,8 @@
 	$: relatedBgIsLight = hasRelatedBg
 		? getContrastYIQFromColor(project.relatedProjectsBgColor!) === 'black'
 		: false;
+	const firstIsVideoPlayer =
+		project.media?.[0]?._type === 'project_media' && project.media?.[0]?.kind === 'video-player';
 </script>
 
 <div
@@ -33,57 +35,39 @@
 	style="--related-section-bg: {project.relatedProjectsBgColor ?? 'transparent'}"
 	class:hasRelatedBg
 	class:relatedBgIsLight
+	class:hasTitle={project.title && firstIsVideoPlayer}
 >
-	{#if project.name}
-		<section class="gutter project-info">
-			{#if hasDescription}
-				{#if project.descriptionIntro}
-					<div class="description intro" in:fly|global={{ ...flyProps }}>
-						<PortableText value={project.descriptionIntro} />
-					</div>
-				{/if}
-				{#if project.description}
-					<div class="description extra" in:fly|global={{ ...flyProps, delay: 200 }}>
-						<PortableText value={project.description} />
-					</div>
-				{/if}
-			{/if}
-			<div class="name-credits">
-				<h3 class="project-name" in:fly|global={{ ...flyProps, delay: 75 }}>{project.title}</h3>
-				{#if project.credits}
-					<div class="credits">
-						{#each project.credits as credit, index (credit)}
-							<div class="credit" in:fly|global={{ ...flyProps, delay: index * 60 + 140 }}>
-								{#if credit.name}
-									<h3 class="name">{credit.name}</h3>
-								{/if}
-								{#if credit.credit}
-									<p class="value">{credit.credit}</p>
-								{/if}
-							</div>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		</section>
-	{/if}
 	{#if project.media}
-		<section class="medias gutter">
-			{#each project.media as item, index}
+		<section class="medias">
+			{#each project.media as item, index (item)}
 				{#if item._type === 'project_media'}
-					<ProjectMediaComponent media={item} scaleOnReveal={index === 0} />
-				{/if}
-				{#if item._type === 'item_pair'}
+					<ProjectMediaComponent
+						media={item}
+						scaleOnReveal={index === 0}
+						title={index === 0 && project.title ? project.title : ''}
+					/>
+				{:else if item._type === 'item_pair'}
 					{@const leftRatio = (item.left.image?.height ?? 100) / (item.left.image?.width ?? 100)}
 					{@const rightRatio = (item.right.image?.height ?? 100) / (item.right.image?.width ?? 100)}
-
 					<div
 						class="pair"
 						class:isLeftLarger={leftRatio > rightRatio}
 						class:isRightLarger={leftRatio < rightRatio}
+						data-ratio-left={leftRatio}
+						data-ratio-right={rightRatio}
 					>
-						<ProjectMediaComponent media={item.left} scaleOnReveal={index === 0} />
+						<ProjectMediaComponent
+							media={item.left}
+							scaleOnReveal={index === 0}
+							title={index === 0 && project.title ? project.title : ''}
+						/>
 						<ProjectMediaComponent media={item.right} scaleOnReveal={index === 0} />
+					</div>
+				{:else if item._type === 'item_trio'}
+					<div class="trio {item.align}">
+						<ProjectMediaComponent media={item.top} scaleOnReveal={index === 0} />
+						<ProjectMediaComponent media={item.bottom} scaleOnReveal={index === 0} />
+						<ProjectMediaComponent media={item.side} scaleOnReveal={index === 0} />
 					</div>
 				{/if}
 			{/each}
@@ -99,7 +83,6 @@
 	.pair {
 		display: grid;
 		grid-template-columns: repeat(1, 1fr);
-		gap: var(--gutter-sm);
 	}
 	.project-info {
 		display: grid;
@@ -176,15 +159,18 @@
 	.hasRelatedBg.relatedBgIsLight :global(.project-grid) {
 		color: var(--bg-dark);
 	}
+	.hasTitle {
+		padding-top: 68px;
+	}
 
 	@media (min-width: 720px) {
-		.medias {
-			gap: var(--gutter-lg);
+		.hasTitle {
+			padding-top: 120px;
 		}
-		.pair {
+		.pair,
+		.trio {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
-			gap: var(--gutter-lg);
 		}
 		.isRightLarger :global(.media:nth-of-type(1)),
 		.isLeftLarger :global(.media:nth-of-type(2)) {
@@ -204,6 +190,43 @@
 		.isRightLarger :global(.media:nth-of-type(1) img),
 		.isLeftLarger :global(.media:nth-of-type(2) img) {
 			object-fit: cover;
+		}
+		.trio.left :global(.project:nth-of-type(1)) {
+			grid-column: 2 / span 1;
+			grid-row: 1;
+		}
+		.trio.left :global(.project:nth-of-type(2)) {
+			grid-column: 2 / span 1;
+			grid-row: 2;
+		}
+		.trio.left :global(.project:nth-of-type(3)) {
+			grid-column: 1 / span 1;
+		}
+		.trio.right :global(.project:nth-of-type(1)) {
+			grid-column: 1 / span 1;
+			grid-row: 1;
+		}
+		.trio.right :global(.project:nth-of-type(2)) {
+			grid-column: 1 / span 1;
+			grid-row: 2;
+		}
+		.trio.right :global(.project:nth-of-type(3)) {
+			grid-column: 2 / span 1;
+		}
+		.trio :global(.project:nth-of-type(3)) {
+			grid-row: 1 / span 2;
+			position: relative;
+		}
+		.trio :global(.project:nth-of-type(3) figure) {
+			padding-top: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.project-info .artist-name {
+			display: none;
 		}
 	}
 	@media (min-width: 960px) {
