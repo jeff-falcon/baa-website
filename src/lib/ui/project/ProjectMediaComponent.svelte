@@ -152,6 +152,7 @@
 	figure .title {
 		margin: 0;
 		text-transform: uppercase;
+		line-height: 1;
 	}
 	.video-player .subtitle,
 	figure .subtitle {
