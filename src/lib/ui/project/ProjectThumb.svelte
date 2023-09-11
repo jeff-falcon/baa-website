@@ -77,7 +77,7 @@
 	.info .wrap {
 		padding-top: var(--20pt);
 		border-top: 1px solid var(--text-light-40);
-		align-items: flex-start;
+		align-items: center;
 		justify-content: space-between;
 		display: flex;
 		padding-bottom: var(--24pt);
@@ -86,7 +86,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0;
-		min-height: 3rem;
 	}
 	.info .title {
 		font-size: var(--18pt);
