@@ -513,18 +513,18 @@
 			transition: none;
 		}
 		.logo.hasArtist .baa {
-			transform: 0;
+			transform: none;
 		}
 		.artist-info {
 			gap: 8px;
-			top: -8px;
+			top: -5px;
 			left: 86px;
 			overflow: hidden;
 		}
 		.artist-info .pipe {
 			display: block;
 			left: 0;
-			top: 6px;
+			top: 3px;
 			width: 1px;
 			height: 36px;
 			position: absolute;
