@@ -101,14 +101,16 @@
 		padding-bottom: var(--16pt);
 	}
 	.title {
-		font-size: var(--38pt);
-		line-height: var(--40pt);
+		font-size: var(--40pt);
 		margin: 0;
+		line-height: 1;
+		text-transform: uppercase;
+		font-weight: bold;
 	}
 	.subtitle {
-		font-size: var(--24pt);
-		line-height: var(--32pt);
-		margin: var(--16pt) 0 0;
+		font-size: var(--14pt);
+		line-height: var(--16pt);
+		margin: var(--8pt) 0 0;
 	}
 	.project {
 		display: flex;
@@ -134,6 +136,7 @@
 	}
 	.name-client .client {
 		font-size: var(--14pt);
+		display: none;
 	}
 	.hero :global(+ section.text-only) {
 		padding-top: 6rem;
@@ -157,13 +160,11 @@
 		}
 		.title {
 			font-size: 4rem;
-			line-height: 1;
-			text-transform: uppercase;
-			font-weight: bold;
 		}
 		.subtitle {
 			font-size: var(--14pt);
 			line-height: var(--16pt);
+			margin-top: var(--16pt);
 		}
 		.name-client .name {
 			font-size: var(--20pt);

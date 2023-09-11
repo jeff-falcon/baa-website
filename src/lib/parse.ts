@@ -80,7 +80,7 @@ export function parseArtistFromData(data: any) {
 		portfolio: parseProjectFromData(data.portfolio),
 		projects: parseArtistProjectsFromData(data.slug, data.projects),
 		nickname: data.nickname,
-		tags: data.tags,
+		tags: data.tags ?? [],
 		location: data.location
 	}
 	return artist;
@@ -147,7 +147,8 @@ export function parseProjectFromData(data: any) {
 		image: parseCloudinaryImage(data.image),
 		videoBgSrc: data.thumb_vimeo_src,
 		videoBgSrcHd: data.thumb_vimeo_src_hd,
-		bgColor: data.bg_color?.value
+		bgColor: data.bg_color?.value,
+		tags: data.tags ?? [],
 	}
 	return project;
 }

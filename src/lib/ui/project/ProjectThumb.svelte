@@ -101,7 +101,7 @@
 		opacity: 0.6;
 		line-height: var(--16pt);
 		font-weight: bold;
-		display: inline;
+		display: none;
 		white-space: nowrap;
 		margin: 0;
 	}

@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
     "portfolio": null,
     "featured": null,
     "slug": slug.current,
+    "tags": tags[]->prefLabel,
     projects[]{
       _type == 'project' => @->{
         _type,
@@ -83,7 +84,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
           align
 				},
 			},
-			"tags": tags[]->
+			"tags": tags[]->prefLabel
 		}`;
   const data = await client.fetch(groqProject);
   const projectData = data[0];
@@ -151,6 +152,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
     bgColor: projectData.bg_color?.value,
     relatedProjects: [],
     showRelatedProjects: false,
+    tags: projectData.tags ?? [],
   };
 
 

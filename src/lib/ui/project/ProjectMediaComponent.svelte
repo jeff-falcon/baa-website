@@ -3,6 +3,8 @@
 	import VimeoBG from '$lib/ui/video/VimeoBG_VJS.svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import VimeoPlayer from '../video/VimeoPlayer.svelte';
+	import { cubicOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
 
 	export let media: ProjectMedia;
 	export let cover = false;
@@ -11,6 +13,7 @@
 	export let fadeOnReveal = true;
 	export let isFullWidth = true;
 	export let title = '';
+	export let subtitle = '';
 
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
@@ -31,7 +34,22 @@
 	{@const src = media.videoPlayerSrc ?? ''}
 	<div class="video-player gutter">
 		{#if title}
-			<h1 class="title">{title}</h1>
+			<div class="title-wrap">
+				<h1
+					class="title"
+					in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
+				>
+					{title}
+				</h1>
+				{#if subtitle}
+					<h3
+						class="subtitle"
+						in:fly|global={{ y: 0, opacity: 0, easing: cubicOut, duration: 750, delay: 200 }}
+					>
+						{subtitle}
+					</h3>
+				{/if}
+			</div>
 		{/if}
 		<VimeoPlayer
 			id="media-{media._key}"
@@ -57,7 +75,22 @@
 			data-is-video-playing={isVideoPlaying}
 		>
 			{#if title}
-				<h1 class="title">{title}</h1>
+				<div class="title-wrap">
+					<h1
+						class="title"
+						in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
+					>
+						{title}
+					</h1>
+					{#if subtitle}
+						<h3
+							class="subtitle"
+							in:fly|global={{ y: 0, opacity: 0, easing: cubicOut, duration: 750, delay: 200 }}
+						>
+							{subtitle}
+						</h3>
+					{/if}
+				</div>
 			{/if}
 			{#if isBgVideo}
 				<VimeoBG
@@ -115,15 +148,28 @@
 		margin-top: var(--gutter-sm);
 		margin-bottom: var(--gutter-sm);
 	}
-	.video-player .title {
-		margin-top: 0;
-	}
+	.video-player .title,
 	figure .title {
+		margin: 0;
+		text-transform: uppercase;
+	}
+	.video-player .subtitle,
+	figure .subtitle {
+		margin: 0;
+	}
+	.title-wrap {
+		margin-bottom: var(--24pt);
+	}
+	figure .title-wrap {
 		position: absolute;
-		bottom: 24px;
+		bottom: 0;
 		left: var(--gutter-sm);
 		z-index: 2;
-		margin: 0;
+	}
+	.subtitle {
+		padding-top: var(--16pt);
+		font-size: var(--14pt);
+		line-height: var(--16pt);
 	}
 	picture {
 		position: relative;
@@ -186,8 +232,12 @@
 			margin-bottom: var(--gutter-lg);
 			margin-top: var(--gutter-lg);
 		}
-		figure .title {
-			bottom: 32px;
+		.title-wrap .title {
+			font-size: 5.5rem;
+			line-height: 0.96;
+		}
+		figure .title-wrap {
+			margin-bottom: 32px;
 			left: var(--gutter-lg);
 		}
 	}

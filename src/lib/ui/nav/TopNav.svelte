@@ -535,8 +535,7 @@
 			padding-left: 16px;
 		}
 		.artist:hover {
-			text-decoration-thickness: 1px;
-			text-underline-offset: 6px;
+			text-decoration: none;
 		}
 	}
 </style>

@@ -26,6 +26,9 @@
 	$: relatedBgIsLight = hasRelatedBg
 		? getContrastYIQFromColor(project.relatedProjectsBgColor!) === 'black'
 		: false;
+
+	const tags = project.tags?.join(', ') ?? '';
+
 	const firstIsVideoPlayer =
 		project.media?.[0]?._type === 'project_media' && project.media?.[0]?.kind === 'video-player';
 </script>
@@ -45,6 +48,7 @@
 						media={item}
 						scaleOnReveal={index === 0}
 						title={index === 0 && project.title ? project.title : ''}
+						subtitle={index === 0 && tags ? tags : ''}
 					/>
 				{:else if item._type === 'item_pair'}
 					{@const leftRatio = (item.left.image?.height ?? 100) / (item.left.image?.width ?? 100)}
@@ -60,6 +64,7 @@
 							media={item.left}
 							scaleOnReveal={index === 0}
 							title={index === 0 && project.title ? project.title : ''}
+							subtitle={index === 0 && tags ? tags : ''}
 						/>
 						<ProjectMediaComponent media={item.right} scaleOnReveal={index === 0} />
 					</div>
@@ -160,12 +165,12 @@
 		color: var(--bg-dark);
 	}
 	.hasTitle {
-		padding-top: 68px;
+		padding-top: 80px;
 	}
 
 	@media (min-width: 720px) {
 		.hasTitle {
-			padding-top: 120px;
+			padding-top: 96px;
 		}
 		.pair,
 		.trio {
@@ -224,9 +229,6 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-		}
-		.project-info .artist-name {
-			display: none;
 		}
 	}
 	@media (min-width: 960px) {
