@@ -467,6 +467,10 @@
 	:global(.bg-is-light) .socials a img {
 		filter: invert(1);
 	}
+	.socials a img {
+		width: 20px;
+		height: 20px;
+	}
 	:global(.bg-is-light) .isMenuOpen {
 		--text-color: var(--text-dark);
 	}

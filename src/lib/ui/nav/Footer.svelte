@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="credits">
-			<p class="copyright">© {new Date().getFullYear()} BAA Inc.</p>
+			<p class="copyright">© {new Date().getFullYear()} BAA Global</p>
 			<p class="tanka"><a href="https://tankadesign.com" target="_blank">Site by TANKA</a></p>
 		</div>
 	</div>
@@ -63,6 +63,7 @@
 		padding-bottom: var(--24pt);
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 	}
 	footer :global(h3.title) {
 		font-size: var(--18pt);
@@ -110,13 +111,14 @@
 	.socials .links {
 		display: flex;
 		gap: 16px;
+		transform: translateX(-8px);
 	}
 	.socials .links a {
 		display: inline-flex;
-		border-radius: 40px;
-		border: 1px solid var(--text-color-15);
-		width: 48px;
-		height: 48px;
+		border-radius: 0;
+		border: 0;
+		width: 32px;
+		height: 32px;
 		align-items: center;
 		justify-content: center;
 		transition: border-color 180ms linear;
@@ -131,7 +133,12 @@
 	.socials .links a:hover .name {
 		text-decoration: underline 1px var(--text-color-40);
 	}
-	:global(.bg-is-light) .socials .links a img {
+	.socials .links a img {
+		width: 20px;
+		height: 20px;
+		display: block;
+	}
+	footer.isLight .socials .links a img {
 		filter: invert(1);
 	}
 	.socials .links a:hover {
@@ -154,6 +161,7 @@
 		}
 		.socials .links {
 			gap: 32px;
+			transform: none;
 		}
 		.socials .links a {
 			border: 0;
