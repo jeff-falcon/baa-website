@@ -168,6 +168,10 @@
 		padding-top: 80px;
 	}
 
+	.medias :global(.video-player + .video-player) {
+		margin-top: 0;
+	}
+
 	@media (min-width: 720px) {
 		.hasTitle {
 			padding-top: 96px;
