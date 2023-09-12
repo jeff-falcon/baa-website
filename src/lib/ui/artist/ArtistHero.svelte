@@ -120,6 +120,7 @@
 		padding-top: var(--12pt);
 		margin-top: var(--18pt);
 		gap: 16px;
+		text-decoration: none;
 	}
 	.project:hover {
 		text-decoration: none;

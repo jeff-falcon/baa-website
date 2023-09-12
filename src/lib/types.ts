@@ -139,6 +139,7 @@ export interface Page {
 	metaDescription?: string;
 	hero?: Hero;
 	components?: PageComponents;
+	footerHasContactInfo: boolean
 }
 
 export interface ProjectMedia {
@@ -186,6 +187,7 @@ export interface Location {
 export interface Config {
 	_type: 'config';
 	socials: { name: string, links: Social[] }
+	contactInfo: InputValue
 }
 
 export interface LogoGrid {

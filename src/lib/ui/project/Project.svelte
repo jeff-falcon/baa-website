@@ -6,6 +6,8 @@
 	import { cubicOut, expoOut } from 'svelte/easing';
 	import ProjectGridComponent from './ProjectGrid.svelte';
 	import { getContrastYIQFromColor } from '$lib/color';
+	import { onMount } from 'svelte';
+	import { footerHasContactInfo } from '$lib/store';
 
 	export let project: Project;
 	export let artist: Artist | undefined = undefined;
@@ -36,6 +38,10 @@
 
 	const firstIsVideoPlayer =
 		project.media?.[0]?._type === 'project_media' && project.media?.[0]?.kind === 'video-player';
+
+	onMount(() => {
+		footerHasContactInfo.set(true);
+	});
 </script>
 
 <svelte:window bind:scrollY />

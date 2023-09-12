@@ -2,7 +2,7 @@
 	import type { Page, ProjectMedia } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Hero from './Hero.svelte';
-	import { bgColor, pageHasHero } from '$lib/store';
+	import { bgColor, footerHasContactInfo, pageHasHero } from '$lib/store';
 	import ColumnedText from '../content/ColumnedText.svelte';
 	import { getContrastYIQFromColor } from '$lib/color';
 	import ArtistsGrid from '../artist/ArtistsGrid.svelte';
@@ -22,6 +22,7 @@
 			getContrastYIQFromColor($bgColor) === 'white' ? 'dark' : 'light'
 		}`;
 		document.body.style.backgroundColor = $bgColor;
+		footerHasContactInfo.set(data.footerHasContactInfo);
 	});
 
 	function isVideoPlayer(component: ProjectMedia) {

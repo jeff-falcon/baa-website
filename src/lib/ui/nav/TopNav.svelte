@@ -496,6 +496,7 @@
 		font-weight: bold;
 		line-height: 1.12;
 		white-space: nowrap;
+		text-decoration: none;
 	}
 	@media (min-width: 720px) {
 		#mobile-nav .wrap {

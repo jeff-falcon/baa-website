@@ -29,6 +29,7 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 		description,
 		"bgColor": bg_color,
 		hero->,
+		footer_has_contact_info,
 		components[]{
 			_type == 'artists_grid_ref' => @->{
 				name,
@@ -97,7 +98,8 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 			slug: pageData.slug,
 			metaDescription: pageData.description,
 			hero: parseHeroFromData(pageData.hero),
-			components: getComponents(pageData.components)
+			components: getComponents(pageData.components),
+			footerHasContactInfo: pageData.footer_has_contact_info ?? true,
 		};
 
 		return page;

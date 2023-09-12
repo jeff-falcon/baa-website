@@ -12,6 +12,7 @@ export const trailingSlash = 'never'
 export async function load() {
   const client = getClient();
   const groq = `*[_type == "config"]{
+    "contactInfo": contact_info,
     "socials": socials_group{
       name,
       "links": socials_links[]{

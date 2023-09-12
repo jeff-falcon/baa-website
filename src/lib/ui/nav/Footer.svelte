@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { isFooterLight, isMenuOpenComplete } from '$lib/store';
+	import { isFooterLight, isMenuOpenComplete, footerHasContactInfo } from '$lib/store';
 	import type { Config } from '$lib/types';
+	import { PortableText } from '@portabletext/svelte';
 
 	export let config: Config;
 	export let hasDivider = false;
 </script>
 
 <footer class="isLight gutter" id="footer" class:hasDivider class:isDisabled={$isMenuOpenComplete}>
-	<div class="content">
-		<p>Discuss the future, a project and collaboration:</p>
-		<p><a href="mailto:hello@baa-global.com">hello@baa-global.com</a></p>
-	</div>
+	{#if $footerHasContactInfo}
+		<div class="content">
+			<PortableText value={config.contactInfo} />
+		</div>
+	{/if}
 	<div class="bottom-row">
 		<div class="socials">
 			<div class="links">
@@ -43,16 +45,16 @@
 	.content {
 		padding-bottom: 48px;
 	}
-	.content p {
+	.content :global(p) {
 		margin: 0;
 		padding: 0 0 var(--24pt);
 	}
-	.content a {
+	.content :global(a) {
 		text-decoration: underline;
 		text-decoration-color: rgba(0, 0, 0, 0.45);
 		text-decoration-thickness: 1px;
 	}
-	.content > :last-child {
+	.content :global(> :last-child) {
 		padding-bottom: 0;
 	}
 	.bottom-row {
@@ -75,6 +77,8 @@
 		--text-color-40: var(--text-dark-40);
 		--text-color: var(--text-dark);
 		margin-top: 0;
+	}
+	footer.isLight .content {
 		padding-top: 120px;
 	}
 
@@ -137,7 +141,7 @@
 		footer:not(.isLight) {
 			margin-top: 128px;
 		}
-		footer.isLight {
+		footer.isLight .content {
 			padding-top: 240px;
 		}
 		.content {

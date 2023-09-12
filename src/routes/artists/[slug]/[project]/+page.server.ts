@@ -155,6 +155,8 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
     tags: projectData.tags ?? [],
   };
 
+  console.log({ project, artist })
+
 
   return { project, artist };
 };

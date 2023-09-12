@@ -4,7 +4,7 @@
 	import ProjectThumb from '../project/ProjectThumb.svelte';
 	import ArtistHeroComponent from './ArtistHero.svelte';
 	import { onMount } from 'svelte';
-	import { isFooterLight, pageHasHero } from '$lib/store';
+	import { footerHasContactInfo, isFooterLight, pageHasHero } from '$lib/store';
 
 	export let data: Artist;
 
@@ -51,6 +51,7 @@
 	onMount(() => {
 		pageHasHero.set(true);
 		isFooterLight.set(true);
+		footerHasContactInfo.set(false);
 		return () => {
 			isFooterLight.set(false);
 			pageHasHero.set(false);
