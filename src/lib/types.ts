@@ -208,12 +208,11 @@ export interface TextOnly {
 export interface ColumnedText {
 	_type: 'columned_text';
 	title: string;
-	borderedTitle: boolean;
+	layout: 'left' | 'right' | 'even';
 	body: {
 		title: string;
 		body: InputValue;
 	}[];
-	bgColor: SectionBackgroundColor
 }
 
 export interface ClientList {

@@ -18,7 +18,8 @@
 		Cantarell, 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 	font-family: var(--font-body);
 	color: black;
-	--bg-dark: #262626;
+	--bg-dark: hsl(0, 0%, 15%);
+	--bg-dark-60: hsla(0, 0%, 15%, 0.6);
 	--bg-darker: #202020;
 	--bg-light: #e6e4df;
 	--bg-light-green: #e9f1cf;
@@ -138,11 +139,22 @@ h6 {
 
 a {
 	color: inherit;
-	text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+	text-decoration-line: underline;
+}
+
+main a,
+footer a {
+	text-decoration-line: underline;
+	text-decoration-color: rgba(255, 255, 255, 0.45);
+	text-decoration-thickness: 1px;
+}
+.bg-is-light main a,
+.bg-is-light footer a,
+section.is-light a {
+	text-decoration-color: rgba(0, 0, 0, 0.45);
 }
 
 h1 {

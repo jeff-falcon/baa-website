@@ -28,8 +28,8 @@
 </script>
 
 <svelte:head>
-	<title>{data.project?.pageTitle ?? 'BAA'}</title>
-	<meta name="description" content={data.project?.metaDescription || 'BAA'} />
+	<title>{data.project?.pageTitle ?? 'BAA Global'}</title>
+	<meta name="description" content={data.project?.metaDescription || 'BAA Global'} />
 </svelte:head>
 
 {#if data.project}

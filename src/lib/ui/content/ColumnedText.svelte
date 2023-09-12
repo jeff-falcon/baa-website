@@ -5,13 +5,12 @@
 	export let data: ColumnedText;
 
 	$: hasTitle = data.title && data.title.length > 0;
-	$: hasBorderedTitle = hasTitle && data.borderedTitle;
 </script>
 
-<section class="columned-text gutter bg-{data.bgColor ?? 'transparent'}" class:hasBorderedTitle>
+<section class="columned-text gutter layout-{data.layout}">
 	<div class="wrap">
 		{#if hasTitle}
-			<h2 class="title">{data.title}</h2>
+			<h1 class="title">{data.title}</h1>
 		{/if}
 	</div>
 
@@ -21,10 +20,11 @@
 				<div class="column">
 					{#if hasTitle}
 						<h3 class="title">{column.title}</h3>
-					{:else}
-						<h2 class="title">{column.title}</h2>
+						<hr />
+					{:else if column.title}
+						<h1 class="title">{column.title}</h1>
+						<hr />
 					{/if}
-					<hr />
 					<div class="body">
 						<PortableText value={column.body} />
 					</div>
@@ -47,23 +47,28 @@
 		border: 0;
 		margin: var(--16pt) 0;
 	}
-	.body {
-		opacity: 0.6;
+	section :global(ul) {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		font-weight: bold;
+		padding-bottom: 1rem;
+	}
+	section :global(li) {
+		margin: 0;
+		padding-bottom: 1rem;
 	}
 	.wrap .title {
 		margin: 0 0 var(--16pt);
 	}
-	.hasBorderedTitle .wrap .title {
-		border-bottom: 1px solid var(--text-color-15);
-		padding-bottom: var(--32pt);
-		margin: 0 0 var(--32pt);
+	section :global(p) {
+		margin: 0;
+		padding: 0 0 var(--24pt);
 	}
-	.hasBorderedTitle hr {
-		display: none;
-	}
-	.hasBorderedTitle .columns :global(p) {
-		font-size: var(--18pt);
-		line-height: var(--24pt);
+	h1.title {
+		text-transform: uppercase;
+		font-size: 4.75rem;
+		line-height: 1.12;
 	}
 	.columns {
 		display: grid;
@@ -94,6 +99,13 @@
 		.columns {
 			gap: 56px var(--gutter-lg);
 		}
+		.layout-even .columns {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.layout-left .columns,
+		.layout-right .columns {
+			grid-template-columns: repeat(12, 1fr);
+		}
 		.column hr {
 			margin: var(--16pt) 0 var(--24pt);
 		}
@@ -101,18 +113,23 @@
 			margin: 0 0 48px;
 			margin-bottom: var(--32pt);
 		}
-		.hasBorderedTitle .columns :global(p) {
-			font-size: var(--20pt);
-			line-height: var(--32pt);
+		h1.title {
+			font-size: 4.75rem;
 		}
-		.hasBorderedTitle .wrap .title {
-			margin-bottom: 56px;
-			padding-bottom: 48px;
+		section :global(p) {
+			padding-bottom: var(--24pt);
 		}
-	}
-	@media (min-width: 768px) {
-		.columns {
-			grid-template-columns: repeat(var(--max-columns), 1fr);
+		.layout-left .column:first-of-type {
+			grid-column: 1 / span 6;
+		}
+		.layout-left .column:last-of-type {
+			grid-column: 9 / span 4;
+		}
+		.layout-right .column:first-of-type {
+			grid-column: 1 / span 4;
+		}
+		.layout-right .column:last-of-type {
+			grid-column: 7 / span 6;
 		}
 	}
 </style>

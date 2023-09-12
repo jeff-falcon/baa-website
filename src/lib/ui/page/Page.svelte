@@ -30,8 +30,8 @@
 </script>
 
 <svelte:head>
-	<title>{data.name ?? 'Home'} | BAA</title>
-	<meta name="description" content={data.metaDescription ?? 'Bespoke Digital'} />
+	<title>{data.name ?? 'Home'} | BAA Global</title>
+	<meta name="description" content={data.metaDescription ?? 'BAA Global'} />
 </svelte:head>
 
 <div class="page" class:hasHero>

@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.artist?.name} | Artists | BAA</title>
+	<title>{data.artist?.name} | Artists | BAA Global</title>
 	{#if data.artist?.metaDescription}
 		<meta name="description" content={data.artist.metaDescription} />
 	{/if}

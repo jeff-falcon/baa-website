@@ -18,14 +18,12 @@
 	export let usePillFollower = true;
 	export let config: Config;
 
-	let isBorderAnimating = false;
 	let scrollY = 0;
 	let changeBgTimeout = 0;
 	let hasBg = false;
 
 	let borderEl: HTMLDivElement;
 	let linkElements: { [key: string]: HTMLAnchorElement } = {};
-	let fromToAnim = { from: { x: 0, width: 0 }, to: { x: 0, width: 0 } };
 	let currentLinkHover: HTMLAnchorElement | null = null;
 	let hoverTimeout = 0;
 	let menuStateTimeout = 0;
@@ -63,8 +61,8 @@
 		},
 		{
 			name: 'Info',
-			url: '/about/',
-			isActive: (currentRoute.indexOf('/about') ?? -1) > -1
+			url: '/info/',
+			isActive: (currentRoute.indexOf('/info') ?? -1) > -1
 		}
 	];
 
@@ -72,7 +70,6 @@
 	$: isMenuOpen = $menuState === 'open';
 	$: isOverCurrent = currentLinkHover?.getAttribute('href') === currentRoute;
 	$: mobileNavStyle = $bgColor ? `--bg-color: ${$bgColor};` : '';
-	$: isOverLightSolid = false;
 
 	function toggleMenu() {
 		menuState.update((state) => {
@@ -93,7 +90,6 @@
 	function removeBorder() {
 		clearTimeout(hoverTimeout);
 		currentLinkHover = null;
-		isBorderAnimating = false;
 	}
 	function mouseOut(e: MouseEvent) {
 		clearTimeout(hoverTimeout);
@@ -122,7 +118,6 @@
 			}
 			if (!prevLink) prevLink = url;
 			if (prevLink && usePillFollower) {
-				isBorderAnimating = true;
 				const fromEl = linkElements[prevLink];
 				const toEl = linkElements[url];
 				const fromBox = fromEl.getBoundingClientRect();
@@ -161,7 +156,6 @@
 					complete: () => {
 						if (removeOnComplete) {
 							currentLinkHover = null;
-							isBorderAnimating = false;
 						}
 					}
 				});
@@ -174,7 +168,6 @@
 
 <header
 	class:isMenuOpen
-	class:isOverLightSolid
 	id="global-header"
 	class="gutter"
 	class:hasBg
@@ -185,7 +178,7 @@
 		<a href="/" class="baa">
 			<BAALogo />
 		</a>
-		{#if hasArtist}
+		{#if hasArtist && !isMenuOpen}
 			<div class="artist-info">
 				{#if $currentProject}
 					<div class="pipe" transition:fade|global={{ duration: 500 }} />
@@ -279,6 +272,7 @@
 							}}
 						>
 							<img src={link.icon} width="16" height="16" alt={link.name} />
+							<span class="name">{link.name}</span>
 						</a>
 					{/each}
 				</div>
@@ -300,7 +294,7 @@
 						easing: sineInOut
 					}}
 				>
-					<p class="copyright">© {new Date().getFullYear()} Bespoke Digital</p>
+					<p class="copyright">© {new Date().getFullYear()} BAA Global</p>
 				</div>
 			</footer>
 		</div>
@@ -322,7 +316,7 @@
 		color: var(--text-color);
 		z-index: var(--level10);
 	}
-	header.isOverLightSolid {
+	:global(.bg-is-light) header:not(.isMenuOpen):not(.pageHasHero) {
 		--text-color: var(--text-dark);
 		--text-color-40: var(--text-dark-40);
 	}
@@ -337,11 +331,14 @@
 		opacity: 0;
 		transition: var(--bg-color-timing) var(--ease-in-out-sine);
 		transition-property: opacity, background-color;
-		background: rgba(38, 38, 38, 0.6);
+		background: var(--bg-color);
 		backdrop-filter: blur(14px);
 		-webkit-backdrop-filter: blur(14px);
 	}
-	header.hasBg:after {
+	header.pageHasHero:after {
+		background: var(--bg-dark-60);
+	}
+	header.hasBg:not(.isMenuOpen):after {
 		opacity: 1;
 	}
 	.right {
@@ -445,6 +442,7 @@
 		text-transform: uppercase;
 		font-weight: bold;
 	}
+	.v-menu a,
 	.v-menu a:hover,
 	.v-menu a:focus,
 	.v-menu a:active {
@@ -463,8 +461,14 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.bg-is-light .socials a {
+	.socials .name {
+		display: none;
+	}
+	:global(.bg-is-light) .socials a img {
 		filter: invert(1);
+	}
+	:global(.bg-is-light) .isMenuOpen {
+		--text-color: var(--text-dark);
 	}
 	.logo {
 		position: relative;
@@ -494,11 +498,21 @@
 		white-space: nowrap;
 	}
 	@media (min-width: 720px) {
+		#mobile-nav .wrap {
+			grid-column: 2 / span 3;
+		}
 		.v-menu {
 			gap: 72px;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
 		}
 		.v-menu a {
 			font-size: var(--36pt);
+			transition: opacity linear 150ms;
+		}
+		.v-menu a:hover {
+			opacity: 0.6;
 		}
 		.logo,
 		.artist-info {
@@ -538,6 +552,29 @@
 		}
 		.artist:hover {
 			text-decoration: none;
+		}
+		.socials {
+			gap: 48px;
+			transform: none;
+		}
+		.socials a {
+			width: auto;
+			height: auto;
+			display: inline-block;
+		}
+		.socials img {
+			display: none;
+		}
+		.socials .name {
+			display: inline-block;
+		}
+		#mobile-nav footer {
+			display: flex;
+			justify-content: space-between;
+			padding-right: var(--gutter-lg);
+		}
+		#mobile-nav .copyright {
+			margin: 0;
 		}
 	}
 </style>

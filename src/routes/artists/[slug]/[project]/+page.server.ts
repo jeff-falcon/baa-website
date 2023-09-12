@@ -135,7 +135,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
 
   const project: Project = {
     _type: 'project',
-    pageTitle: `${title} | ${artist?.name ?? ''} | BAA`,
+    pageTitle: `${title} | ${artist?.name ?? ''} | BAA Global`,
     name: projectData.name,
     title,
     metaDescription: projectData.meta_description,

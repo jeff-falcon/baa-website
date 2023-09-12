@@ -84,7 +84,7 @@
 		{/each}
 	</section>
 {/if}
-<section class="bio gutter">
+<section class="bio gutter is-light">
 	<div class="wrap">
 		{#if data.bio}
 			<div class="long-bio">

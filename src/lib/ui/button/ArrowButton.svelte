@@ -8,7 +8,11 @@
 	export let isOverSolid = true;
 	export let style: 'capsule' | 'default' = 'default';
 
-	$: sanitizedHref = href.replace(/^http(s):\/\/(.*?)bespokedigital\.com/, '') ?? '';
+	$: sanitizedHref =
+		href.replace(
+			typeof location !== 'undefined' ? location.origin : /^http(s):\/\/(.*?)baa-global\.com/,
+			''
+		) ?? '';
 	$: isLinkExternal = sanitizedHref.startsWith('http');
 	$: titleSplits = title.split(' ');
 </script>
