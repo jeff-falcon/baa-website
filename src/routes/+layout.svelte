@@ -46,8 +46,6 @@
 <style>
 	main {
 		width: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
 	}
 	main.isDisabled {
 		visibility: hidden;

@@ -8,7 +8,7 @@
 	export let data: PageData;
 
 	onMount(() => {
-		pageHasHero.set(false);
+		pageHasHero.set(true);
 		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
 		const color = data.project?.bgColor || defaultBg;
 		bgColor.set(color);
@@ -20,6 +20,7 @@
 		currentArtist.set(data.artist);
 		currentProject.set(data.project);
 		return () => {
+			pageHasHero.set(false);
 			currentArtist.set(undefined);
 			currentProject.set(undefined);
 		};

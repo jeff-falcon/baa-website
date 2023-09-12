@@ -14,6 +14,7 @@
 	export let isFullWidth = true;
 	export let title = '';
 	export let subtitle = '';
+	export let isTitleVisible = true;
 
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
@@ -34,7 +35,7 @@
 	{@const src = media.videoPlayerSrc ?? ''}
 	<div class="video-player gutter">
 		{#if title}
-			<div class="title-wrap">
+			<div class="title-wrap" style="opacity: {isTitleVisible ? 1 : 0}">
 				<h1
 					class="title"
 					in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
@@ -75,7 +76,7 @@
 			data-is-video-playing={isVideoPlaying}
 		>
 			{#if title}
-				<div class="title-wrap">
+				<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
 					<h1
 						class="title"
 						in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
@@ -149,22 +150,32 @@
 		margin-bottom: var(--gutter-sm);
 	}
 	.video-player .title,
-	figure .title {
+	.media .title {
 		margin: 0;
 		text-transform: uppercase;
 		line-height: 1;
 	}
 	.video-player .subtitle,
-	figure .subtitle {
+	.media .subtitle {
 		margin: 0;
 	}
 	.title-wrap {
 		margin-bottom: var(--24pt);
+		transition: opacity linear 300ms;
 	}
-	figure .title-wrap {
-		position: absolute;
+	.video-player .title-wrap {
+		position: -webkit-sticky;
+		position: sticky;
+		top: var(--site-top-padding);
+	}
+	.media .title-wrap {
+		width: 100%;
+		margin-bottom: 0;
+		padding-bottom: var(--24pt);
+		padding-top: 40px;
+		background: linear-gradient(to bottom, hsla(0, 0%, 15%, 0) 0%, hsla(0, 0%, 15%, 0.6) 100%);
+		position: fixed;
 		bottom: 0;
-		left: var(--gutter-sm);
 		z-index: 2;
 	}
 	.subtitle {
@@ -236,10 +247,6 @@
 		.title-wrap .title {
 			font-size: 5.5rem;
 			line-height: 0.96;
-		}
-		figure .title-wrap {
-			margin-bottom: 32px;
-			left: var(--gutter-lg);
 		}
 	}
 </style>

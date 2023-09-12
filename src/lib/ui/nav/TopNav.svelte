@@ -178,6 +178,7 @@
 	id="global-header"
 	class="gutter"
 	class:hasBg
+	class:pageHasHero={$pageHasHero}
 	{style}
 >
 	<div class="logo" class:hasArtist>

@@ -12,6 +12,8 @@
 
 	const flyProps: FlyParams = { opacity: 0, y: 30, easing: expoOut, duration: 1500 };
 
+	let scrollY = 0;
+
 	$: relatedProjects =
 		project.showRelatedProjects && (project.relatedProjects?.length || 0)
 			? <ProjectGrid>{
@@ -27,11 +29,16 @@
 		? getContrastYIQFromColor(project.relatedProjectsBgColor!) === 'black'
 		: false;
 
+	$: isMobile = typeof window !== 'undefined' && window.innerWidth < 720;
+	$: isTitleVisible = scrollY < (isMobile ? 80 : 96);
+
 	const tags = project.tags?.join(', ') ?? '';
 
 	const firstIsVideoPlayer =
 		project.media?.[0]?._type === 'project_media' && project.media?.[0]?.kind === 'video-player';
 </script>
+
+<svelte:window bind:scrollY />
 
 <div
 	class="project-view"
@@ -49,6 +56,7 @@
 						scaleOnReveal={index === 0}
 						title={index === 0 && project.title ? project.title : ''}
 						subtitle={index === 0 && tags ? tags : ''}
+						{isTitleVisible}
 					/>
 				{:else if item._type === 'item_pair'}
 					{@const leftRatio = (item.left.image?.height ?? 100) / (item.left.image?.width ?? 100)}
@@ -65,6 +73,7 @@
 							scaleOnReveal={index === 0}
 							title={index === 0 && project.title ? project.title : ''}
 							subtitle={index === 0 && tags ? tags : ''}
+							{isTitleVisible}
 						/>
 						<ProjectMediaComponent media={item.right} scaleOnReveal={index === 0} />
 					</div>
@@ -84,11 +93,6 @@
 </div>
 
 <style>
-	.medias,
-	.pair {
-		display: grid;
-		grid-template-columns: repeat(1, 1fr);
-	}
 	.project-info {
 		display: grid;
 		grid-template-areas:
@@ -165,17 +169,17 @@
 		color: var(--bg-dark);
 	}
 	.hasTitle {
-		padding-top: 80px;
+		padding-top: var(--site-top-padding);
 	}
 
 	.medias :global(.video-player + .video-player) {
 		margin-top: 0;
 	}
+	.medias :global(:first-child) {
+		margin-top: 0;
+	}
 
 	@media (min-width: 720px) {
-		.hasTitle {
-			padding-top: 96px;
-		}
 		.pair,
 		.trio {
 			display: grid;

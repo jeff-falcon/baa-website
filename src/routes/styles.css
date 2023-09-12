@@ -49,6 +49,7 @@
 	--ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
 	--column-width: calc((100vw - var(--gutter-sm)) * (1 / 4));
 	--top-nav-height: 80px;
+	--site-top-padding: 80px;
 	--level10: 1000;
 	--level9: 900;
 	--level8: 800;
@@ -245,6 +246,7 @@ form button:disabled {
 @media (min-width: 720px) {
 	:root {
 		--column-width: calc((100vw - var(--gutter-lg)) * (1 / 12));
+		--site-top-padding: 96px;
 	}
 	.gutter {
 		padding-left: var(--gutter-lg);
