@@ -147,13 +147,13 @@
 	@media (min-width: 720px) {
 		.info {
 			display: grid;
-			grid-template-columns: repeat(4, 1fr);
+			grid-template-columns: repeat(12, 1fr);
 			gap: var(--gutter-lg);
 			align-items: end;
 			padding-bottom: var(--32pt);
 		}
 		.wrap {
-			grid-column: 2 / span 3;
+			grid-column: 5 / span 8;
 		}
 		.hero :global(+ section.text-only) {
 			padding-top: 8rem;
@@ -170,13 +170,20 @@
 			font-size: var(--20pt);
 		}
 	}
-	@media (min-width: 1024px) {
+	@media (min-width: 960px) {
+		.wrap {
+			grid-column: 7 / span 6;
+		}
+	}
+	@media (min-width: 1100px) {
 		.title {
-			font-size: 5.5rem;
+			font-size: 4.5rem;
 			line-height: 0.96;
 		}
-		.wrap {
-			grid-column: 3 / span 2;
+	}
+	@media (min-width: 1360px) {
+		.title {
+			font-size: 5.5rem;
 		}
 	}
 </style>
