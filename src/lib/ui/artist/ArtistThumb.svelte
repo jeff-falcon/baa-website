@@ -113,9 +113,11 @@
 	}
 	.info .name {
 		font-size: var(--20pt);
+		text-transform: uppercase;
 	}
 	.info .skills {
 		font-size: var(--16pt);
+		font-weight: bold;
 		opacity: 0.6;
 	}
 	@media (min-width: 720px) {
