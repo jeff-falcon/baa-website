@@ -8,7 +8,7 @@
 	export let data: PageData;
 
 	onMount(() => {
-		pageHasHero.set(false);
+		pageHasHero.set(true);
 		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
 		const color = defaultBg;
 		bgColor.set(color);

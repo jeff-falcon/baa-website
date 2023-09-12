@@ -490,6 +490,7 @@
 		font-size: 1rem;
 		font-weight: bold;
 		line-height: 1.12;
+		white-space: nowrap;
 	}
 	@media (min-width: 720px) {
 		.v-menu {
