@@ -497,7 +497,7 @@
 	.artist {
 		text-transform: uppercase;
 		font-size: 1rem;
-		font-weight: bold;
+		font-weight: normal;
 		line-height: 1.12;
 		white-space: nowrap;
 		text-decoration: none;

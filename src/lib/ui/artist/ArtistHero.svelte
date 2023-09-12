@@ -105,7 +105,7 @@
 		margin: 0;
 		line-height: 1;
 		text-transform: uppercase;
-		font-weight: bold;
+		font-weight: normal;
 	}
 	.subtitle {
 		font-size: var(--14pt);

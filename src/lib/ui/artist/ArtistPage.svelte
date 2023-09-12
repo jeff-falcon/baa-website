@@ -184,7 +184,8 @@
 			grid-template-columns: repeat(12, 1fr);
 		}
 		.bio .wrap {
-			grid-column: 6 / span 6;
+			grid-column: 2 / span 7;
+			padding-left: 0;
 		}
 	}
 </style>
