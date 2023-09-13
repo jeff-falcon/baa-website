@@ -9,7 +9,7 @@
 		currentProject
 	} from '$lib/store';
 	import type { Config } from '$lib/types';
-	import BAALogo from '$lib/ui/logos/BAALogo.svelte';
+	import BAALogo from '$lib/ui/logos/BAALogoBitmap.svelte';
 
 	import anime from 'animejs';
 	import { cubicIn, cubicOut, expoOut, linear, sineInOut } from 'svelte/easing';
