@@ -167,6 +167,7 @@
 		position: -webkit-sticky;
 		position: sticky;
 		top: var(--site-top-padding);
+		padding-top: 24px;
 	}
 	.media .title-wrap {
 		width: 100%;
@@ -179,7 +180,7 @@
 		z-index: 2;
 	}
 	.subtitle {
-		padding-top: var(--16pt);
+		padding-top: var(--8pt);
 		font-size: var(--14pt);
 		line-height: var(--16pt);
 	}
@@ -247,6 +248,9 @@
 		.title-wrap .title {
 			font-size: 5.5rem;
 			line-height: 0.96;
+		}
+		.subtitle {
+			padding-top: var(--16pt);
 		}
 	}
 </style>

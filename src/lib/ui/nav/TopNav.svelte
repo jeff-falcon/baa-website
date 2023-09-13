@@ -221,6 +221,7 @@
 	header {
 		--text-color: var(--text-light);
 		--text-color-40: var(--text-light-40);
+		--fade-height: 120px;
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -255,7 +256,7 @@
 		-webkit-backdrop-filter: blur(14px);
 	}
 	header.pageHasHero:not(.hasBg):not(.isMenuOpen):before {
-		height: 160px;
+		height: var(--fade-height);
 		background: linear-gradient(to bottom, var(--bg-dark-45) 0%, transparent 100%);
 		opacity: 1;
 		pointer-events: none;
@@ -435,6 +436,9 @@
 		text-decoration: none;
 	}
 	@media (min-width: 720px) {
+		header {
+			--fade-height: 160px;
+		}
 		#mobile-nav .wrap {
 			grid-column: 2 / span 3;
 		}
