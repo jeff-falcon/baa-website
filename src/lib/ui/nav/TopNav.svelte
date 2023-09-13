@@ -320,21 +320,31 @@
 		--text-color: var(--text-dark);
 		--text-color-40: var(--text-dark-40);
 	}
-	header:after {
+	header:after,
+	header:before {
 		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 100%;
 		z-index: -1;
 		opacity: 0;
 		transition: var(--bg-color-timing) var(--ease-in-out-sine);
 		transition-property: opacity, background-color;
+	}
+	header:after {
+		height: 100%;
 		background: var(--bg-color);
 		backdrop-filter: blur(14px);
 		-webkit-backdrop-filter: blur(14px);
 	}
+	header.pageHasHero:not(.hasBg):not(.isMenuOpen):before {
+		height: 160px;
+		background: linear-gradient(to bottom, var(--bg-dark-30) 0%, transparent 100%);
+		opacity: 1;
+		pointer-events: none;
+	}
+
 	header.pageHasHero:after {
 		background: var(--bg-dark-60);
 	}
