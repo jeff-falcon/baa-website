@@ -14,7 +14,7 @@
 		mask-image: url('/baa-logo-light.png');
 		-webkit-mask-size: contain;
 		mask-size: contain;
-		width: 60px;
+		width: 58px;
 		height: 24px;
 		background: currentColor;
 	}
