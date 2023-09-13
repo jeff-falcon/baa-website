@@ -240,17 +240,32 @@
 	.media.scaleOnReveal:not(.isBgVideo).isIntersecting img {
 		transform: scale(1);
 	}
+	@media (min-width: 560px) {
+		.title-wrap {
+			width: 80%;
+		}
+	}
 	@media (min-width: 720px) {
 		.video-player {
 			margin-bottom: var(--gutter-lg);
 			margin-top: var(--gutter-lg);
 		}
 		.title-wrap .title {
-			font-size: 5.5rem;
-			line-height: 0.96;
+			font-size: 4.5rem;
+			line-height: 1;
 		}
 		.subtitle {
 			padding-top: var(--16pt);
+		}
+	}
+	@media (min-width: 1280px) {
+		.title-wrap {
+			width: 67%;
+			max-width: 920px;
+		}
+		.title-wrap .title {
+			font-size: 5.5rem;
+			line-height: 0.96;
 		}
 	}
 </style>
