@@ -38,6 +38,8 @@
 	section {
 		padding-top: 3rem;
 		padding-bottom: 3rem;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	.column hr {
 		width: 48px;
@@ -67,7 +69,7 @@
 	}
 	h1.title {
 		text-transform: uppercase;
-		font-size: 4.75rem;
+		font-size: 3rem;
 		line-height: 1.12;
 	}
 	.columns {
