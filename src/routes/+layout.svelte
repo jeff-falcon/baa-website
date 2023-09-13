@@ -48,7 +48,7 @@
 		width: 100%;
 	}
 	main.isDisabled {
-		visibility: hidden;
+		pointer-events: none;
 	}
 	svg {
 		display: block;

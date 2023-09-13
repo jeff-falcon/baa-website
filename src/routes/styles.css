@@ -22,6 +22,7 @@
 	--bg-dark-60: hsla(0, 0%, 15%, 0.6);
 	--bg-darker: #202020;
 	--bg-light: #e6e4df;
+	--bg-light-90: rgba(230, 228, 223, 0.9);
 	--bg-light-green: #e9f1cf;
 	--bg-default: var(--bg-dark);
 

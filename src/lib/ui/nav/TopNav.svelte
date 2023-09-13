@@ -402,7 +402,13 @@
 		width: 100%;
 		height: 100%;
 		z-index: 0;
-		background: var(--bg-color);
+		background: rgba(0, 0, 0, 0.9);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+	}
+
+	:global(.bg-is-light) #mobile-nav .bg {
+		background: var(--bg-light-90);
 	}
 
 	#mobile-nav.isMenuOpen {

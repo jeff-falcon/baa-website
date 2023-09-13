@@ -36,7 +36,7 @@
 		margin-top: 88px;
 	}
 	footer.isDisabled {
-		visibility: hidden;
+		pointer-events: none;
 	}
 	footer.hasDivider {
 		padding-top: 40px;
