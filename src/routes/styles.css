@@ -20,6 +20,7 @@
 	color: black;
 	--bg-dark: hsl(0, 0%, 15%);
 	--bg-dark-60: hsla(0, 0%, 15%, 0.6);
+	--bg-dark-45: hsla(0, 0%, 15%, 0.45);
 	--bg-dark-30: hsla(0, 0%, 15%, 0.3);
 	--bg-darker: #202020;
 	--bg-light: #e6e4df;

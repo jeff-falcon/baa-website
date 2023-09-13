@@ -11,21 +11,16 @@
 	import type { Config } from '$lib/types';
 	import BAALogo from '$lib/ui/logos/BAALogoBitmap.svelte';
 
-	import anime from 'animejs';
 	import { cubicIn, cubicOut, expoOut, linear, sineInOut } from 'svelte/easing';
 	import { fade, fly } from 'svelte/transition';
 
-	export let usePillFollower = true;
 	export let config: Config;
 
 	let scrollY = 0;
 	let changeBgTimeout = 0;
 	let hasBg = false;
 
-	let borderEl: HTMLDivElement;
-	let linkElements: { [key: string]: HTMLAnchorElement } = {};
 	let currentLinkHover: HTMLAnchorElement | null = null;
-	let hoverTimeout = 0;
 	let menuStateTimeout = 0;
 
 	$: if ($navigating?.type === 'popstate' || $navigating?.type === 'link') {
@@ -68,7 +63,6 @@
 
 	$: currentRoute = $page.url.pathname ?? '';
 	$: isMenuOpen = $menuState === 'open';
-	$: isOverCurrent = currentLinkHover?.getAttribute('href') === currentRoute;
 	$: mobileNavStyle = $bgColor ? `--bg-color: ${$bgColor};` : '';
 
 	function toggleMenu() {
@@ -86,81 +80,6 @@
 			}
 			return newState;
 		});
-	}
-	function removeBorder() {
-		clearTimeout(hoverTimeout);
-		currentLinkHover = null;
-	}
-	function mouseOut(e: MouseEvent) {
-		clearTimeout(hoverTimeout);
-		hoverTimeout = window.setTimeout(() => {
-			if (!isOverCurrent) {
-				const prevLink = menuLinks.find((link) => link.isActive);
-				if (prevLink) {
-					drawBorder(prevLink.url, true);
-				} else {
-					anime({
-						targets: borderEl,
-						opacity: 0,
-						duration: 300,
-						easing: 'easeInOutSine'
-					});
-				}
-			}
-		}, 350);
-	}
-	function drawBorder(url: string, removeOnComplete = false) {
-		clearTimeout(hoverTimeout);
-		hoverTimeout = window.setTimeout(() => {
-			let prevLink = menuLinks.find((link) => link.isActive)?.url;
-			if (currentLinkHover) {
-				prevLink = currentLinkHover.getAttribute('href') ?? undefined;
-			}
-			if (!prevLink) prevLink = url;
-			if (prevLink && usePillFollower) {
-				const fromEl = linkElements[prevLink];
-				const toEl = linkElements[url];
-				const fromBox = fromEl.getBoundingClientRect();
-				const toBox = toEl.getBoundingClientRect();
-				const left = Math.min(fromBox.left, toBox.left);
-				const right = Math.max(fromBox.right, toBox.right);
-				currentLinkHover = toEl;
-				anime({
-					targets: borderEl,
-					opacity: 1,
-					duration: 300,
-					easing: 'easeInOutSine'
-				});
-				anime({
-					targets: borderEl,
-					keyframes: [
-						{
-							duration: 0,
-							left: `${fromBox.left}px`,
-							width: `${fromBox.width}px`,
-							easing: 'easeOutCubic'
-						},
-						{
-							duration: 220,
-							left: `${left}px`,
-							width: `${right - left}px`,
-							easing: 'easeOutCubic'
-						},
-						{
-							duration: 300,
-							left: `${toBox.left}px`,
-							width: `${toBox.width}px`,
-							easing: 'easeOutCubic'
-						}
-					],
-					complete: () => {
-						if (removeOnComplete) {
-							currentLinkHover = null;
-						}
-					}
-				});
-			}
-		}, 150);
 	}
 </script>
 
@@ -190,9 +109,6 @@
 					>
 						{$currentArtist?.name}
 					</a>
-					<!-- <div class="project" transition:fade|global={{ duration: 500, delay: 100 }}>
-						{$currentProject.title}
-					</div> -->
 				{:else}
 					<div class="artist">{$currentArtist?.name}</div>
 				{/if}
@@ -340,7 +256,7 @@
 	}
 	header.pageHasHero:not(.hasBg):not(.isMenuOpen):before {
 		height: 160px;
-		background: linear-gradient(to bottom, var(--bg-dark-30) 0%, transparent 100%);
+		background: linear-gradient(to bottom, var(--bg-dark-45) 0%, transparent 100%);
 		opacity: 1;
 		pointer-events: none;
 	}
@@ -513,7 +429,7 @@
 	.artist {
 		text-transform: uppercase;
 		font-size: 1rem;
-		font-weight: normal;
+		font-weight: bold;
 		line-height: 1.12;
 		white-space: nowrap;
 		text-decoration: none;
@@ -570,6 +486,7 @@
 		.artist {
 			font-size: 2.375rem;
 			padding-left: 16px;
+			font-weight: normal;
 		}
 		.artist:hover {
 			text-decoration: none;
