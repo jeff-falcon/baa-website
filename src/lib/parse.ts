@@ -1,5 +1,4 @@
 import type { Project, ProjectMedia, CloudinaryImage, Hero, Artist, HeroArtist, ProjectPair, ProjectTrio } from '$lib/types';
-import { bgColor } from './store';
 
 export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false) {
 	if (!image) return undefined;
@@ -104,7 +103,7 @@ export function mergePortfolioIntoProjects(artist: Artist) {
 }
 
 export function parseArtistProjectsFromData(artistSlug: string, data: any) {
-	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any) => {
+	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any, index: number) => {
 		if (p?._type === 'project_trio') {
 			const top = parseProjectFromData(p.top)
 			const bottom = parseProjectFromData(p.bottom)
@@ -136,6 +135,9 @@ export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 				return pair;
 			}
 		} else if (p?._type === 'project') {
+			if (p?.hidden_from_artist_page === true) {
+				return undefined
+			}
 			const project = parseProjectFromData(p)
 			if (project) {
 				project.slug = parseProjectSlug(artistSlug, project.slug)
@@ -143,7 +145,7 @@ export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 			return project
 		}
 		return null
-	}).filter((p: any) => p)
+	}).filter((p: any) => p != null)
 	return projects ?? []
 }
 
@@ -194,7 +196,7 @@ export function parseHeroArtistFromData(data: any) {
 }
 
 export function parseProjectSlug(artistSlug: string, projectSlug: string) {
-	if (projectSlug.startsWith(artistSlug + '-')) {
+	if (projectSlug?.startsWith(artistSlug + '-')) {
 		return projectSlug.slice(artistSlug.length + 1);
 	}
 	return projectSlug;

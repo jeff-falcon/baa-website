@@ -12,18 +12,21 @@
 	const mobileHero: CloudinaryImage | undefined = featuredProject?.image
 		? <CloudinaryImage>{ ...featuredProject.image, sizes: { ...featuredProject.image.sizes } }
 		: undefined;
-	const hero: ArtistHero = {
-		_type: 'hero',
-		_id: data._id,
-		name: data.name,
-		subtitle: data.tags?.join(', ') ?? '',
-		kind: featuredProject?.kind,
-		image_desktop: featuredProject?.image,
-		image_mobile: mobileHero,
-		videoBgSrc: featuredProject?.videoBgSrc,
-		videoBgSrcHd: featuredProject?.videoBgSrcHd,
-		project: featuredProject
-	};
+	const hero: ArtistHero | undefined =
+		featuredProject?._type === 'project'
+			? {
+					_type: 'hero',
+					_id: data._id,
+					name: data.name,
+					subtitle: data.tags?.join(', ') ?? '',
+					kind: featuredProject?.kind,
+					image_desktop: featuredProject?.image,
+					image_mobile: mobileHero,
+					videoBgSrc: featuredProject?.videoBgSrc,
+					videoBgSrcHd: featuredProject?.videoBgSrcHd,
+					project: featuredProject
+			  }
+			: undefined;
 	const projects = data.projects?.length ?? 0 > 1 ? data.projects.slice(1) ?? [] : [];
 	const nickname = data.nickname || data.name;
 
@@ -59,7 +62,9 @@
 	});
 </script>
 
-<ArtistHeroComponent data={hero} url="/artists/{data.slug}/{featuredProject?.slug}" />
+{#if hero}
+	<ArtistHeroComponent data={hero} url="/artists/{data.slug}/{featuredProject?.slug}" />
+{/if}
 
 {#if projects.length}
 	<section class="projects">

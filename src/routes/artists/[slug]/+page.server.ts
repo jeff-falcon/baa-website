@@ -1,12 +1,10 @@
 import type { PageServerLoad } from './$types';
 import { getClient } from '$lib/sanity';
 import type { Artist } from '$lib/types';
-import { error, type HttpError } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { parseArtistFromData } from '$lib/parse';
 
-export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artist } | HttpError> => {
-	console.log('loading artists/' + params.slug);
-
+export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artist }> => {
 	const client = getClient();
 	const groq = `*[_type == "artist" && slug.current == "${params.slug}"]{
 			...,
@@ -59,16 +57,15 @@ export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artis
 		}`;
 	const data = await client.fetch(groq);
 
-	if (!data) return error(404, 'Artist not found');
+	if (!data) throw error(404, 'Artist not found');
 
 	const projectData = data[0];
-
 	const artist = parseArtistFromData(projectData)
 
 	if (artist) {
 		return { artist }
 	} else {
-		return error(404, 'Artist not found');
+		throw error(404, 'Artist not found');
 	}
 
 };
