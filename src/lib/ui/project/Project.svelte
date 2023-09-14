@@ -80,6 +80,7 @@
 							title={index === 0 && project.title ? project.title : ''}
 							subtitle={index === 0 && tags ? tags : ''}
 							{isTitleVisible}
+							isInsidePair={true}
 						/>
 						<ProjectMediaComponent media={item.right} scaleOnReveal={index === 0} />
 					</div>

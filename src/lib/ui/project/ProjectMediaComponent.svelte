@@ -15,6 +15,7 @@
 	export let title = '';
 	export let subtitle = '';
 	export let isTitleVisible = true;
+	export let isInsidePair = false;
 
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
@@ -33,7 +34,7 @@
 
 {#if isVideoPlayer}
 	{@const src = media.videoPlayerSrc ?? ''}
-	<div class="video-player gutter">
+	<div class="video-player gutter" class:isInsidePair>
 		{#if title}
 			<div class="title-wrap" style="opacity: {isTitleVisible ? 1 : 0}">
 				<h1
@@ -74,6 +75,7 @@
 			class:fadeOnReveal
 			class:fillContainer={!cover && fillContainer}
 			data-is-video-playing={isVideoPlaying}
+			class:isInsidePair
 		>
 			{#if title}
 				<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
@@ -262,6 +264,10 @@
 		.title-wrap {
 			width: 67%;
 			max-width: 920px;
+		}
+		.isInsidePair .title-wrap {
+			width: 50%;
+			max-width: 100%;
 		}
 		.title-wrap .title {
 			font-size: 5.5rem;
