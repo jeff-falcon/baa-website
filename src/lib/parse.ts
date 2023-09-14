@@ -83,7 +83,24 @@ export function parseArtistFromData(data: any) {
 		tags: data.tags ?? [],
 		location: data.location
 	}
+	mergePortfolioIntoProjects(artist)
 	return artist;
+}
+
+export function mergePortfolioIntoProjects(artist: Artist) {
+	if (artist.portfolio) {
+		const { portfolio } = artist
+		portfolio.title = 'Portfolio'
+		portfolio.shortName = 'Portfolio'
+		portfolio.slug = parseProjectSlug(artist.slug, portfolio.slug)
+
+		if (!artist.projects) {
+			artist.projects = [portfolio]
+		} else {
+			artist.projects.unshift(portfolio)
+		}
+		artist.portfolio = undefined;
+	}
 }
 
 export function parseArtistProjectsFromData(artistSlug: string, data: any) {

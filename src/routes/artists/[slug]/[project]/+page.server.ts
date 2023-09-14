@@ -3,7 +3,7 @@ import { getClient } from '$lib/sanity';
 import type { Artist, Project, ProjectMedia, ProjectMediaPair, ProjectMediaTrio } from '$lib/types';
 import type { HttpError } from '@sveltejs/kit';
 import { error } from '@sveltejs/kit';
-import { parseProjectSlug, parseCloudinaryImage, parseProjectMediaFromData, parseArtistFromData } from '$lib/parse';
+import { parseProjectSlug, parseCloudinaryImage, parseProjectMediaFromData, parseArtistFromData, mergePortfolioIntoProjects } from '$lib/parse';
 
 export const load: PageServerLoad = async ({ params }): Promise<{ project?: Project, artist?: Artist } | HttpError> => {
   console.log(`checking project ${params.project} is in artist ${params.slug} projects`);
@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
   const client = getClient();
   const groqArtist = `*[_type == "artist" && slug.current == "${params.slug}"]{
     ...,
-    "portfolio": null,
+    "portfolio": portfolio->{..., "slug": slug.current},
     "featured": null,
     "slug": slug.current,
     "tags": tags[]->prefLabel,
@@ -48,8 +48,9 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
   if (!artistData?.[0]) return error(404, 'Artist not found');
 
   artistData = artistData[0]
+  mergePortfolioIntoProjects(artistData)
 
-  const projects = artistData.projects.flatMap((p: any) => {
+  const projects = artistData.projects?.flatMap((p: any) => {
     if (p._type === 'project') {
       return [parseProjectSlug(params.slug, p.slug), p.slug];
     } else if (p._type === 'project_pair') {
@@ -57,7 +58,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
     } else if (p._type === 'project_trio') {
       return [parseProjectSlug(params.slug, p.top.slug), p.top.slug, parseProjectSlug(params.slug, p.bottom.slug), p.bottom.slug, parseProjectSlug(params.slug, p.side.slug), p.side.slug];
     }
-  });
+  }) ?? [];
 
   if (!projects.includes(params.project)) {
     return error(404, 'Project not found');
