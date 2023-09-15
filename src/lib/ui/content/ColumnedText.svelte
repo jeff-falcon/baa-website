@@ -47,18 +47,18 @@
 		background: var(--text-color);
 		opacity: 0.15;
 		border: 0;
-		margin: var(--16pt) 0;
+		margin: -8px 0 var(--24pt);
 	}
 	section :global(ul) {
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		font-weight: bold;
+		font-weight: normal;
 		padding-bottom: 1rem;
 	}
 	section :global(li) {
 		margin: 0;
-		padding-bottom: 1rem;
+		padding-bottom: 0.5rem;
 	}
 	.wrap .title {
 		margin: 0 0 var(--16pt);
@@ -86,19 +86,17 @@
 	.column .body :global(p:last-of-type) {
 		margin-bottom: 0;
 	}
-	@media (min-width: 560px) {
+	.column .body :global(h3) {
+		font-size: var(--18pt);
+		line-height: var(--24pt);
+		text-transform: uppercase;
+		font-weight: bold;
+		margin: 0 0 var(--16pt);
+	}
+	@media (min-width: 840px) {
 		.columns {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
-			gap: 40px var(--gutter-sm);
-		}
-	}
-	@media (min-width: 720px) {
-		section {
-			padding-top: 4rem;
-			padding-bottom: 4rem;
-		}
-		.columns {
 			gap: 56px var(--gutter-lg);
 		}
 		.layout-even .columns {
@@ -108,8 +106,26 @@
 		.layout-right .columns {
 			grid-template-columns: repeat(12, 1fr);
 		}
+		.layout-left .column:first-of-type {
+			grid-column: 1 / span 7;
+		}
+		.layout-left .column:last-of-type {
+			grid-column: 9 / span 4;
+		}
+		.layout-right .column:first-of-type {
+			grid-column: 1 / span 4;
+		}
+		.layout-right .column:last-of-type {
+			grid-column: 6 / span 7;
+		}
+	}
+	@media (min-width: 720px) {
+		section {
+			padding-top: 4rem;
+			padding-bottom: 4rem;
+		}
 		.column hr {
-			margin: var(--16pt) 0 var(--24pt);
+			margin: -8px 0 var(--32pt);
 		}
 		.wrap .title {
 			margin: 0 0 48px;
@@ -121,17 +137,9 @@
 		section :global(p) {
 			padding-bottom: var(--24pt);
 		}
-		.layout-left .column:first-of-type {
-			grid-column: 1 / span 6;
-		}
-		.layout-left .column:last-of-type {
-			grid-column: 9 / span 4;
-		}
-		.layout-right .column:first-of-type {
-			grid-column: 1 / span 4;
-		}
-		.layout-right .column:last-of-type {
-			grid-column: 7 / span 6;
+		.column .body :global(h3) {
+			font-size: var(--20pt);
+			margin-bottom: var(--20pt);
 		}
 	}
 </style>

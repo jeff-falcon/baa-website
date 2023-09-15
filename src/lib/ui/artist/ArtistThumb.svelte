@@ -114,6 +114,7 @@
 	.info .name {
 		font-size: var(--20pt);
 		text-transform: uppercase;
+		font-weight: bold;
 	}
 	.info .skills {
 		font-size: var(--16pt);

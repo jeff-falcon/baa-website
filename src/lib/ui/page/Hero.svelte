@@ -203,6 +203,7 @@
 			grid-row: 1;
 			font-size: var(--48pt);
 			line-height: 1.12;
+			font-weight: normal;
 		}
 		.subtitle {
 			grid-column: 9 / span 4;

@@ -13,12 +13,13 @@
 </script>
 
 <TopNav config={data.config} />
+<div class="site-wrap">
+	<main class:isDisabled={$isMenuOpenComplete}>
+		<slot />
+	</main>
 
-<main class:isDisabled={$isMenuOpenComplete}>
-	<slot />
-</main>
-
-<Footer config={data.config} />
+	<Footer config={data.config} />
+</div>
 
 <svg viewBox="0 0 100 100" height="0" width="0">
 	<defs>
@@ -46,11 +47,17 @@
 <style>
 	main {
 		width: 100%;
+		flex: 1;
 	}
 	main.isDisabled {
 		pointer-events: none;
 	}
 	svg {
 		display: block;
+	}
+	.site-wrap {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
 	}
 </style>

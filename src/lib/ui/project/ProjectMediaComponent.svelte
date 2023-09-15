@@ -253,7 +253,7 @@
 			margin-top: var(--gutter-lg);
 		}
 		.title-wrap .title {
-			font-size: 4.5rem;
+			font-size: 4.25rem;
 			line-height: 1;
 		}
 		.subtitle {
@@ -270,8 +270,7 @@
 			max-width: 100%;
 		}
 		.title-wrap .title {
-			font-size: 5.5rem;
-			line-height: 0.96;
+			font-size: 4.75rem;
 		}
 	}
 </style>
