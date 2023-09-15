@@ -123,15 +123,22 @@
 
 <style>
 	@media (min-width: 720px) {
-		.projects {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-		}
 		.projects .pair,
 		.projects .trio {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			grid-column: 1 / span 2;
+		}
+		.projects .single {
+			min-height: 500px;
+			height: 100vh;
+		}
+		.projects .single :global(.project) {
+			height: 100%;
+		}
+		.projects .single :global(.project a) {
+			padding-top: 0;
+			height: 100%;
 		}
 		.projects .trio.left :global(.project:nth-of-type(1)) {
 			grid-column: 2 / span 1;
