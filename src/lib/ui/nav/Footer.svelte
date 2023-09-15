@@ -175,5 +175,8 @@
 		.socials .links a .name {
 			display: inline-block;
 		}
+		.credits {
+			gap: var(--32pt);
+		}
 	}
 </style>
