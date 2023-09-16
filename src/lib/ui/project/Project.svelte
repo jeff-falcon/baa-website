@@ -85,17 +85,14 @@
 						<ProjectMediaComponent media={item.right} scaleOnReveal={index === 0} />
 					</div>
 				{:else if item._type === 'item_trio'}
-					<div class="trio {item.align}">
+					<div class="trio {item.align ?? 'left'}">
 						<ProjectMediaComponent media={item.top} scaleOnReveal={index === 0} />
 						<ProjectMediaComponent media={item.bottom} scaleOnReveal={index === 0} />
-						<ProjectMediaComponent media={item.side} scaleOnReveal={index === 0} />
+						<ProjectMediaComponent media={item.side} cover={true} scaleOnReveal={index === 0} />
 					</div>
 				{/if}
 			{/each}
 		</section>
-	{/if}
-	{#if relatedProjects}
-		<ProjectGridComponent data={relatedProjects} />
 	{/if}
 </div>
 
@@ -165,6 +162,9 @@
 	.credit + .credit {
 		margin-top: var(--24pt);
 	}
+	.medias {
+		padding-bottom: 0;
+	}
 	.medias + :global(.project-grid) {
 		background-color: var(--related-section-bg);
 		margin-top: 4rem;
@@ -192,6 +192,10 @@
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 		}
+		.trio {
+			overflow: hidden;
+			position: relative;
+		}
 		.isRightLarger :global(.media:nth-of-type(1)),
 		.isLeftLarger :global(.media:nth-of-type(2)) {
 			position: relative;
@@ -211,33 +215,33 @@
 		.isLeftLarger :global(.media:nth-of-type(2) img) {
 			object-fit: cover;
 		}
-		.trio.left :global(.project:nth-of-type(1)) {
+		.trio.left :global(.media:nth-of-type(1)) {
 			grid-column: 2 / span 1;
 			grid-row: 1;
 		}
-		.trio.left :global(.project:nth-of-type(2)) {
+		.trio.left :global(.media:nth-of-type(2)) {
 			grid-column: 2 / span 1;
 			grid-row: 2;
 		}
-		.trio.left :global(.project:nth-of-type(3)) {
+		.trio.left :global(.media:nth-of-type(3)) {
 			grid-column: 1 / span 1;
 		}
-		.trio.right :global(.project:nth-of-type(1)) {
+		.trio.right :global(.media:nth-of-type(1)) {
 			grid-column: 1 / span 1;
 			grid-row: 1;
 		}
-		.trio.right :global(.project:nth-of-type(2)) {
+		.trio.right :global(.media:nth-of-type(2)) {
 			grid-column: 1 / span 1;
 			grid-row: 2;
 		}
-		.trio.right :global(.project:nth-of-type(3)) {
+		.trio.right :global(.media:nth-of-type(3)) {
 			grid-column: 2 / span 1;
 		}
-		.trio :global(.project:nth-of-type(3)) {
+		.trio :global(.media:nth-of-type(3)) {
 			grid-row: 1 / span 2;
 			position: relative;
 		}
-		.trio :global(.project:nth-of-type(3) figure) {
+		.trio.right :global(.media:nth-of-type(3)) {
 			padding-top: 0;
 			position: absolute;
 			top: 0;

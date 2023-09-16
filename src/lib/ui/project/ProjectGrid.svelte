@@ -16,7 +16,7 @@
 	{/if}
 	<div class="projects">
 		{#each data.projects as project, index}
-			<ProjectThumb {project} size={index === 0 && data.useFeature ? 'full' : 'half'} />
+			<ProjectThumb url="" {project} size={index === 0 && data.useFeature ? 'full' : 'half'} />
 		{/each}
 	</div>
 	{#if data.moreLink?.url}
