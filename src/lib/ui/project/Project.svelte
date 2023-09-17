@@ -88,7 +88,7 @@
 					<div class="trio {item.align ?? 'left'}">
 						<ProjectMediaComponent media={item.top} scaleOnReveal={index === 0} />
 						<ProjectMediaComponent media={item.bottom} scaleOnReveal={index === 0} />
-						<ProjectMediaComponent media={item.side} cover={true} scaleOnReveal={index === 0} />
+						<ProjectMediaComponent media={item.side} cover="desktop" scaleOnReveal={index === 0} />
 					</div>
 				{/if}
 			{/each}
@@ -184,6 +184,10 @@
 	}
 	.medias :global(:first-child) {
 		margin-top: 0;
+	}
+	.pair,
+	.trio {
+		position: relative;
 	}
 
 	@media (min-width: 720px) {

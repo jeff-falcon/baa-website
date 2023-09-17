@@ -7,7 +7,7 @@
 	import { fly } from 'svelte/transition';
 
 	export let media: ProjectMedia;
-	export let cover = false;
+	export let cover: 'desktop' | boolean = false;
 	export let fillContainer = false;
 	export let scaleOnReveal = true;
 	export let fadeOnReveal = true;
@@ -65,7 +65,6 @@
 	<IntersectionObserver element={figureEl} bind:intersecting={isIntersecting} once={true}>
 		<figure
 			class="media"
-			class:cover={cover && !fillContainer}
 			class:isBgVideo
 			class:isVideoPlaying
 			class:isFullWidth
@@ -73,7 +72,9 @@
 			class:isIntersecting
 			class:scaleOnReveal
 			class:fadeOnReveal
-			class:fillContainer={!cover && fillContainer}
+			class:fillContainer={cover === false && fillContainer}
+			class:desktopCover={cover === 'desktop' && !fillContainer}
+			class:mobileCover={cover === true && !fillContainer}
 			data-is-video-playing={isVideoPlaying}
 			class:isInsidePair
 		>
@@ -194,9 +195,9 @@
 	.media :global(.video-container) {
 		z-index: 1;
 	}
-	.cover.media,
-	.cover img,
-	.cover picture,
+	.mobileCover.media,
+	.mobileCover img,
+	.mobileCover picture,
 	.fillContainer img,
 	.fillContainer picture {
 		position: absolute;
@@ -209,18 +210,18 @@
 	.fillContainer {
 		position: relative;
 	}
-	.cover img,
+	.mobileCover img,
 	.fillContainer img {
 		object-fit: cover;
 	}
-	.cover.isBgVideo.isVideoPlaying picture {
+	.mobileCover.isBgVideo.isVideoPlaying picture {
 		visibility: hidden;
 	}
-	.cover.isBgVideo :global(.video-container) {
+	.mobileCover.isBgVideo :global(.video-container) {
 		opacity: 0;
 		transition: 1200ms linear opacity;
 	}
-	.cover.isBgVideo.isVideoPlaying :global(.video-container) {
+	.mobileCover.isBgVideo.isVideoPlaying :global(.video-container) {
 		opacity: 1;
 	}
 	.media:not(.isBgVideo) picture {
@@ -258,6 +259,29 @@
 		}
 		.subtitle {
 			padding-top: var(--16pt);
+		}
+		.desktopCover.media,
+		.desktopCover img,
+		.desktopCover picture {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+		.desktopCover img {
+			object-fit: cover;
+		}
+		.desktopCover.isBgVideo.isVideoPlaying picture {
+			visibility: hidden;
+		}
+		.desktopCover.isBgVideo :global(.video-container) {
+			opacity: 0;
+			transition: 1200ms linear opacity;
+		}
+		.desktopCover.isBgVideo.isVideoPlaying :global(.video-container) {
+			opacity: 1;
 		}
 	}
 	@media (min-width: 1280px) {
