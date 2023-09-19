@@ -60,6 +60,10 @@
 			pageHasHero.set(false);
 		};
 	});
+
+	function formatUrl(url: string) {
+		return url.replace(/^http(s)?:\/\//, '').replace(/\/$/, '');
+	}
 </script>
 
 {#if hero}
@@ -99,7 +103,7 @@
 		{/if}
 		{#if data.clients}
 			<div class="clients">
-				<b>Clients and publications:</b>
+				<h3 class="title">Clients and publications</h3>
 				{data.clients}
 			</div>
 		{/if}
@@ -107,22 +111,80 @@
 			<ul class="links">
 				{#each data.links as link}
 					<li>
-						<b>{uppercaseFirst(link.name)}</b>
-						<a href={getArtistLinkUrl(link)} target="_blank">{link.url ?? `@${link.username}`}</a>
+						<a href={getArtistLinkUrl(link)} target="_blank"
+							><b class="title">{uppercaseFirst(link.name)}</b>
+							<span class="value">{link.url ? formatUrl(link.url) : `@${link.username}`}</span></a
+						>
 					</li>
 				{/each}
 			</ul>
 		{/if}
 		<div class="contact">
-			Interested in working with {nickname},<br />
-			please email
+			Interested in working with {nickname}, please email
 			<a href="mailto:workwith@baa.com?subject=Interested in {nickname}">workwith@baa.com</a>
 		</div>
 	</div>
 </section>
 
 <style>
+	.links {
+		list-style: none;
+		padding: 0;
+	}
+	.bio {
+		background: var(--bg-light);
+		color: var(--text-dark);
+		padding-top: 9rem;
+		padding-bottom: 9rem;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: var(--gutter-lg);
+	}
+	.bio .wrap {
+		grid-column: 1 / span 4;
+	}
+	.clients .title {
+		text-transform: uppercase;
+		font-size: var(--16pt);
+		line-height: var(--24pt);
+		margin: 0;
+		font-weight: bold;
+	}
+	.links {
+		display: flex;
+		gap: 24px;
+		margin: 40px 0 0;
+	}
+	.links .value {
+		display: none;
+	}
 	@media (min-width: 720px) {
+		.bio {
+			grid-template-columns: repeat(12, 1fr);
+		}
+		.bio .wrap {
+			grid-column: 2 / span 7;
+			padding-left: 0;
+		}
+		.clients .title {
+			font-size: var(--18pt);
+		}
+		.links {
+			display: block;
+			margin: 80px 0 1.25rem;
+		}
+		.links li {
+			margin: 0;
+		}
+		.links a {
+			text-decoration-line: none;
+		}
+		.links .value {
+			display: inline;
+			text-decoration-line: underline;
+			text-decoration-thickness: 1px;
+			text-decoration-color: inherit;
+		}
 		.projects .pair,
 		.projects .trio {
 			display: grid;
@@ -173,31 +235,6 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-		}
-	}
-	.links {
-		list-style: none;
-		padding: 0;
-	}
-	.bio {
-		background: var(--bg-light);
-		color: var(--text-dark);
-		padding-top: 9rem;
-		padding-bottom: 9rem;
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: var(--gutter-lg);
-	}
-	.bio .wrap {
-		grid-column: 1 / span 4;
-	}
-	@media (min-width: 720px) {
-		.bio {
-			grid-template-columns: repeat(12, 1fr);
-		}
-		.bio .wrap {
-			grid-column: 2 / span 7;
-			padding-left: 0;
 		}
 	}
 </style>

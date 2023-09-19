@@ -1,10 +1,7 @@
 <script lang="ts">
 	import ProjectMediaComponent from '$lib/ui/project/ProjectMediaComponent.svelte';
 	import { PortableText } from '@portabletext/svelte';
-	import type { Project, ProjectGrid, Artist } from '$lib/types';
-	import type { fly, FlyParams } from 'svelte/transition';
-	import { cubicOut, expoOut } from 'svelte/easing';
-	import ProjectGridComponent from './ProjectGrid.svelte';
+	import type { Project, Artist } from '$lib/types';
 	import { getContrastYIQFromColor } from '$lib/color';
 	import { onMount } from 'svelte';
 	import { footerHasContactInfo } from '$lib/store';
@@ -12,18 +9,7 @@
 	export let project: Project;
 	export let artist: Artist | undefined = undefined;
 
-	const flyProps: FlyParams = { opacity: 0, y: 30, easing: expoOut, duration: 1500 };
-
 	let scrollY = 0;
-
-	$: relatedProjects =
-		project.showRelatedProjects && (project.relatedProjects?.length || 0)
-			? <ProjectGrid>{
-					title: 'Related Projects',
-					projects: project.relatedProjects,
-					_type: 'project_grid'
-			  }
-			: null;
 
 	$: hasRelatedBg =
 		project.relatedProjectsBgColor && project.relatedProjectsBgColor !== 'transparent';
@@ -33,6 +19,7 @@
 
 	$: isMobile = typeof window !== 'undefined' && window.innerWidth < 720;
 	$: isTitleVisible = scrollY < (isMobile ? 80 : 96);
+	$: hasDetails = project.description || project.descriptionIntro || project.credits?.length;
 
 	const tags = project.tags?.join(', ') ?? '';
 
@@ -95,27 +82,49 @@
 		</section>
 	{/if}
 </div>
+{#if hasDetails}
+	<section class="project-info gutter">
+		<div class="wrap">
+			{#if project.credits?.length}
+				<ul class="credits">
+					{#each project.credits as credit, index (credit)}
+						<li class="credit">
+							{#if credit.name}
+								<h3 class="name">{credit.name}</h3>
+							{/if}
+							{#if credit.credit}
+								<p class="value">{credit.credit}</p>
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			{/if}
+			{#if project.descriptionIntro}
+				<div class="description intro">
+					<PortableText value={project.descriptionIntro} />
+				</div>
+			{/if}
+			{#if project.description}
+				<div class="description extra">
+					<PortableText value={project.description} />
+				</div>
+			{/if}
+		</div>
+	</section>
+{/if}
 
 <style>
-	.project-info {
-		display: grid;
-		grid-template-areas:
-			'description-intro'
-			'name-credits'
-			'description-extra';
-		padding-top: 120px;
-		padding-bottom: 40px;
-	}
 	.description.intro {
-		grid-area: description-intro;
 		font-size: var(--18pt);
 		line-height: var(--24pt);
 	}
 	.description.extra {
-		grid-area: description-extra;
 		font-size: var(--16pt);
 		line-height: var(--24pt);
 		opacity: 0.6;
+	}
+	.credits + .description,
+	.description + .description.extra {
 		margin-top: var(--32pt);
 	}
 	.description :global(p),
@@ -147,6 +156,14 @@
 		margin: 0;
 		font-weight: bold;
 	}
+	.credits {
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+	}
+	.credits li {
+		margin-top: 0;
+	}
 	.credits .name,
 	.credits .value {
 		font-size: var(--14pt);
@@ -155,6 +172,7 @@
 	}
 	.credits .name {
 		font-weight: bold;
+		text-transform: uppercase;
 	}
 	.credits .value {
 		font-weight: normal;
@@ -189,7 +207,17 @@
 	.trio {
 		position: relative;
 	}
-
+	.project-info {
+		background: var(--bg-light);
+		color: var(--text-dark);
+		padding-top: 4rem;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: var(--gutter-lg);
+	}
+	.project-info .wrap {
+		grid-column: 1 / span 4;
+	}
 	@media (min-width: 720px) {
 		.pair,
 		.trio {
@@ -253,17 +281,16 @@
 			width: 100%;
 			height: 100%;
 		}
+		.project-info {
+			grid-template-columns: repeat(12, 1fr);
+			padding-top: 8rem;
+		}
+		.project-info .wrap {
+			grid-column: 2 / span 7;
+			padding-left: 0;
+		}
 	}
 	@media (min-width: 960px) {
-		.project-info {
-			grid-template-areas:
-				'description-intro name-credits'
-				'description-extra name-credits';
-			grid-template-columns: 8fr 4fr;
-			gap: var(--32pt) calc(var(--gutter-lg) + var(--column-width));
-			padding-top: 128px;
-			padding-bottom: 68px;
-		}
 		.name-credits {
 			padding-top: 0;
 			margin-top: 0;
@@ -286,7 +313,6 @@
 			line-height: var(--32pt);
 		}
 		.description.extra {
-			margin-top: 0;
 			font-size: var(--18pt);
 			line-height: var(--24pt);
 		}

@@ -34,9 +34,9 @@
 
 {#if isVideoPlayer}
 	{@const src = media.videoPlayerSrc ?? ''}
-	<div class="video-player gutter" class:isInsidePair>
+	<div class="video-player" class:isInsidePair>
 		{#if title}
-			<div class="title-wrap" style="opacity: {isTitleVisible ? 1 : 0}">
+			<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
 				<h1
 					class="title"
 					in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
@@ -150,7 +150,7 @@
 	}
 	.video-player {
 		margin-top: var(--gutter-sm);
-		margin-bottom: var(--gutter-sm);
+		margin-bottom: 0;
 	}
 	.video-player .title,
 	.media .title {
@@ -250,7 +250,6 @@
 	}
 	@media (min-width: 720px) {
 		.video-player {
-			margin-bottom: var(--gutter-lg);
 			margin-top: var(--gutter-lg);
 		}
 		.title-wrap .title {
