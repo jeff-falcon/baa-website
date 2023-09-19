@@ -171,7 +171,7 @@
 		position: sticky;
 		top: var(--site-top-padding);
 		padding-top: 24px;
-		z-index: 0;
+		z-index: -1;
 	}
 	.media .title-wrap {
 		width: 100%;

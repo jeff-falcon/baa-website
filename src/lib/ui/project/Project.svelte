@@ -48,7 +48,7 @@
 						media={item}
 						scaleOnReveal={index === 0}
 						title={index === 0 && project.title ? project.title : ''}
-						subtitle={index === 0 && tags ? tags : ''}
+						subtitle={index === 0 && tags ? tags : project.client ?? ''}
 						{isTitleVisible}
 					/>
 				{:else if item._type === 'item_pair'}
