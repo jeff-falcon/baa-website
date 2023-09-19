@@ -419,7 +419,7 @@
 		transition: var(--ease-in-out-cubic) transform 600ms;
 	}
 	.logo.hasArtist .baa {
-		transform: translateY(-8px);
+		transform: translateY(-10px);
 	}
 	.artist-info {
 		position: absolute;
