@@ -257,9 +257,6 @@
 			font-size: 4.25rem;
 			line-height: 1;
 		}
-		.subtitle {
-			padding-top: var(--16pt);
-		}
 		.desktopCover.media,
 		.desktopCover img,
 		.desktopCover picture {
