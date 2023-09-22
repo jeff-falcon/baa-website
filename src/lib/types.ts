@@ -188,6 +188,7 @@ export interface Config {
 	_type: 'config';
 	socials: { name: string, links: Social[] }
 	contactInfo: InputValue
+	artistContactInfo: InputValue
 }
 
 export interface LogoGrid {

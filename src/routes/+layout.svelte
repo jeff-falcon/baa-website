@@ -7,9 +7,11 @@
 	// import 'swiper/css/modules/navigation';
 	import Footer from '$lib/ui/nav/Footer.svelte';
 	import type { LayoutData } from './$types';
-	import { isMenuOpenComplete } from '$lib/store';
+	import { isMenuOpenComplete, artistContactInfo } from '$lib/store';
 
 	export let data: LayoutData;
+
+	artistContactInfo.set(data.config.artistContactInfo);
 </script>
 
 <TopNav config={data.config} />

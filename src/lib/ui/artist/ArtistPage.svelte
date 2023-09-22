@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { Artist, ArtistHero, ArtistLink, CloudinaryImage, Project } from '$lib/types';
-	import { PortableText } from '@portabletext/svelte';
+	import { PortableText, type PortableTextComponents } from '@portabletext/svelte';
+	import type { InputValue } from '@portabletext/svelte/ptTypes';
 	import ProjectThumb from '../project/ProjectThumb.svelte';
 	import ArtistHeroComponent from './ArtistHero.svelte';
 	import { onMount } from 'svelte';
-	import { footerHasContactInfo, isFooterLight, pageHasHero } from '$lib/store';
+	import { artistContactInfo, footerHasContactInfo, isFooterLight, pageHasHero } from '$lib/store';
 
 	export let data: Artist;
 
@@ -29,6 +30,37 @@
 			: undefined;
 	const projects = data.projects?.length ?? 0 > 1 ? data.projects.slice(1) ?? [] : [];
 	const nickname = data.nickname || data.name;
+
+	$: replacedFooter =
+		$artistContactInfo && Array.isArray($artistContactInfo)
+			? $artistContactInfo.reduce((prev: any, block) => {
+					if (block._type === 'block') {
+						const blockClone = { ...block };
+						if (blockClone.children?.length) {
+							blockClone.children = block.children.map((child: any) => {
+								let text = child.text;
+								if (text.includes('{nickname}')) {
+									text = text.replace('{nickname}', nickname);
+								}
+								return { ...child, text };
+							});
+						}
+						if (block.markDefs?.length) {
+							blockClone.markDefs = block.markDefs.map((b: any) => {
+								if (b._type === 'link' && b.url?.startsWith('mailto:')) {
+									const url = b.url + '?subject=Inquiry for BAA Artist: ' + nickname;
+									return { ...b, url };
+								} else {
+									return b;
+								}
+							});
+						}
+						return [...prev, blockClone];
+					} else {
+						return prev;
+					}
+			  }, [] as any)
+			: null;
 
 	function uppercaseFirst(str: string) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -119,10 +151,11 @@
 				{/each}
 			</ul>
 		{/if}
-		<div class="contact">
-			Interested in working with {nickname}, please email
-			<a href="mailto:workwith@baa.com?subject=Interested in {nickname}">workwith@baa.com</a>
-		</div>
+		{#if replacedFooter}
+			<div class="contact">
+				<PortableText value={replacedFooter} />
+			</div>
+		{/if}
 	</div>
 </section>
 

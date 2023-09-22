@@ -13,6 +13,7 @@ export async function load() {
   const client = getClient();
   const groq = `*[_type == "config"]{
     "contactInfo": contact_info,
+    "artistContactInfo": artist_contact_info,
     "socials": socials_group{
       name,
       "links": socials_links[]{
