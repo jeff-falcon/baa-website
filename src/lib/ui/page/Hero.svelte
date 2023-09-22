@@ -1,16 +1,22 @@
 <script lang="ts">
-	import type { Hero, HeroArtist, Project, ProjectMedia } from '$lib/types';
+	import type { Hero, HeroArtist, ProjectMedia } from '$lib/types';
 	import ArrowButton from '$lib/ui/button/ArrowButton.svelte';
 	import { onMount } from 'svelte';
 	import ProjectMediaComponent from '../project/ProjectMediaComponent.svelte';
 	import ArrowIcon from '../button/ArrowIcon.svelte';
+	import HeroVideoBg from '../video/HeroVideoBG.svelte';
+	import anime from 'animejs';
 
 	export let data: Hero;
 
 	let scrollY = 0;
 	let innerHeight = 0;
+	let videoComponentsReady = 0;
+	let tl: anime.AnimeTimelineInstance;
 
 	let currentArtist: HeroArtist = data.artists[0];
+
+	let videoComponents: { [key: string]: HeroVideoBg } = {};
 
 	$: scrollPct = innerHeight ? Math.max(0, Math.min(1, scrollY / innerHeight)) : 0;
 	$: canApplyTransform = Math.abs(scrollY) < innerHeight + 100;
@@ -34,16 +40,48 @@
 		};
 		return media;
 	}
-	onMount(() => {
-		let index = 0;
-		const myInt = window.setInterval(() => {
-			index = (index + 1) % data.artists.length;
-			currentArtist = data.artists[index];
-		}, 4000);
-		return () => {
-			clearInterval(myInt);
-		};
-	});
+
+	function onReady(artist: HeroArtist, duration: number) {
+		videoComponentsReady++;
+		const numberOfVideos = data.artists.filter((a) => a.kind === 'video-bg').length;
+		artist.duration = duration;
+		if (videoComponentsReady === numberOfVideos) {
+			console.log('ready to start animation', data.artists);
+			createTimeline();
+		}
+	}
+
+	function createTimeline() {
+		console.log('create timeline');
+		const totalDuration = data.artists.reduce((prev, curr) => {
+			return prev + (curr.duration ?? 4) * 1000;
+		}, 0);
+		tl = anime.timeline({ loop: true, autoplay: true, easing: 'linear', duration: totalDuration });
+		let time = 0;
+		const obj = { o: 0 };
+		data.artists.forEach((artist: HeroArtist, index: number) => {
+			const duration = (artist.duration ? artist.duration - 1.2 : 4) * 1000;
+			if (index > 0) {
+				time += duration;
+			}
+			console.log({ time, duration });
+			tl.add(
+				{
+					targets: obj,
+					o: [0, 1],
+					changeBegin: () => {
+						currentArtist = artist;
+						console.log('begin', artist.name, artist.duration);
+						if (artist.duration) {
+							videoComponents[artist.name].startPlaying();
+						}
+					},
+					duration: duration
+				},
+				time
+			);
+		});
+	}
 </script>
 
 <svelte:window bind:scrollY bind:innerHeight />
@@ -83,13 +121,22 @@
 		{#each data.artists as artist (artist.name)}
 			<div class="artist-media" style="opacity: {currentArtist.name === artist.name ? 1 : 0}">
 				{#key `artist_hero_media_${artist.name}`}
-					<ProjectMediaComponent
-						media={getMediaForArtist(artist)}
-						cover={true}
-						scaleOnReveal={false}
-						fadeOnReveal={false}
-						isFullWidth={true}
-					/>
+					{#if artist.kind === 'image'}
+						<ProjectMediaComponent
+							media={getMediaForArtist(artist)}
+							cover={true}
+							scaleOnReveal={false}
+							fadeOnReveal={false}
+							isFullWidth={true}
+						/>
+					{:else}
+						<HeroVideoBg
+							id="hero-video-bg-{artist.name.replace(/\s+/g, '_')}"
+							src={artist.videoBgSrcHd || artist.videoBgSrc || ''}
+							bind:this={videoComponents[artist.name]}
+							on:ready={(e) => onReady(artist, e.detail.duration)}
+						/>
+					{/if}
 				{/key}
 			</div>
 		{/each}

@@ -126,6 +126,7 @@ export interface HeroArtist {
 	image?: CloudinaryImage;
 	videoBgSrc?: string;
 	videoBgSrcHd?: string;
+	duration?: number;
 }
 
 export type PageComponents = Array<ArtistsGrid | ColumnedText>
