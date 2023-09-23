@@ -81,6 +81,12 @@
 			time += duration;
 		});
 	}
+
+	onMount(() => {
+		return () => {
+			tl?.pause();
+		};
+	});
 </script>
 
 <svelte:window bind:scrollY bind:innerHeight />
