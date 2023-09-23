@@ -174,23 +174,25 @@ export function parseProjectFromData(data: any) {
 
 export function parseHeroFromData(data: any) {
 	if (Boolean(data?._type) === false) return undefined;
+	const stillDuration = data.still_duration ? Number(data.still_duration) : 4;
 	const hero: Hero = {
 		_type: 'hero',
 		name: data.title,
 		subtitle: data.subtitle,
-		artists: data.artists?.map((a: any) => parseHeroArtistFromData(a)),
+		artists: data.artists?.map((a: any) => parseHeroArtistFromData(a, stillDuration)),
 		scrollInstructions: data.scroll_instructions
 	}
 	return hero;
 }
 
-export function parseHeroArtistFromData(data: any) {
+export function parseHeroArtistFromData(data: any, stillDuration: number) {
 	const artist: HeroArtist = {
 		name: data.artist,
 		image: parseCloudinaryImage(data.image_desktop, data.image_mobile),
 		kind: data.kind === 'video-bg' ? 'video-bg' : 'image',
 		videoBgSrc: data.thumb_vimeo_src,
 		videoBgSrcHd: data.thumb_vimeo_src_hd,
+		stillDuration
 	}
 	return artist
 }

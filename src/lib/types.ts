@@ -126,6 +126,7 @@ export interface HeroArtist {
 	image?: CloudinaryImage;
 	videoBgSrc?: string;
 	videoBgSrcHd?: string;
+	stillDuration: number;
 	duration?: number;
 }
 

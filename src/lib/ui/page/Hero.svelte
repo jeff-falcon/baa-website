@@ -61,7 +61,7 @@
 		let time = 0;
 		const obj = { o: 0 };
 		data.artists.forEach((artist: HeroArtist, index: number) => {
-			const duration = (artist.duration ? artist.duration - 1.2 : 4) * 1000;
+			const duration = (artist.duration ? artist.duration - 1.2 : artist.stillDuration) * 1000;
 			console.log({ time, duration });
 			tl.add(
 				{
