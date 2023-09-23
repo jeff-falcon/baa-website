@@ -53,17 +53,15 @@
 
 	function createTimeline() {
 		console.log('create timeline');
-		const totalDuration = data.artists.reduce((prev, curr) => {
-			return prev + (curr.duration ?? 4) * 1000;
-		}, 0);
+		const totalDuration =
+			data.artists.reduce((prev, curr) => {
+				return prev + (curr.duration ?? 4) * 1000;
+			}, 0) - 1200;
 		tl = anime.timeline({ loop: true, autoplay: true, easing: 'linear', duration: totalDuration });
 		let time = 0;
 		const obj = { o: 0 };
 		data.artists.forEach((artist: HeroArtist, index: number) => {
 			const duration = (artist.duration ? artist.duration - 1.2 : 4) * 1000;
-			if (index > 0) {
-				time += duration;
-			}
 			console.log({ time, duration });
 			tl.add(
 				{
@@ -80,6 +78,7 @@
 				},
 				time
 			);
+			time += duration;
 		});
 	}
 </script>
