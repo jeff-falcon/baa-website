@@ -38,6 +38,7 @@ export interface Project {
 	relatedProjects?: Project[];
 	showRelatedProjects?: boolean;
 	relatedProjectsBgColor?: string;
+	type: 'project' | 'portfolio'
 }
 export interface ProjectGrid {
 	_type: 'project_grid';

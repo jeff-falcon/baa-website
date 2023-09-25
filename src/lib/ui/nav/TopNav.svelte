@@ -34,9 +34,11 @@
 		: `rgba(${$bgColor.replace('rgb(', '').replace(')', '')},0.8)`;
 	$: style = `--bg-color: ${backgroundColor};}`;
 
+	$: isScrolled = scrollY > 120;
+
 	$: if ($pageHasHero) {
 		clearTimeout(changeBgTimeout);
-		hasBg = scrollY > 120;
+		hasBg = isScrolled;
 	} else {
 		clearTimeout(changeBgTimeout);
 		if (typeof window !== 'undefined') {
@@ -46,7 +48,7 @@
 		}
 	}
 
-	$: hasArtist = Boolean($currentArtist && $currentProject);
+	$: hasArtist = Boolean($currentArtist && $currentProject && isScrolled);
 
 	$: menuLinks = [
 		{
@@ -64,6 +66,11 @@
 	$: currentRoute = $page.url.pathname ?? '';
 	$: isMenuOpen = $menuState === 'open';
 	$: mobileNavStyle = $bgColor ? `--bg-color: ${$bgColor};` : '';
+	$: isShowingArtistHeader = hasArtist && !isMenuOpen;
+
+	function replaceArtist(project: string) {
+		return project.replace($currentArtist?.name + ' -', '').trim();
+	}
 
 	function toggleMenu() {
 		menuState.update((state) => {
@@ -91,30 +98,37 @@
 	class="gutter"
 	class:hasBg
 	class:pageHasHero={$pageHasHero}
+	class:isScrolled
 	{style}
 >
-	<div class="logo" class:hasArtist>
+	<div class="logo" class:hasArtist={isShowingArtistHeader}>
 		<a href="/" class="baa">
 			<BAALogo />
 		</a>
-		{#if hasArtist && !isMenuOpen}
-			<div class="artist-info">
-				{#if $currentProject}
-					<div class="pipe" transition:fade|global={{ duration: 500 }} />
-					<a
-						class="artist"
-						href="/artists/{$currentArtist?.slug}/"
-						in:fly|global={{ duration: 600, easing: cubicOut, x: '-40px', opacity: 0 }}
-						out:fly|global={{ duration: 400, easing: linear, x: 0, opacity: 0 }}
-					>
-						{$currentArtist?.name}
-					</a>
-				{:else}
-					<div class="artist">{$currentArtist?.name}</div>
-				{/if}
-			</div>
-		{/if}
 	</div>
+	{#if isShowingArtistHeader}
+		<div class="artist-info gutter">
+			{#if $currentProject}
+				<a
+					class="artist"
+					href="/artists/{$currentArtist?.slug}/"
+					in:fly|global={{ duration: 600, easing: cubicOut, x: '-40px', opacity: 0 }}
+					out:fly|global={{ duration: 200, easing: linear, x: 0, opacity: 0 }}
+				>
+					{$currentArtist?.name}
+				</a>
+				<p
+					class="project-name"
+					in:fly|global={{ duration: 600, easing: cubicOut, x: '-40px', opacity: 0, delay: 80 }}
+					out:fly|global={{ duration: 200, easing: linear, x: 0, opacity: 0 }}
+				>
+					{replaceArtist($currentProject.title)}
+				</p>
+			{:else}
+				<div class="artist">{$currentArtist?.name}</div>
+			{/if}
+		</div>
+	{/if}
 	<div class="right">
 		<button class="menu-btn" on:click={toggleMenu}>
 			<div class="line line1" />
@@ -255,15 +269,26 @@
 		backdrop-filter: blur(14px);
 		-webkit-backdrop-filter: blur(14px);
 	}
+
 	header.pageHasHero:not(.hasBg):not(.isMenuOpen):before {
 		height: var(--fade-height);
 		background: linear-gradient(to bottom, var(--bg-dark-45) 0%, transparent 100%);
 		opacity: 1;
 		pointer-events: none;
 	}
+	:global(.bg-is-light) header.pageHasHero.isScrolled:not(.hasBg):not(.isMenuOpen):before {
+		background: transparent;
+	}
 
 	header.pageHasHero:after {
 		background: var(--bg-dark-60);
+	}
+	:global(.bg-is-light) header.pageHasHero:after {
+		background-color: var(--bg-light-60);
+	}
+	:global(.bg-is-light) header.pageHasHero.isScrolled {
+		--text-color: var(--text-dark);
+		--text-color-40: var(--text-dark-40);
 	}
 	header.hasBg:not(.isMenuOpen):after {
 		opacity: 1;
@@ -284,9 +309,6 @@
 		cursor: pointer;
 		transition: linear 180ms border-color;
 	}
-	.menu-btn {
-		border-color: var(--text-color);
-	}
 
 	.menu-btn .line {
 		width: 16px;
@@ -296,6 +318,9 @@
 		position: absolute;
 		left: calc(50% - 8px);
 		top: calc(50% - 1px);
+	}
+	:global(.bg-is-light) .menu-btn {
+		border-color: var(--text-dark-40);
 	}
 	.menu-btn .line1 {
 		transform: translateY(-3px);
@@ -416,24 +441,38 @@
 	}
 	.logo .baa {
 		display: block;
-		transition: var(--ease-in-out-cubic) transform 600ms;
+		transition: linear opacity 180ms;
 	}
 	.logo.hasArtist .baa {
-		transform: translateY(-10px);
+		opacity: 0;
 	}
 	.artist-info {
 		position: absolute;
-		top: 20px;
+		top: 17px;
 		left: 0;
+		right: 60px;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
 	}
 	.artist {
 		text-transform: uppercase;
-		font-size: 1rem;
+		font-size: var(--12pt);
 		font-weight: bold;
 		line-height: 1.12;
 		white-space: nowrap;
 		text-decoration: none;
+		margin: 0;
+	}
+	.project-name {
+		margin: 0;
+		font-size: var(--20pt);
+		line-height: 1.5;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		transform: translateY(-2px);
 	}
 	@media (min-width: 720px) {
 		header {
@@ -455,8 +494,7 @@
 		.v-menu a:hover {
 			opacity: 0.6;
 		}
-		.logo,
-		.artist-info {
+		.logo {
 			display: flex;
 			flex-direction: row;
 			align-items: baseline;
@@ -466,34 +504,19 @@
 			position: relative;
 		}
 
-		.logo .baa {
-			transition: none;
-		}
-		.logo.hasArtist .baa {
-			transform: none;
-		}
 		.artist-info {
-			gap: 8px;
-			top: -5px;
-			left: 86px;
-			overflow: hidden;
-		}
-		.artist-info .pipe {
-			display: block;
-			left: 0;
-			top: 3px;
-			width: 1px;
-			height: 36px;
-			position: absolute;
-			background: var(--text-color-40);
+			top: 25px;
 		}
 		.artist {
-			font-size: 2.375rem;
-			padding-left: 16px;
-			font-weight: normal;
+			font-size: var(--16pt);
 		}
 		.artist:hover {
 			text-decoration: none;
+		}
+		.project-name {
+			font-size: var(--36pt);
+			font-weight: normal;
+			transform: translateY(-4px);
 		}
 		.socials {
 			gap: 48px;

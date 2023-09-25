@@ -8,8 +8,12 @@
 	export let data: PageData;
 
 	onMount(() => {
-		pageHasHero.set(true);
-		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
+		const firstIsFullBleed =
+			data.project?.media?.[0]._type === 'project_media' &&
+			data.project?.media?.[0].kind !== 'video-player';
+		pageHasHero.set(firstIsFullBleed);
+		console.log({ firstIsFullBleed });
+		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-light');
 		const color = data.project?.bgColor || defaultBg;
 		bgColor.set(color);
 		document.body.style.setProperty('--page-bg-color', color);

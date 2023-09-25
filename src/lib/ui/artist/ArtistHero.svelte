@@ -55,7 +55,11 @@
 						{/if}
 					</div>
 					<div class="arrow">
-						<ArrowButton title="View Project" isTitleHiddenOnMobile={true} isOverSolid={false} />
+						<ArrowButton
+							title="View {data.project.type === 'portfolio' ? 'Portfolio' : 'Project'}"
+							isTitleHiddenOnMobile={true}
+							isOverSolid={false}
+						/>
 					</div>
 				</a>
 			{/if}

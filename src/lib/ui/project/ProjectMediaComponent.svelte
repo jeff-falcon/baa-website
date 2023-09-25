@@ -14,6 +14,7 @@
 	export let isFullWidth = true;
 	export let title = '';
 	export let subtitle = '';
+	export let preTitle = '';
 	export let isTitleVisible = true;
 	export let isInsidePair = false;
 
@@ -37,6 +38,14 @@
 	<div class="video-player" class:isInsidePair>
 		{#if title}
 			<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
+				{#if preTitle}
+					<h2
+						class="pre-title"
+						in:fly|global={{ y: 0, opacity: 0, easing: cubicOut, duration: 750, delay: 100 }}
+					>
+						{preTitle}
+					</h2>
+				{/if}
 				<h1
 					class="title"
 					in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
@@ -79,7 +88,19 @@
 			class:isInsidePair
 		>
 			{#if title}
-				<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
+				<div
+					class="title-wrap gutter"
+					style="opacity: {isTitleVisible ? 1 : 0}"
+					class:hasPreTitle={Boolean(preTitle)}
+				>
+					{#if preTitle}
+						<h2
+							class="pre-title"
+							in:fly|global={{ y: 0, opacity: 0, easing: cubicOut, duration: 750, delay: 100 }}
+						>
+							{preTitle}
+						</h2>
+					{/if}
 					<h1
 						class="title"
 						in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
@@ -155,7 +176,6 @@
 	.video-player .title,
 	.media .title {
 		margin: 0;
-		text-transform: uppercase;
 		line-height: 1;
 	}
 	.video-player .subtitle,
@@ -179,9 +199,20 @@
 		padding-bottom: var(--24pt);
 		padding-top: 40px;
 		background: linear-gradient(to bottom, hsla(0, 0%, 15%, 0) 0%, hsla(0, 0%, 15%, 0.6) 100%);
-		position: fixed;
+		position: absolute;
 		bottom: 0;
 		z-index: 2;
+		--text-color: var(--text-light);
+		color: var(--text-color);
+	}
+	.title-wrap .pre-title {
+		border-top: 1px solid var(--text-color-40);
+		padding-top: var(--24pt);
+		line-height: 1.12;
+		text-transform: uppercase;
+		font-size: var(--18pt);
+		font-weight: bold;
+		margin: 0 0 10px;
 	}
 	.subtitle {
 		padding-top: var(--8pt);
@@ -245,7 +276,7 @@
 		transform: scale(1);
 	}
 	@media (min-width: 560px) {
-		.title-wrap {
+		.title-wrap .title {
 			width: 80%;
 		}
 	}
@@ -256,6 +287,10 @@
 		.title-wrap .title {
 			font-size: 4.25rem;
 			line-height: 1;
+		}
+		.video-player .title-wrap {
+			padding-top: 80px;
+			margin-bottom: 40px;
 		}
 		.desktopCover.media,
 		.desktopCover img,
@@ -282,7 +317,7 @@
 		}
 	}
 	@media (min-width: 1280px) {
-		.title-wrap {
+		.title-wrap .title {
 			width: 67%;
 			max-width: 920px;
 		}

@@ -44,13 +44,17 @@
 		<section class="medias">
 			{#each project.media as item, index (item)}
 				{#if item._type === 'project_media'}
-					<ProjectMediaComponent
-						media={item}
-						scaleOnReveal={index === 0}
-						title={index === 0 && project.title ? project.title : ''}
-						subtitle={index === 0 && tags ? tags : project.client ?? ''}
-						{isTitleVisible}
-					/>
+					{@const isHero = index === 0 && item.kind !== 'video-player'}
+					<div class="single" class:isHero>
+						<ProjectMediaComponent
+							media={item}
+							cover={isHero}
+							scaleOnReveal={index === 0}
+							title={index === 0 && project.title ? project.title : ''}
+							preTitle={index === 0 && tags ? tags : artist?.name ?? ''}
+							{isTitleVisible}
+						/>
+					</div>
 				{:else if item._type === 'item_pair'}
 					{@const leftRatio = (item.left.image?.height ?? 100) / (item.left.image?.width ?? 100)}
 					{@const rightRatio = (item.right.image?.height ?? 100) / (item.right.image?.width ?? 100)}
@@ -202,6 +206,10 @@
 	}
 	.medias :global(:first-child) {
 		margin-top: 0;
+	}
+	.medias .single.isHero {
+		height: 100vh;
+		height: 100svh;
 	}
 	.pair,
 	.trio {

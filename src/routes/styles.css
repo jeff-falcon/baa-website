@@ -25,6 +25,7 @@
 	--bg-darker: #202020;
 	--bg-light: #e6e4df;
 	--bg-light-90: rgba(230, 228, 223, 0.9);
+	--bg-light-60: rgba(230, 228, 223, 0.6);
 	--bg-light-green: #e9f1cf;
 	--bg-default: var(--bg-dark);
 
@@ -262,6 +263,7 @@ form button:disabled {
 	:root {
 		--column-width: calc((100vw - var(--gutter-lg)) * (1 / 12));
 		--site-top-padding: 96px;
+		--top-nav-height: 108px;
 	}
 	.gutter {
 		padding-left: var(--gutter-lg);
