@@ -17,6 +17,7 @@
 	export let preTitle = '';
 	export let isTitleVisible = true;
 	export let isInsidePair = false;
+	export let hasEmptyTitle = false;
 
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
@@ -86,6 +87,7 @@
 			class:mobileCover={cover === true && !fillContainer}
 			data-is-video-playing={isVideoPlaying}
 			class:isInsidePair
+			class:hasEmptyTitle
 		>
 			{#if title}
 				<div
@@ -203,6 +205,7 @@
 		bottom: 0;
 		z-index: 2;
 		--text-color: var(--text-light);
+		--text-color-40: var(--text-light-40);
 		color: var(--text-color);
 	}
 	.title-wrap .pre-title {
@@ -321,12 +324,15 @@
 			width: 67%;
 			max-width: 920px;
 		}
-		.isInsidePair .title-wrap {
-			width: 50%;
+		.isInsidePair .title-wrap * {
+			width: 80%;
 			max-width: 100%;
 		}
 		.title-wrap .title {
 			font-size: 4.75rem;
+		}
+		.isInsidePair.hasEmptyTitle .title-wrap * {
+			opacity: 0;
 		}
 	}
 </style>

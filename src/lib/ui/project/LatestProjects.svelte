@@ -9,7 +9,7 @@
 	{#each data.projects as hero, index (hero)}
 		<ArtistHero
 			data={hero}
-			url="/artists/{hero.project?.artist?.slug}/{hero.project?.slug}"
+			url="/artists/{hero.project?.slug}"
 			doParallax={false}
 			align={index % 2 === 1 ? 'left' : 'right'}
 		/>

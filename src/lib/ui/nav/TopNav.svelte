@@ -324,7 +324,7 @@
 		left: calc(50% - 8px);
 		top: calc(50% - 1px);
 	}
-	:global(.bg-is-light) .menu-btn {
+	:global(.bg-is-light) header:not(.pageHasHero) .menu-btn {
 		border-color: var(--text-dark-40);
 	}
 	.menu-btn .line1 {

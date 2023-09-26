@@ -9,8 +9,9 @@
 
 	onMount(() => {
 		const firstIsFullBleed =
-			data.project?.media?.[0]._type === 'project_media' &&
-			data.project?.media?.[0].kind !== 'video-player';
+			(data.project?.media?.[0]._type === 'project_media' &&
+				data.project?.media?.[0].kind !== 'video-player') ||
+			data.project?.media?.[0]._type !== 'project_media';
 		pageHasHero.set(firstIsFullBleed);
 		console.log({ firstIsFullBleed });
 		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-light');

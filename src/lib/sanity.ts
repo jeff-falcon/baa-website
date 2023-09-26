@@ -188,7 +188,8 @@ async function getArtistsForProjects(latestProjects: LatestProjects[]) {
 				projects.forEach(p => {
 					p.name = a.name
 					if (p.project?.slug) {
-						p.project.slug = parseProjectSlug(a.slug, p.project.slug)
+						const slug = a.slug + '/' + parseProjectSlug(a.slug, p.project.slug)
+						p.project.slug = slug
 					}
 					console.log('added artist to project')
 				})

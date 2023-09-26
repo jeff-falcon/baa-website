@@ -73,7 +73,14 @@
 							{isTitleVisible}
 							isInsidePair={true}
 						/>
-						<ProjectMediaComponent media={item.right} scaleOnReveal={index === 0} />
+						<ProjectMediaComponent
+							media={item.right}
+							scaleOnReveal={index === 0}
+							title={index === 0 && project.title ? project.title : ''}
+							subtitle={index === 0 && tags ? tags : ''}
+							{isTitleVisible}
+							isInsidePair={true}
+						/>
 					</div>
 				{:else if item._type === 'item_trio'}
 					<div class="trio {item.align ?? 'left'}">
@@ -225,6 +232,9 @@
 	}
 	.project-info .wrap {
 		grid-column: 1 / span 4;
+	}
+	.pair :global(.media:nth-of-type(2) .title-wrap *) {
+		opacity: 0;
 	}
 	@media (min-width: 720px) {
 		.pair,
