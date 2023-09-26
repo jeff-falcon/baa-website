@@ -12,6 +12,7 @@
 	let scrollY = 0;
 	let innerHeight = 0;
 	let videoComponentsReady = 0;
+	let animStarted = false;
 	let tl: anime.AnimeTimelineInstance;
 
 	let currentArtist: HeroArtist = data.artists[0];
@@ -20,7 +21,9 @@
 
 	$: scrollPct = innerHeight ? Math.max(0, Math.min(1, scrollY / innerHeight)) : 0;
 	$: canApplyTransform = Math.abs(scrollY) < innerHeight + 100;
-	$: bgStyle = canApplyTransform ? `transform: translateY(${scrollY * 0.55}px);` : '';
+	$: bgStyle =
+		(canApplyTransform ? `transform: translateY(${scrollY * 0.55}px);` : '') +
+		` opacity: ${animStarted ? 1 : 0}`;
 	$: fgStyle = canApplyTransform
 		? `transform: translateY(${scrollY * 0.65}px); opacity: ${1 - scrollPct};`
 		: '';
@@ -49,6 +52,7 @@
 		if (videoComponentsReady === numberOfVideos) {
 			console.log('ready to start animation', data.artists);
 			createTimeline();
+			animStarted = true;
 		}
 	}
 
@@ -172,6 +176,8 @@
 	}
 	.bg {
 		z-index: 0;
+		opacity: 0;
+		transition: opacity linear 500ms;
 	}
 	.dim {
 		background: black;

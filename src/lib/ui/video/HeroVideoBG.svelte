@@ -13,8 +13,6 @@
 	export let id: string;
 
 	let isPlaying = false;
-	let isReady = false;
-	let playerTimeout: number | NodeJS.Timeout = 0;
 
 	let videoEl: HTMLVideoElement | null = null;
 
@@ -28,7 +26,6 @@
 	}
 
 	function onReady() {
-		isReady = true;
 		dispatch('ready', { duration: videoEl!.duration });
 		console.log('ready');
 	}
@@ -52,6 +49,7 @@
 		videoEl?.addEventListener('canplay', onReady);
 		videoEl?.addEventListener('ended', onEnd);
 		videoEl!.src = src;
+		videoEl!.load();
 		return () => {
 			videoEl?.removeEventListener('playing', onPlaying);
 			videoEl?.removeEventListener('pause', onPaused);
@@ -68,6 +66,7 @@
 		playsinline
 		muted
 		poster={placeholder}
+		preload="metadata"
 		crossorigin="anonymous"
 		disablepictureinpicture
 		disableremoteplayback
