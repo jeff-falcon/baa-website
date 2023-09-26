@@ -95,8 +95,8 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
         if (item) mediaList.push(item)
       }
       if (media._type === 'item_pair') {
-        const left = parseProjectMediaFromData(media.left)
-        const right = parseProjectMediaFromData(media.right)
+        const left = parseProjectMediaFromData(media.left, false)
+        const right = parseProjectMediaFromData(media.right, false)
         if (!left && !right) {
           continue;
         }
@@ -112,9 +112,9 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
         }
       }
       if (media._type === 'item_trio') {
-        const top = parseProjectMediaFromData(media.top)
-        const bottom = parseProjectMediaFromData(media.bottom)
-        const side = parseProjectMediaFromData(media.side)
+        const top = parseProjectMediaFromData(media.top, false)
+        const bottom = parseProjectMediaFromData(media.bottom, false)
+        const side = parseProjectMediaFromData(media.side, false)
         if (!top || !bottom || !side) {
           continue;
         }

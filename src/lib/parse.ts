@@ -1,6 +1,6 @@
 import type { Project, ProjectMedia, CloudinaryImage, Hero, Artist, HeroArtist, ProjectPair, ProjectTrio } from '$lib/types';
 
-export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false) {
+export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false, isSingle = true) {
 	if (!image) return undefined;
 	const originalUrl = image.derived?.[0]?.secure_url ?? image.secure_url;
 	if (image.format === 'gif') {
@@ -31,7 +31,7 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 				: url.replace(/\/upload\/(.*?)\/v(\d+)/, '/upload/$1,w_1600/v$2'),
 			lg: useOriginalQuality ? originalUrl : matches?.length
 				? url
-				: url.replace(/\/upload\/(.*?)\/v(\d+)/, '/upload/$1,w_3200/v$2')
+				: url.replace(/\/upload\/(.*?)\/v(\d+)/, `/upload/$1,w_${isSingle ? 32 : 16}00/v$2`)
 		},
 		width: image.width,
 		height: image.height
@@ -46,10 +46,10 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 	return img;
 }
 
-export function parseProjectMediaFromData(project: any): ProjectMedia | undefined {
+export function parseProjectMediaFromData(project: any, isSingle = true): ProjectMedia | undefined {
 	if (project?._type !== 'project_media') return undefined;
 	const useOriginalQuality = project.use_original_quality ?? false;
-	const image = parseCloudinaryImage(project.image, project.image_mobile, useOriginalQuality);
+	const image = parseCloudinaryImage(project.image, project.image_mobile, useOriginalQuality, isSingle);
 	const media: ProjectMedia = {
 		_type: 'project_media',
 		_key: project._id as string,
@@ -105,9 +105,9 @@ export function mergePortfolioIntoProjects(artist: Artist) {
 export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any, index: number) => {
 		if (p?._type === 'project_trio') {
-			const top = parseProjectFromData(p.top)
-			const bottom = parseProjectFromData(p.bottom)
-			const side = parseProjectFromData(p.side)
+			const top = parseProjectFromData(p.top, false)
+			const bottom = parseProjectFromData(p.bottom, false)
+			const side = parseProjectFromData(p.side, false)
 			if (top && bottom && side) {
 				top.slug = parseProjectSlug(artistSlug, top.slug)
 				bottom.slug = parseProjectSlug(artistSlug, bottom.slug)
@@ -122,8 +122,8 @@ export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 				return trio
 			}
 		} else if (p?._type === 'project_pair') {
-			const left = parseProjectFromData(p.left)
-			const right = parseProjectFromData(p.right)
+			const left = parseProjectFromData(p.left, false)
+			const right = parseProjectFromData(p.right, false)
 			if (left && right) {
 				left.slug = parseProjectSlug(artistSlug, left.slug)
 				right.slug = parseProjectSlug(artistSlug, right.slug)
@@ -149,7 +149,7 @@ export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 	return projects ?? []
 }
 
-export function parseProjectFromData(data: any) {
+export function parseProjectFromData(data: any, isSingle = true) {
 	if (data?._type !== 'project') return undefined;
 	const project: Project = {
 		_type: 'project',
@@ -165,7 +165,7 @@ export function parseProjectFromData(data: any) {
 		descriptionIntro: data.description_intro,
 		client: data.client,
 		kind: data.kind,
-		image: parseCloudinaryImage(data.image),
+		image: parseCloudinaryImage(data.image, null, false, isSingle),
 		videoBgSrc: data.thumb_vimeo_src,
 		videoBgSrcHd: data.thumb_vimeo_src_hd,
 		bgColor: data.bg_color?.value,

@@ -279,7 +279,7 @@
 		transform: scale(1);
 	}
 	@media (min-width: 560px) {
-		.title-wrap .title {
+		.video-player .title-wrap .title {
 			width: 80%;
 		}
 	}
@@ -320,7 +320,7 @@
 		}
 	}
 	@media (min-width: 1280px) {
-		.title-wrap .title {
+		.video-player .title-wrap .title {
 			width: 67%;
 			max-width: 920px;
 		}
