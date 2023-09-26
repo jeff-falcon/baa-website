@@ -169,6 +169,7 @@ export interface ProjectMedia {
 	videoBgSrcHd?: string;
 	useOriginalQuality: boolean;
 	autoplay: boolean;
+	fillContainer: boolean;
 }
 
 export interface ProjectMediaPair {
