@@ -61,6 +61,7 @@ export function parseProjectMediaFromData(project: any, isSingle = true): Projec
 		videoBgSrcHd: project.thumb_vimeo_src_hd as string || '',
 		useOriginalQuality,
 		autoplay: project.autoplay ?? false,
+		fillContainer: project.fill_container ?? false
 	};
 	return media;
 }

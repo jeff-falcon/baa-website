@@ -36,7 +36,8 @@
 			videoBgSrc: artist.videoBgSrc,
 			videoBgSrcHd: artist.videoBgSrcHd,
 			useOriginalQuality: false,
-			autoplay: true
+			autoplay: true,
+			fillContainer: true
 		};
 		return media;
 	}

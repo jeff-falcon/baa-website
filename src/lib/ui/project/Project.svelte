@@ -72,6 +72,7 @@
 							subtitle={index === 0 && tags ? tags : ''}
 							{isTitleVisible}
 							isInsidePair={true}
+							aspectRatio={leftRatio}
 						/>
 						<ProjectMediaComponent
 							media={item.right}
@@ -80,6 +81,7 @@
 							subtitle={index === 0 && tags ? tags : ''}
 							{isTitleVisible}
 							isInsidePair={true}
+							aspectRatio={rightRatio}
 						/>
 					</div>
 				{:else if item._type === 'item_trio'}

@@ -21,7 +21,8 @@
 		videoBgSrc: data.videoBgSrc,
 		videoBgSrcHd: data.videoBgSrcHd,
 		useOriginalQuality: false,
-		autoplay: true
+		autoplay: true,
+		fillContainer: false
 	};
 	$: scrollPct = innerHeight ? Math.max(0, Math.min(1, scrollY / innerHeight)) : 0;
 	$: canApplyTransform = doParallax && Math.abs(scrollY) < innerHeight + 100;

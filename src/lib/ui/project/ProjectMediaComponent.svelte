@@ -18,6 +18,7 @@
 	export let isTitleVisible = true;
 	export let isInsidePair = false;
 	export let hasEmptyTitle = false;
+	export let aspectRatio = 0;
 
 	let figureEl: HTMLElement;
 	let isIntersecting = false;
@@ -36,7 +37,14 @@
 
 {#if isVideoPlayer}
 	{@const src = media.videoPlayerSrc ?? ''}
-	<div class="video-player" class:isInsidePair>
+	<div
+		class="video-player"
+		class:isInsidePair
+		class:fillPlayer={isInsidePair && media.fillContainer}
+		style={aspectRatio && isInsidePair && media.fillContainer
+			? `--pad-top: ${aspectRatio * 100}%`
+			: ''}
+	>
 		{#if title}
 			<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
 				{#if preTitle}
@@ -171,10 +179,6 @@
 		z-index: 0;
 		height: auto;
 	}
-	.video-player {
-		margin-top: var(--gutter-sm);
-		margin-bottom: 0;
-	}
 	.video-player .title,
 	.media .title {
 		margin: 0;
@@ -183,6 +187,9 @@
 	.video-player .subtitle,
 	.media .subtitle {
 		margin: 0;
+	}
+	.fillPlayer.video-player :global(.video-js.vjs-16-9:not(.vjs-audio-only-mode)) {
+		padding-top: var(--pad-top);
 	}
 	.title-wrap {
 		margin-bottom: var(--24pt);
@@ -284,9 +291,9 @@
 		}
 	}
 	@media (min-width: 720px) {
-		.video-player {
-			margin-top: var(--gutter-lg);
-		}
+		/* .fillPlayer.video-player :global(.video-container) {
+			height: 100%;
+		} */
 		.title-wrap .title {
 			font-size: 4.25rem;
 			line-height: 1;

@@ -19,7 +19,8 @@
 		videoBgSrc: project.videoBgSrc,
 		videoBgSrcHd: project.videoBgSrcHd,
 		useOriginalQuality: false,
-		autoplay: true
+		autoplay: true,
+		fillContainer: false
 	};
 	$: name = project.shortName || project.title;
 </script>
