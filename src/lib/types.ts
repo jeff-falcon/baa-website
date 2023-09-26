@@ -133,6 +133,11 @@ export interface HeroArtist {
 	duration?: number;
 }
 
+export interface ArtistMenuItem {
+	name: string;
+	url: string;
+}
+
 export type PageComponents = Array<ArtistsGrid | ColumnedText | LatestProjects>
 
 export interface LatestProjects {
@@ -197,9 +202,10 @@ export interface Location {
 
 export interface Config {
 	_type: 'config';
-	socials: { name: string, links: Social[] }
-	contactInfo: InputValue
-	artistContactInfo: InputValue
+	socials: { name: string, links: Social[] };
+	contactInfo: InputValue;
+	artistContactInfo: InputValue;
+	artistMenu: ArtistMenuItem[];
 }
 
 export interface LogoGrid {

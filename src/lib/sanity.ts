@@ -1,6 +1,6 @@
 import { createClient } from '@sanity/client';
 import { SANITY_TOKEN, SANITY_DATASET, SANITY_PROJECT_ID } from '$env/static/private';
-import type { Artist, ArtistsGrid, ColumnedText, LatestProjects, Page, PageComponents, ArtistHero } from '$lib/types';
+import type { Artist, ArtistsGrid, ColumnedText, LatestProjects, Page, PageComponents, ArtistHero, ArtistMenuItem } from '$lib/types';
 import { type HttpError, error } from '@sveltejs/kit';
 import { parseArtistFromData, parseCloudinaryImage, parseHeroFromData, parseProjectFromData, parseProjectSlug } from './parse';
 
@@ -193,7 +193,6 @@ async function getArtistsForProjects(latestProjects: LatestProjects[]) {
 						const slug = a.slug + '/' + parseProjectSlug(a.slug, p.project.slug)
 						p.project.slug = slug
 					}
-					console.log('added artist to project')
 				})
 			}
 		})
@@ -241,23 +240,3 @@ function getComponents(components: any): PageComponents {
 	}
 	return comps
 }
-/* 
-async function getAllArtists(orderByAlpha = true): Promise<Artist[]> {
-	const client = getClient();
-	const groq = `*[_type == "artist"] | order(${orderByAlpha ? 'name asc' : '_createdAt desc'}) {
-		...,
-		"portfolio": portfolio->,
-		"featured": featured->,
-		"projects": projects[]->,
-		"tags": tags[]->prefLabel,
-	}`;
-	try {
-		const result = await client.fetch(groq);
-		const artists = result.map((data: any) => parseArtistFromData(data));
-		return artists
-	} catch (err) {
-		console.log('fetch error', (err as Error).message);
-		return []
-	}
-}
- */

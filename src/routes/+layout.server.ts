@@ -22,6 +22,10 @@ export async function load() {
         "icon": icon.asset->url
       }
     },
+    "artistMenu": artists[]->{
+      name,
+      "slug": "/artists/" + slug.current,
+    }
   }`;
   const data = await client.fetch(groq);
   const configData = data[0] as Config;
