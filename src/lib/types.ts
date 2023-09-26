@@ -18,6 +18,7 @@ export interface Credit {
 
 export interface Project {
 	_type: 'project';
+	_id: string;
 	name: string;
 	title: string;
 	shortName: string;
@@ -38,7 +39,8 @@ export interface Project {
 	relatedProjects?: Project[];
 	showRelatedProjects?: boolean;
 	relatedProjectsBgColor?: string;
-	type: 'project' | 'portfolio'
+	type: 'project' | 'portfolio',
+	artist?: Artist
 }
 export interface ProjectGrid {
 	_type: 'project_grid';
@@ -60,7 +62,7 @@ export interface Artist {
 	slug: string;
 	tags: string[];
 	location: string;
-	bio: InputValue;
+	bio?: InputValue;
 	clients: string;
 	links: ArtistLink[];
 	featured?: ProjectMedia[];
@@ -131,8 +133,14 @@ export interface HeroArtist {
 	duration?: number;
 }
 
-export type PageComponents = Array<ArtistsGrid | ColumnedText>
+export type PageComponents = Array<ArtistsGrid | ColumnedText | LatestProjects>
 
+export interface LatestProjects {
+	_type: 'latest_projects';
+	name: string;
+	title: string;
+	projects: ArtistHero[];
+}
 export interface Page {
 	_type: 'page';
 	_id: string;

@@ -134,6 +134,7 @@ export const load: PageServerLoad = async ({ params }): Promise<{ project?: Proj
 
   const project: Project = {
     _type: 'project',
+    _id: projectData._id,
     type: projectData.type === 'portfolio' ? 'portfolio' : 'project',
     pageTitle: `${title} | ${artist?.name ?? ''} | BAA Global`,
     name: projectData.name,

@@ -6,13 +6,15 @@
 	import ColumnedText from '../content/ColumnedText.svelte';
 	import { getContrastYIQFromColor } from '$lib/color';
 	import ArtistsGrid from '../artist/ArtistsGrid.svelte';
+	import LatestProjects from '../project/LatestProjects.svelte';
 
 	export let data: Page;
 
 	const hero = data.hero;
-	const hasHero = Boolean(hero);
+	const hasHero = Boolean(hero || data.components?.[0]._type === 'latest_projects');
 
 	onMount(() => {
+		console.log({ data });
 		pageHasHero.set(hasHero);
 		const defaultBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
 		const color = data.bgColor || defaultBg;
@@ -46,6 +48,9 @@
 			{/if}
 			{#if component._type === 'columned_text'}
 				<ColumnedText data={component} />
+			{/if}
+			{#if component._type === 'latest_projects'}
+				<LatestProjects data={component} />
 			{/if}
 		{/each}
 	{/if}

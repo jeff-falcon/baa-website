@@ -5,6 +5,8 @@
 
 	export let data: ArtistHero;
 	export let url: string;
+	export let doParallax = true;
+	export let align: 'left' | 'right' = 'right';
 
 	let scrollY = 0;
 	let innerHeight = 0;
@@ -22,7 +24,7 @@
 		autoplay: true
 	};
 	$: scrollPct = innerHeight ? Math.max(0, Math.min(1, scrollY / innerHeight)) : 0;
-	$: canApplyTransform = Math.abs(scrollY) < innerHeight + 100;
+	$: canApplyTransform = doParallax && Math.abs(scrollY) < innerHeight + 100;
 	$: bgStyle = canApplyTransform ? `transform: translateY(${scrollY * 0.55}px);` : '';
 	$: fgStyle = canApplyTransform
 		? `transform: translateY(${scrollY * 0.65}px); opacity: ${1 - scrollPct};`
@@ -37,6 +39,7 @@
 	data-scroll-pct={scrollPct}
 	data-scroll-y={scrollY}
 	data-inner-height={innerHeight}
+	class:isLeft={align === 'left'}
 >
 	<div class="info gutter">
 		<div class="wrap" style={fgStyle}>
@@ -160,6 +163,9 @@
 		.wrap {
 			grid-column: 5 / span 8;
 		}
+		.isLeft .wrap {
+			grid-column: 1 / span 8;
+		}
 		.hero :global(+ section.text-only) {
 			padding-top: 8rem;
 		}
@@ -178,6 +184,9 @@
 	@media (min-width: 960px) {
 		.wrap {
 			grid-column: 7 / span 6;
+		}
+		.isLeft .wrap {
+			grid-column: 1 / span 6;
 		}
 	}
 	@media (min-width: 1100px) {

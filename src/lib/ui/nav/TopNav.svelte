@@ -57,6 +57,11 @@
 			isActive: currentRoute === '/'
 		},
 		{
+			name: 'Latest',
+			url: '/latest/',
+			isActive: (currentRoute.indexOf('/latest') ?? -1) > -1
+		},
+		{
 			name: 'Info',
 			url: '/info/',
 			isActive: (currentRoute.indexOf('/info') ?? -1) > -1

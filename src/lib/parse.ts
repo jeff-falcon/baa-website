@@ -153,6 +153,7 @@ export function parseProjectFromData(data: any) {
 	if (data?._type !== 'project') return undefined;
 	const project: Project = {
 		_type: 'project',
+		_id: data._id,
 		type: data.type === 'portfolio' ? 'portfolio' : 'project',
 		pageTitle: data.name,
 		name: data.name,
