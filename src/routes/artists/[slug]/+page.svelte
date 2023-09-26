@@ -32,5 +32,7 @@
 </svelte:head>
 
 {#if data.artist}
-	<ArtistPage data={data.artist} />
+	{#key data.artist._id}
+		<ArtistPage data={data.artist} />
+	{/key}
 {/if}

@@ -24,7 +24,7 @@ export async function load() {
     },
     "artistMenu": artists[]->{
       name,
-      "slug": "/artists/" + slug.current,
+      "url": "/artists/" + slug.current,
     }
   }`;
   const data = await client.fetch(groq);

@@ -54,17 +54,20 @@
 		{
 			name: 'Artists',
 			url: '/',
-			isActive: currentRoute === '/'
+			isActive: currentRoute === '/',
+			children: config.artistMenu
 		},
 		{
 			name: 'Latest',
 			url: '/latest/',
-			isActive: (currentRoute.indexOf('/latest') ?? -1) > -1
+			isActive: (currentRoute.indexOf('/latest') ?? -1) > -1,
+			children: null
 		},
 		{
 			name: 'Info',
 			url: '/info/',
-			isActive: (currentRoute.indexOf('/info') ?? -1) > -1
+			isActive: (currentRoute.indexOf('/info') ?? -1) > -1,
+			children: null
 		}
 	];
 
@@ -141,7 +144,7 @@
 		</button>
 	</div>
 </header>
-<div id="mobile-nav" class:isMenuOpen style={mobileNavStyle}>
+<div id="mobile-nav" class="gutter" class:isMenuOpen style={mobileNavStyle}>
 	{#if isMenuOpen}
 		<div
 			class="bg"
@@ -183,6 +186,30 @@
 						}}
 						class:active={link.isActive}>{link.name}</a
 					>
+					{#if link.children}
+						<div class="subnav">
+							{#each link.children as child, cIndex (child)}
+								<a
+									href={child.url}
+									class:active={child.url === currentRoute}
+									in:fly|global={{
+										duration: 1200,
+										opacity: 0,
+										y: 15,
+										easing: expoOut,
+										delay: index * 80 + 150
+									}}
+									out:fly|global={{
+										duration: 400,
+										opacity: 0,
+										y: 0,
+										easing: cubicIn,
+										delay: index * 50
+									}}>{child.name}</a
+								>
+							{/each}
+						</div>
+					{/if}
 				{/each}
 			</nav>
 			<footer>
@@ -345,7 +372,7 @@
 		top: 0;
 		left: 0;
 		height: 100dvh;
-		width: 100dvw;
+		width: 100vw;
 		z-index: var(--level9);
 		pointer-events: none;
 		display: grid;
@@ -375,7 +402,7 @@
 		overscroll-behavior: contain;
 	}
 	#mobile-nav .wrap {
-		grid-column: 3 / span 2;
+		grid-column: 1 / span all;
 		display: flex;
 		flex-direction: column;
 		position: relative;
@@ -410,6 +437,25 @@
 	.v-menu a:focus,
 	.v-menu a:active {
 		text-decoration: none;
+	}
+
+	.v-menu .subnav {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px 8px;
+	}
+	.v-menu .subnav a {
+		display: inline-block;
+		white-space: nowrap;
+		cursor: pointer;
+		font-size: var(--14pt);
+		line-height: var(--16pt);
+		opacity: 0.6;
+	}
+	.v-menu .subnav a:hover,
+	.v-menu .subnav a.active {
+		opacity: 1;
 	}
 
 	.socials {
@@ -483,14 +529,15 @@
 		header {
 			--fade-height: 160px;
 		}
+		#mobile-nav {
+			grid-template-columns: repeat(12, 1fr);
+		}
 		#mobile-nav .wrap {
-			grid-column: 2 / span 3;
+			grid-column: 2 / span 10;
 		}
 		.v-menu {
-			gap: 72px;
-			flex-direction: row;
-			justify-content: flex-start;
-			align-items: center;
+			gap: 40px;
+			align-items: start;
 		}
 		.v-menu a {
 			font-size: var(--36pt);
@@ -498,6 +545,14 @@
 		}
 		.v-menu a:hover {
 			opacity: 0.6;
+		}
+		.v-menu .subnav {
+			grid-template-columns: repeat(3, min-content);
+			gap: 16px 40px;
+		}
+		.v-menu .subnav a {
+			font-size: var(--16pt);
+			line-height: var(--24pt);
 		}
 		.logo {
 			display: flex;
@@ -545,6 +600,19 @@
 		}
 		#mobile-nav .copyright {
 			margin: 0;
+		}
+	}
+	@media (min-width: 960px) {
+		#mobile-nav .wrap {
+			grid-column: 3 / span 10;
+		}
+		.v-menu .subnav {
+			grid-template-columns: repeat(4, min-content);
+		}
+	}
+	@media (min-width: 1110px) {
+		.v-menu .subnav {
+			gap: 16px 80px;
 		}
 	}
 </style>
