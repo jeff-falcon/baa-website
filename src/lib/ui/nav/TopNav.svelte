@@ -221,7 +221,7 @@
 							in:fly|global={{
 								duration: 800,
 								opacity: 0,
-								x: 10,
+								x: 0,
 								easing: cubicOut,
 								delay: index * 50
 							}}
@@ -257,6 +257,7 @@
 					}}
 				>
 					<p class="copyright">© {new Date().getFullYear()} BAA Global</p>
+					<p class="tanka"><a href="https://tankadesign.com" target="_blank">Site by TANKA</a></p>
 				</div>
 			</footer>
 		</div>
@@ -409,12 +410,14 @@
 		z-index: 1;
 	}
 	#mobile-nav .copyright {
-		font-size: var(--12pt);
 		opacity: 0.4;
-		margin: 24px 0 0;
+		margin: 0;
 	}
 	#mobile-nav footer {
-		padding-bottom: 40px;
+		padding-bottom: 24px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 	.v-menu {
 		display: flex;
@@ -525,22 +528,51 @@
 		text-overflow: ellipsis;
 		transform: translateY(-2px);
 	}
+	.credits {
+		display: flex;
+		gap: 16px;
+		align-items: baseline;
+		justify-content: center;
+		font-size: var(--12pt);
+	}
+	.credits p {
+		margin: 0;
+		font-size: inherit;
+	}
+	.credits a {
+		display: inline-block;
+		transition: opacity 0.2s linear;
+		transform: translateZ(0);
+		text-decoration: none;
+		font-size: inherit;
+		opacity: 0.4;
+	}
+	.credits a:hover {
+		opacity: 0.98;
+	}
+
 	@media (min-width: 720px) {
 		header {
 			--fade-height: 160px;
 		}
-		#mobile-nav {
-			grid-template-columns: repeat(12, 1fr);
-		}
 		#mobile-nav .wrap {
-			grid-column: 2 / span 10;
+			display: grid;
+			grid-template-columns: repeat(12, 1fr);
+			grid-column: 1 / span all;
+			grid-template-rows: 1fr auto;
+		}
+		#mobile-nav footer {
+			padding-bottom: 32px;
+			grid-column: 1 / span all;
 		}
 		.v-menu {
 			gap: 40px;
 			align-items: start;
+			grid-column: 2 / span 10;
 		}
 		.v-menu a {
-			font-size: var(--36pt);
+			font-size: 1.75rem;
+			line-height: 1;
 			transition: opacity linear 150ms;
 		}
 		.v-menu a:hover {
@@ -596,14 +628,17 @@
 		#mobile-nav footer {
 			display: flex;
 			justify-content: space-between;
-			padding-right: var(--gutter-lg);
 		}
 		#mobile-nav .copyright {
 			margin: 0;
 		}
+		.credits {
+			gap: 32px;
+			font-size: var(--14pt);
+		}
 	}
 	@media (min-width: 960px) {
-		#mobile-nav .wrap {
+		.v-menu {
 			grid-column: 3 / span 10;
 		}
 		.v-menu .subnav {
