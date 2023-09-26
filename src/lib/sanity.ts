@@ -135,6 +135,7 @@ async function getArtistsForProjects(latestProjects: LatestProjects[]) {
 			"portfolio": portfolio->{
 				_id,
 			},
+			"tags": tags[]->prefLabel,
 			projects[]{
 				_type == 'project' => @->{
 					"projects": [
@@ -183,10 +184,11 @@ async function getArtistsForProjects(latestProjects: LatestProjects[]) {
 					nickname: '',
 					projects: [],
 					slug: artist.slug,
-					tags: [],
+					tags: artist.tags ?? [],
 				}
 				projects.forEach(p => {
 					p.name = a.name
+					p.subtitle = a.tags.join(', ')
 					if (p.project?.slug) {
 						const slug = a.slug + '/' + parseProjectSlug(a.slug, p.project.slug)
 						p.project.slug = slug
