@@ -1,6 +1,12 @@
 {
-	"name": "bespoke-digital-website",
-	"version": "0.0.1",
+	"name": "baa-website-sveltekit",
+	"version": "1.0.0",
+	"description": "BAA Global website built with SvelteKit",
+	"author": {
+		"name": "Jeff Falcon",
+		"url": "https://tankadesign.com",
+		"email": "jeff@tankadesign.com"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -14,8 +20,6 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@fontsource/fira-mono": "^4.5.10",
-		"@neoconfetti/svelte": "^1.0.0",
 		"@playwright/test": "^1.37.0",
 		"@portabletext/svelte": "^2.0.0",
 		"@sanity/client": "^6.4.6",
@@ -23,34 +27,25 @@
 		"@sveltejs/kit": "^1.22.6",
 		"@types/animejs": "^3.1.7",
 		"@types/cookie": "^0.5.1",
-		"@types/nodemailer": "^6.4.9",
 		"@types/sanitize-html": "^2.9.0",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
+		"@vercel/analytics": "^1.0.2",
 		"animejs": "^3.2.1",
 		"eslint": "^8.47.0",
 		"eslint-config-prettier": "^8.10.0",
 		"eslint-plugin-svelte": "^2.32.4",
-		"fastest-validator": "^1.17.0",
-		"google-auth-library": "^9.0.0",
-		"google-spreadsheet": "^4.0.2",
-		"luxon": "^3.4.0",
-		"nodemailer": "^6.9.4",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",
 		"sanitize-html": "^2.11.0",
 		"svelte": "^4.2.0",
 		"svelte-check": "^3.5.0",
 		"svelte-intersection-observer": "^0.10.1",
-		"swiper": "^10.2.0",
 		"tslib": "^2.6.1",
 		"typescript": "^5.1.6",
 		"video.js": "^8.3.0",
 		"vite": "^4.4.9",
 		"vitest": "^0.32.4"
 	},
-	"type": "module",
-	"dependencies": {
-		"@vercel/analytics": "^1.0.2"
-	}
+	"type": "module"
 }
