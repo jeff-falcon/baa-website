@@ -253,18 +253,18 @@
 			position: relative;
 			height: 100%;
 		}
-		.isRightLarger :global(.media:nth-of-type(1) img),
-		.isRightLarger :global(.media:nth-of-type(1) picture),
-		.isLeftLarger :global(.media:nth-of-type(2) img),
-		.isLeftLarger :global(.media:nth-of-type(2) picture) {
+		.isRightLarger :global(.media:nth-of-type(1) .img),
+		.isRightLarger :global(.media:nth-of-type(1) .pic),
+		.isLeftLarger :global(.media:nth-of-type(2) .img),
+		.isLeftLarger :global(.media:nth-of-type(2) .pic) {
 			position: absolute;
 			top: 0;
 			left: 0;
 			height: 100%;
 			width: 100%;
 		}
-		.isRightLarger :global(.media:nth-of-type(1) img),
-		.isLeftLarger :global(.media:nth-of-type(2) img) {
+		.isRightLarger :global(.media:nth-of-type(1) .img),
+		.isLeftLarger :global(.media:nth-of-type(2) .img) {
 			object-fit: cover;
 		}
 		.trio.left :global(.media:nth-of-type(1)) {

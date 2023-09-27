@@ -138,7 +138,7 @@
 			{/if}
 			{#if media.image}
 				{#if media.image.sizes}
-					<picture>
+					<picture class="pic">
 						<source srcset={media.image.sizes.sm} media="(max-width: 719px)" />
 						<source
 							srcset={media.image.sizes.md}
@@ -146,6 +146,7 @@
 						/>
 						<source srcset={media.image.sizes.lg} media="(min-width: 1200px)" />
 						<img
+							class="img"
 							src={media.image.sizes.sm}
 							width={media.image.width}
 							height={media.image.height}
@@ -154,6 +155,7 @@
 					</picture>
 				{:else}
 					<img
+						class="img"
 						src={media.image.url}
 						width={media.image.width}
 						height={media.image.height}
