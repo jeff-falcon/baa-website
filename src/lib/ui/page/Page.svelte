@@ -63,19 +63,9 @@
 	.page:not(.hasHero) {
 		padding-top: var(--top-nav-height);
 	}
-	.project-media-single {
-		padding-top: var(--section-spacing);
-		padding-bottom: var(--section-spacing);
-	}
 	@media (min-width: 720px) {
 		.page {
 			--section-spacing: 4rem;
-		}
-	}
-	@media (max-width: 719px) {
-		.is-video-player.gutter {
-			padding-left: 0;
-			padding-right: 0;
 		}
 	}
 	.page :global(section:first-of-type[class*='project-grid']) {
