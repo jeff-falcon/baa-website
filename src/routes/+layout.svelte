@@ -8,11 +8,25 @@
 	import Footer from '$lib/ui/nav/Footer.svelte';
 	import type { LayoutData } from './$types';
 	import { isMenuOpenComplete, artistContactInfo } from '$lib/store';
+	import { PUBLIC_GA4_TAG_ID } from '$env/static/public';
 
 	export let data: LayoutData;
 
 	artistContactInfo.set(data.config.artistContactInfo);
 </script>
+
+<svelte:head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id={PUBLIC_GA4_TAG_ID}"></script>
+	<script data-tag-id={PUBLIC_GA4_TAG_ID}>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', document.querySelector('script[data-tag-id]').dataset.tagId);
+	</script>
+</svelte:head>
 
 <TopNav config={data.config} />
 <div class="site-wrap">
