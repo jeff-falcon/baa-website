@@ -136,7 +136,7 @@
 		{#if data.clients}
 			<div class="clients">
 				<h3 class="title">Clients and publications</h3>
-				{data.clients}
+				{@html data.clients}
 			</div>
 		{/if}
 		{#if data.links.length}

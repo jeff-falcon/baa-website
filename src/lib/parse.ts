@@ -74,7 +74,7 @@ export function parseArtistFromData(data: any) {
 		name: data.name,
 		slug: data.slug,
 		bio: data.bio,
-		clients: data.clients,
+		clients: data.clients.replace(/\n/g, '<br/>'),
 		links: data.links,
 		featured: data.featured?.map((p: any) => parseProjectMediaFromData(p)).filter((p: any) => p),
 		portfolio: parseProjectFromData(data.portfolio),
