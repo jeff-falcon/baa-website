@@ -5,6 +5,8 @@
 	import { getContrastYIQFromColor } from '$lib/color';
 	import { onMount } from 'svelte';
 	import { footerHasContactInfo } from '$lib/store';
+	import { fly } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 
 	export let project: Project;
 	export let artist: Artist | undefined = undefined;
@@ -58,30 +60,48 @@
 				{:else if item._type === 'item_pair'}
 					{@const leftRatio = (item.left.image?.height ?? 100) / (item.left.image?.width ?? 100)}
 					{@const rightRatio = (item.right.image?.height ?? 100) / (item.right.image?.width ?? 100)}
+					{@const hasTitle = Boolean(index === 0 && project.title)}
 					<div
 						class="pair"
 						class:isLeftLarger={leftRatio > rightRatio}
 						class:isRightLarger={leftRatio < rightRatio}
 						data-ratio-left={leftRatio}
 						data-ratio-right={rightRatio}
+						class:hasTitle
 					>
+						{#if index === 0 && project.title}
+							<div class="title-wrap gutter" style="opacity: {isTitleVisible ? 1 : 0}">
+								{#if artist?.name}
+									<h2
+										class="pre-title"
+										in:fly|global={{
+											y: 0,
+											opacity: 0,
+											easing: cubicOut,
+											duration: 750,
+											delay: 100
+										}}
+									>
+										{artist.name}
+									</h2>
+								{/if}
+								<h1
+									class="title"
+									in:fly|global={{ y: 0, opacity: 0, duration: 750, delay: 150, easing: cubicOut }}
+								>
+									{project.title}
+								</h1>
+							</div>
+						{/if}
 						<ProjectMediaComponent
 							media={item.left}
 							scaleOnReveal={index === 0}
-							title={index === 0 && project.title ? project.title : ''}
-							subtitle={index === 0 && tags ? tags : ''}
-							{isTitleVisible}
-							isInsidePair={true}
-							aspectRatio={leftRatio}
+							aspectRatio={hasTitle ? undefined : leftRatio}
 						/>
 						<ProjectMediaComponent
 							media={item.right}
 							scaleOnReveal={index === 0}
-							title={index === 0 && project.title ? project.title : ''}
-							subtitle={index === 0 && tags ? tags : ''}
-							{isTitleVisible}
-							isInsidePair={true}
-							aspectRatio={rightRatio}
+							aspectRatio={hasTitle ? undefined : rightRatio}
 						/>
 					</div>
 				{:else if item._type === 'item_trio'}
@@ -195,6 +215,7 @@
 	}
 	.medias {
 		padding-bottom: 0;
+		background: var(--bg-dark);
 	}
 	.medias + :global(.project-grid) {
 		background-color: var(--related-section-bg);
@@ -206,7 +227,7 @@
 	.hasRelatedBg.relatedBgIsLight :global(.project-grid) {
 		color: var(--bg-dark);
 	}
-	.hasTitle {
+	.project-view.hasTitle {
 		padding-top: var(--site-top-padding);
 	}
 
@@ -238,7 +259,67 @@
 	.pair :global(.media:nth-of-type(2) .title-wrap *) {
 		opacity: 0;
 	}
+	.pair .title-wrap {
+		margin-bottom: var(--24pt);
+		transition: opacity linear 300ms;
+	}
+	.pair .title-wrap {
+		width: 100%;
+		margin-bottom: 0;
+		padding-bottom: var(--24pt);
+		padding-top: 40px;
+		background: linear-gradient(to bottom, hsla(0, 0%, 15%, 0) 0%, hsla(0, 0%, 15%, 0.6) 100%);
+		position: fixed;
+		bottom: 0;
+		z-index: 2;
+		--text-color: var(--text-light);
+		--text-color-40: var(--text-light-40);
+		color: var(--text-color);
+	}
+	.pair .title {
+		margin: 0;
+		line-height: 1;
+	}
+	.pair .title-wrap .pre-title {
+		border-top: 1px solid var(--text-color-40);
+		padding-top: var(--24pt);
+		line-height: 1.12;
+		text-transform: uppercase;
+		font-size: var(--18pt);
+		font-weight: bold;
+		margin: 0 0 10px;
+	}
+	.pair.hasTitle :global(.media:nth-of-type(1)) {
+		z-index: 0;
+	}
+	.pair.hasTitle :global(.media:nth-of-type(1)),
+	.pair.hasTitle :global(.media:nth-of-type(1) picture),
+	.pair.hasTitle :global(.media:nth-of-type(1) img) {
+		height: 100vh;
+	}
+	.pair.hasTitle :global(.media:nth-of-type(1) img) {
+		object-fit: cover;
+	}
 	@media (min-width: 720px) {
+		.pair.hasTitle {
+			height: 100vh;
+			min-height: 500px;
+		}
+		.pair .title-wrap {
+			position: absolute;
+		}
+		.pair .title-wrap .title {
+			font-size: 4.25rem;
+			line-height: 1;
+		}
+		.pair.hasTitle :global(.media:nth-of-type(2)),
+		.pair.hasTitle :global(.media:nth-of-type(2) picture),
+		.pair.hasTitle :global(.media:nth-of-type(2) img) {
+			height: 100vh;
+		}
+		.pair.hasTitle :global(.media:nth-of-type(2) img) {
+			object-fit: cover;
+		}
 		.pair,
 		.trio {
 			display: grid;
@@ -342,6 +423,11 @@
 		}
 		.hasRelatedBg .medias + :global(.project-grid) {
 			margin-top: 8rem;
+		}
+	}
+	@media (min-width: 1280px) {
+		.pair .title-wrap .title {
+			font-size: 4.75rem;
 		}
 	}
 </style>
