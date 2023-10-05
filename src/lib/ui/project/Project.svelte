@@ -48,14 +48,16 @@
 				{#if item._type === 'project_media'}
 					{@const isHero = index === 0 && item.kind !== 'video-player'}
 					<div class="single" class:isHero>
-						<ProjectMediaComponent
-							media={item}
-							cover={isHero}
-							scaleOnReveal={index === 0}
-							title={index === 0 && project.title ? project.title : ''}
-							preTitle={index === 0 && tags ? tags : artist?.name ?? ''}
-							{isTitleVisible}
-						/>
+						{#key `media-single-${item._key}`}
+							<ProjectMediaComponent
+								media={item}
+								cover={isHero}
+								scaleOnReveal={index === 0}
+								title={index === 0 && project.title ? project.title : ''}
+								preTitle={index === 0 && tags ? tags : artist?.name ?? ''}
+								{isTitleVisible}
+							/>
+						{/key}
 					</div>
 				{:else if item._type === 'item_pair'}
 					{@const leftRatio = (item.left.image?.height ?? 100) / (item.left.image?.width ?? 100)}
@@ -93,22 +95,38 @@
 								</h1>
 							</div>
 						{/if}
-						<ProjectMediaComponent
-							media={item.left}
-							scaleOnReveal={index === 0}
-							aspectRatio={hasTitle ? undefined : leftRatio}
-						/>
-						<ProjectMediaComponent
-							media={item.right}
-							scaleOnReveal={index === 0}
-							aspectRatio={hasTitle ? undefined : rightRatio}
-						/>
+						{#key `media-left-${item.left._key}`}
+							<ProjectMediaComponent
+								isInsidePair={true}
+								media={item.left}
+								scaleOnReveal={index === 0}
+								aspectRatio={hasTitle ? undefined : leftRatio}
+							/>
+						{/key}
+						{#key `media-right-${item.right._key}`}
+							<ProjectMediaComponent
+								isInsidePair={true}
+								media={item.right}
+								scaleOnReveal={index === 0}
+								aspectRatio={hasTitle ? undefined : rightRatio}
+							/>
+						{/key}
 					</div>
 				{:else if item._type === 'item_trio'}
 					<div class="trio {item.align ?? 'left'}">
-						<ProjectMediaComponent media={item.top} scaleOnReveal={index === 0} />
-						<ProjectMediaComponent media={item.bottom} scaleOnReveal={index === 0} />
-						<ProjectMediaComponent media={item.side} cover="desktop" scaleOnReveal={index === 0} />
+						{#key `media-trio-top-${item.top._key}`}
+							<ProjectMediaComponent media={item.top} scaleOnReveal={index === 0} />
+						{/key}
+						{#key `media-trio-bottom-${item.bottom._key}`}
+							<ProjectMediaComponent media={item.bottom} scaleOnReveal={index === 0} />
+						{/key}
+						{#key `media-trio-side-${item.side._key}`}
+							<ProjectMediaComponent
+								media={item.side}
+								cover="desktop"
+								scaleOnReveal={index === 0}
+							/>
+						{/key}
 					</div>
 				{/if}
 			{/each}
