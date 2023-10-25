@@ -1,8 +1,23 @@
 import { createClient } from '@sanity/client';
 import { SANITY_TOKEN, SANITY_DATASET, SANITY_PROJECT_ID } from '$env/static/private';
-import type { Artist, ArtistsGrid, ColumnedText, LatestProjects, Page, PageComponents, ArtistHero, ArtistMenuItem } from '$lib/types';
+import type {
+	Artist,
+	ArtistsGrid,
+	ColumnedText,
+	LatestProjects,
+	Page,
+	PageComponents,
+	ArtistHero,
+	ArtistMenuItem
+} from '$lib/types';
 import { type HttpError, error } from '@sveltejs/kit';
-import { parseArtistFromData, parseCloudinaryImage, parseHeroFromData, parseProjectFromData, parseProjectSlug } from './parse';
+import {
+	parseArtistFromData,
+	parseCloudinaryImage,
+	parseHeroFromData,
+	parseProjectFromData,
+	parseProjectSlug
+} from './parse';
 
 const date = new Date().toISOString().split('T')[0];
 
@@ -19,7 +34,7 @@ export function getClient() {
 }
 
 export async function getPage(slug: string): Promise<Page | HttpError> {
-	if (!slug) return error(404, 'Page not found');
+	if (!slug) throw error(404, 'Page not found');
 
 	const client = getClient();
 	const groq = `*[_type == "page" && slug.current == "${slug}"]{
@@ -98,7 +113,7 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 	}`;
 	try {
 		const result = await client.fetch(groq);
-		if (!result || !result.length) return error(404, 'Page not found');
+		if (!result || !result.length) throw error(404, 'Page not found');
 		const pageData = result[0];
 		const page: Page = {
 			_type: 'page',
@@ -109,19 +124,21 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 			metaDescription: pageData.description,
 			hero: parseHeroFromData(pageData.hero),
 			components: getComponents(pageData.components),
-			footerHasContactInfo: pageData.footer_has_contact_info ?? true,
+			footerHasContactInfo: pageData.footer_has_contact_info ?? true
 		};
 
-		const latestProjects = page.components?.filter(c => c._type === 'latest_projects') as LatestProjects[]
+		const latestProjects = page.components?.filter(
+			(c) => c._type === 'latest_projects'
+		) as LatestProjects[];
 		if (latestProjects?.length) {
-			console.log('page has latest projects', { latestProjects })
-			await getArtistsForProjects(latestProjects)
+			console.log('page has latest projects', { latestProjects });
+			await getArtistsForProjects(latestProjects);
 		}
 
 		return page;
 	} catch (err) {
 		console.log('fetch error', (err as Error).message);
-		return error(403, (err as Error).message);
+		throw error(403, (err as Error).message);
 	}
 }
 
@@ -159,20 +176,19 @@ async function getArtistsForProjects(latestProjects: LatestProjects[]) {
 		}`;
 	const artistsData = await client.fetch(groq);
 	for (const artist of artistsData) {
-		const projectIds: string[] = []
+		const projectIds: string[] = [];
 		if (artist.portfolio?._id) {
-			projectIds.push(artist.portfolio._id)
+			projectIds.push(artist.portfolio._id);
 		}
 		if (artist.projects) {
 			for (const project of artist.projects) {
-				projectIds.push(...project.projects)
+				projectIds.push(...project.projects);
 			}
 		}
 		if (projectIds.length === 0) continue;
 
-
-		latestProjects.forEach(lp => {
-			const projects = lp.projects.filter(p => projectIds.includes(p._id))
+		latestProjects.forEach((lp) => {
+			const projects = lp.projects.filter((p) => projectIds.includes(p._id));
 			if (projects.length) {
 				const a: Artist = {
 					_type: 'artist',
@@ -184,31 +200,31 @@ async function getArtistsForProjects(latestProjects: LatestProjects[]) {
 					nickname: '',
 					projects: [],
 					slug: artist.slug,
-					tags: artist.tags ?? [],
-				}
-				projects.forEach(p => {
-					p.name = a.name
-					p.subtitle = a.tags.join(', ')
+					tags: artist.tags ?? []
+				};
+				projects.forEach((p) => {
+					p.name = a.name;
+					p.subtitle = a.tags.join(', ');
 					if (p.project?.slug) {
-						const slug = a.slug + '/' + parseProjectSlug(a.slug, p.project.slug)
-						p.project.slug = slug
+						const slug = a.slug + '/' + parseProjectSlug(a.slug, p.project.slug);
+						p.project.slug = slug;
 					}
-				})
+				});
 			}
-		})
+		});
 	}
 }
 
 function getComponents(components: any): PageComponents {
-	if (!components) return []
-	const comps: PageComponents = []
+	if (!components) return [];
+	const comps: PageComponents = [];
 	for (const component of components) {
 		if (component?._type === 'artists_grid') {
-			const artists: Artist[] = []
+			const artists: Artist[] = [];
 			if (component.artists && Array.isArray(component.artists)) {
 				for (const artist of component.artists) {
-					const p = parseArtistFromData(artist)
-					if (p) artists.push(p)
+					const p = parseArtistFromData(artist);
+					if (p) artists.push(p);
 				}
 			}
 			const grid: ArtistsGrid = {
@@ -222,21 +238,23 @@ function getComponents(components: any): PageComponents {
 		} else if (component?._type === 'latest_projects') {
 			const lp = component as LatestProjects;
 			if (lp.projects) {
-				lp.projects = lp.projects.map(p => ({
-					_type: 'hero',
-					_id: p._id,
-					name: '',
-					kind: p.kind,
-					image_desktop: parseCloudinaryImage((p as any).image),
-					videoBgSrc: (p as any).thumb_vimeo_src,
-					videoBgSrcHd: (p as any).thumb_vimeo_src_hd,
-					project: parseProjectFromData(p)
-				})).filter(p => p) as ArtistHero[]
+				lp.projects = lp.projects
+					.map((p) => ({
+						_type: 'hero',
+						_id: p._id,
+						name: '',
+						kind: p.kind,
+						image_desktop: parseCloudinaryImage((p as any).image),
+						videoBgSrc: (p as any).thumb_vimeo_src,
+						videoBgSrcHd: (p as any).thumb_vimeo_src_hd,
+						project: parseProjectFromData(p)
+					}))
+					.filter((p) => p) as ArtistHero[];
 			}
 			comps.push(lp);
 		} else {
 			console.log('unknown component', component);
 		}
 	}
-	return comps
+	return comps;
 }
