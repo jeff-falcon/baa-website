@@ -1,10 +1,26 @@
-import type { Project, ProjectMedia, CloudinaryImage, Hero, Artist, HeroArtist, ProjectPair, ProjectTrio } from '$lib/types';
+import type {
+	Project,
+	ProjectMedia,
+	CloudinaryImage,
+	Hero,
+	Artist,
+	HeroArtist,
+	ProjectPair,
+	ProjectTrio
+} from '$lib/types';
 
-export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQuality = false, isSingle = true) {
+export function parseCloudinaryImage(
+	image: any,
+	mobileImage?: any,
+	useOriginalQuality = false,
+	isSingle = true
+) {
 	if (!image) return undefined;
 	const originalUrl = image.derived?.[0]?.secure_url ?? image.secure_url;
 	if (image.format === 'gif') {
-		const url = image.secure_url.replace(/\.gif$/, '.webp').replace(/\/upload\/v/, '/upload/fl_awebp/v');
+		const url = image.secure_url
+			.replace(/\.gif$/, '.webp')
+			.replace(/\/upload\/v/, '/upload/fl_awebp/v');
 		return {
 			url,
 			sizes: {
@@ -14,7 +30,7 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 			},
 			width: image.width,
 			height: image.height
-		}
+		};
 	}
 	const url: string =
 		image.derived?.[0]?.secure_url ??
@@ -23,13 +39,11 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 	const img: CloudinaryImage = {
 		url,
 		sizes: {
-			sm: matches?.length
-				? url
-				: url.replace(/\/upload\/(.*?)\/v(\d+)/, '/upload/$1,w_900/v$2'),
-			md: matches?.length
-				? url
-				: url.replace(/\/upload\/(.*?)\/v(\d+)/, '/upload/$1,w_1600/v$2'),
-			lg: useOriginalQuality ? originalUrl : matches?.length
+			sm: matches?.length ? url : url.replace(/\/upload\/(.*?)\/v(\d+)/, '/upload/$1,w_900/v$2'),
+			md: matches?.length ? url : url.replace(/\/upload\/(.*?)\/v(\d+)/, '/upload/$1,w_1600/v$2'),
+			lg: useOriginalQuality
+				? originalUrl
+				: matches?.length
 				? url
 				: url.replace(/\/upload\/(.*?)\/v(\d+)/, `/upload/$1,w_${isSingle ? 32 : 16}00/v$2`)
 		},
@@ -37,7 +51,8 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 		height: image.height
 	};
 	if (mobileImage) {
-		const mobileUrl: string = mobileImage.derived?.[0]?.secure_url ??
+		const mobileUrl: string =
+			mobileImage.derived?.[0]?.secure_url ??
 			mobileImage.secure_url.replace(/\/upload\/v/, '/upload/f_auto,q_auto:best,w_900/v');
 		if (img.sizes) {
 			img.sizes.sm = mobileUrl;
@@ -49,16 +64,21 @@ export function parseCloudinaryImage(image: any, mobileImage?: any, useOriginalQ
 export function parseProjectMediaFromData(project: any, isSingle = true): ProjectMedia | undefined {
 	if (project?._type !== 'project_media') return undefined;
 	const useOriginalQuality = project.use_original_quality ?? false;
-	const image = parseCloudinaryImage(project.image, project.image_mobile, useOriginalQuality, isSingle);
+	const image = parseCloudinaryImage(
+		project.image,
+		project.image_mobile,
+		useOriginalQuality,
+		isSingle
+	);
 	const media: ProjectMedia = {
 		_type: 'project_media',
 		_key: project._id as string,
 		name: project.name as string,
 		image,
 		kind: project.kind as ProjectMedia['kind'],
-		videoPlayerSrc: project.vimeo_player_src as string || '',
-		videoBgSrc: project.thumb_vimeo_src as string || '',
-		videoBgSrcHd: project.thumb_vimeo_src_hd as string || '',
+		videoPlayerSrc: (project.vimeo_player_src as string) || '',
+		videoBgSrc: (project.thumb_vimeo_src as string) || '',
+		videoBgSrcHd: (project.thumb_vimeo_src_hd as string) || '',
 		useOriginalQuality,
 		autoplay: project.autoplay ?? false,
 		fillContainer: project.fill_container ?? false
@@ -74,7 +94,7 @@ export function parseArtistFromData(data: any) {
 		name: data.name,
 		slug: data.slug,
 		bio: data.bio,
-		clients: data.clients.replace(/\n/g, '<br/>'),
+		clients: data.clients?.replace(/\n/g, '<br/>'),
 		links: data.links,
 		featured: data.featured?.map((p: any) => parseProjectMediaFromData(p)).filter((p: any) => p),
 		portfolio: parseProjectFromData(data.portfolio),
@@ -82,72 +102,74 @@ export function parseArtistFromData(data: any) {
 		nickname: data.nickname,
 		tags: data.tags ?? [],
 		location: data.location
-	}
-	mergePortfolioIntoProjects(artist)
+	};
+	mergePortfolioIntoProjects(artist);
 	return artist;
 }
 
 export function mergePortfolioIntoProjects(artist: Artist) {
 	if (artist.portfolio) {
-		const { portfolio } = artist
-		portfolio.title = 'Portfolio'
-		portfolio.shortName = 'Portfolio'
-		portfolio.slug = parseProjectSlug(artist.slug, portfolio.slug)
+		const { portfolio } = artist;
+		portfolio.title = 'Portfolio';
+		portfolio.shortName = 'Portfolio';
+		portfolio.slug = parseProjectSlug(artist.slug, portfolio.slug);
 
 		if (!artist.projects) {
-			artist.projects = [portfolio]
+			artist.projects = [portfolio];
 		} else {
-			artist.projects.unshift(portfolio)
+			artist.projects.unshift(portfolio);
 		}
 		artist.portfolio = undefined;
 	}
 }
 
 export function parseArtistProjectsFromData(artistSlug: string, data: any) {
-	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data?.map((p: any, index: number) => {
-		if (p?._type === 'project_trio') {
-			const top = parseProjectFromData(p.top, false)
-			const bottom = parseProjectFromData(p.bottom, false)
-			const side = parseProjectFromData(p.side, false)
-			if (top && bottom && side) {
-				top.slug = parseProjectSlug(artistSlug, top.slug)
-				bottom.slug = parseProjectSlug(artistSlug, bottom.slug)
-				side.slug = parseProjectSlug(artistSlug, side.slug)
-				const trio: ProjectTrio = {
-					_type: 'project_trio',
-					align: p.align,
-					top,
-					bottom,
-					side
+	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data
+		?.map((p: any, index: number) => {
+			if (p?._type === 'project_trio') {
+				const top = parseProjectFromData(p.top, false);
+				const bottom = parseProjectFromData(p.bottom, false);
+				const side = parseProjectFromData(p.side, false);
+				if (top && bottom && side) {
+					top.slug = parseProjectSlug(artistSlug, top.slug);
+					bottom.slug = parseProjectSlug(artistSlug, bottom.slug);
+					side.slug = parseProjectSlug(artistSlug, side.slug);
+					const trio: ProjectTrio = {
+						_type: 'project_trio',
+						align: p.align,
+						top,
+						bottom,
+						side
+					};
+					return trio;
 				}
-				return trio
-			}
-		} else if (p?._type === 'project_pair') {
-			const left = parseProjectFromData(p.left, false)
-			const right = parseProjectFromData(p.right, false)
-			if (left && right) {
-				left.slug = parseProjectSlug(artistSlug, left.slug)
-				right.slug = parseProjectSlug(artistSlug, right.slug)
-				const pair: ProjectPair = {
-					_type: 'project_pair',
-					left,
-					right
+			} else if (p?._type === 'project_pair') {
+				const left = parseProjectFromData(p.left, false);
+				const right = parseProjectFromData(p.right, false);
+				if (left && right) {
+					left.slug = parseProjectSlug(artistSlug, left.slug);
+					right.slug = parseProjectSlug(artistSlug, right.slug);
+					const pair: ProjectPair = {
+						_type: 'project_pair',
+						left,
+						right
+					};
+					return pair;
 				}
-				return pair;
+			} else if (p?._type === 'project') {
+				if (p?.hidden_from_artist_page === true) {
+					return undefined;
+				}
+				const project = parseProjectFromData(p);
+				if (project) {
+					project.slug = parseProjectSlug(artistSlug, project.slug);
+				}
+				return project;
 			}
-		} else if (p?._type === 'project') {
-			if (p?.hidden_from_artist_page === true) {
-				return undefined
-			}
-			const project = parseProjectFromData(p)
-			if (project) {
-				project.slug = parseProjectSlug(artistSlug, project.slug)
-			}
-			return project
-		}
-		return null
-	}).filter((p: any) => p != null)
-	return projects ?? []
+			return null;
+		})
+		.filter((p: any) => p != null);
+	return projects ?? [];
 }
 
 export function parseProjectFromData(data: any, isSingle = true) {
@@ -170,8 +192,8 @@ export function parseProjectFromData(data: any, isSingle = true) {
 		videoBgSrc: data.thumb_vimeo_src,
 		videoBgSrcHd: data.thumb_vimeo_src_hd,
 		bgColor: data.bg_color?.value,
-		tags: data.tags ?? [],
-	}
+		tags: data.tags ?? []
+	};
 	return project;
 }
 
@@ -184,7 +206,7 @@ export function parseHeroFromData(data: any) {
 		subtitle: data.subtitle,
 		artists: data.artists?.map((a: any) => parseHeroArtistFromData(a, stillDuration)),
 		scrollInstructions: data.scroll_instructions
-	}
+	};
 	return hero;
 }
 
@@ -196,8 +218,8 @@ export function parseHeroArtistFromData(data: any, stillDuration: number) {
 		videoBgSrc: data.thumb_vimeo_src,
 		videoBgSrcHd: data.thumb_vimeo_src_hd,
 		stillDuration
-	}
-	return artist
+	};
+	return artist;
 }
 
 export function parseProjectSlug(artistSlug: string, projectSlug: string) {
