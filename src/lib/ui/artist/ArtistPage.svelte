@@ -102,7 +102,7 @@
 	<ArtistHeroComponent data={hero} url="/artists/{data.slug}/{featuredProject?.slug}" />
 {/if}
 
-{#if projects.length}
+{#if projects?.length}
 	<section class="projects">
 		{#each projects as project (project)}
 			{#if project._type === 'project'}
@@ -139,7 +139,7 @@
 				{@html data.clients}
 			</div>
 		{/if}
-		{#if data.links.length}
+		{#if data.links?.length}
 			<ul class="links">
 				{#each data.links as link}
 					<li>
