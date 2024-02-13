@@ -26,7 +26,7 @@
 						<hr />
 					{/if}
 					<div class="body">
-						<PortableText value={column.body} />
+						<PortableText value={column.body} components={{}} />
 					</div>
 				</div>
 			{/each}

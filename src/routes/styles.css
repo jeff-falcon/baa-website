@@ -84,7 +84,7 @@
 	--8pt: 0.5rem;
 	--button-height-large: 48px;
 	--button-height-small: 40px;
-	--input-border-radius: 4px;
+	--input-border-radius: 0px;
 	--bg-color-timing: 600ms;
 	--text-color: var(--text-light);
 	--text-color-60: var(--text-light-60);
@@ -207,27 +207,6 @@ button {
 
 button:focus:not(:focus-visible) {
 	outline: none;
-}
-
-form button {
-	cursor: pointer;
-	height: var(--button-height-large);
-	border-radius: var(--input-border-radius);
-	border: 1px solid var(--text-light);
-	background: transparent;
-	color: var(--text-light);
-	transition: border-color 0.2s linear;
-	display: block;
-	width: 100%;
-	font-weight: bold;
-}
-form button:hover {
-	border-color: var(--text-light);
-}
-form button:disabled {
-	border-color: var(--text-light-30);
-	color: var(--text-light-30);
-	cursor: default;
 }
 
 .visually-hidden {

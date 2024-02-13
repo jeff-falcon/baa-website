@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { getClient } from '$lib/sanity';
 import type { Artist, Project, ProjectMedia, ProjectMediaPair, ProjectMediaTrio } from '$lib/types';
-import { parseCloudinaryImage, parseProjectMediaFromData, parseArtistFromData } from '$lib/parse';
+import { parseCloudinaryImage, parseProjectMediaFromData } from '$lib/parse';
 
 export const load: PageServerLoad = async ({
 	params

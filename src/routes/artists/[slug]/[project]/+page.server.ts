@@ -9,6 +9,16 @@ import {
 	mergePortfolioIntoProjects
 } from '$lib/parse';
 
+interface ArtistProjectData {
+	_type: string;
+	slug: string;
+	left?: { slug: string };
+	right?: { slug: string };
+	top?: { slug: string };
+	bottom?: { slug: string };
+	side?: { slug: string };
+}
+
 export const load: PageServerLoad = async ({
 	params
 }): Promise<{ project?: Project; artist?: Artist }> => {
@@ -56,7 +66,7 @@ export const load: PageServerLoad = async ({
 
 	const artistProjectsSlugs: string[] =
 		artistData.projects
-			?.flatMap((p: any) => {
+			?.flatMap((p: ArtistProjectData) => {
 				if (p._type === 'project') {
 					return [p.slug];
 				} else if (p._type === 'project_pair') {
