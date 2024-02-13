@@ -8,7 +8,7 @@ function createHtmlBody(
 	fields?: { [key: string]: string },
 	isExternal = false
 ) {
-	let body = `<p style="margin: 0 0 10px"><img src="https://bespokedigital.com/bespoke-logo-black.png" width="183" height="32" alt="Bespoke"  /></p>
+	let body = `<p style="margin: 0 0 10px"><img src="https://baa-global.com/baa-logo-dark.png" width="72" height="30" alt="BAA Global"  /></p>
   <h3 style="font-size: 16px; line-height: 1.5em; margin: 0 0 50px; font-weight: normal;">${
 		isExternal ? 'Receipt of your inquiry' : 'New website submission'
 	}</h3>
