@@ -1,16 +1,24 @@
 <script lang="ts">
-	import { isMenuOpenComplete, footerHasContactInfo } from '$lib/store';
+	import { isMenuOpenComplete, footerHasContactInfo, footerHasNewsletterForm } from '$lib/store';
 	import type { Config } from '$lib/types';
 	import { PortableText } from '@portabletext/svelte';
+	import NewsletterSignup from '../form/NewsletterSignup.svelte';
 
 	export let config: Config;
 	export let hasDivider = false;
 </script>
 
 <footer class="isLight gutter" id="footer" class:hasDivider class:isDisabled={$isMenuOpenComplete}>
-	{#if $footerHasContactInfo}
-		<div class="content">
-			<PortableText value={config.contactInfo} components={{}} />
+	{#if $footerHasContactInfo || $footerHasNewsletterForm}
+		<div class="contact content">
+			{#if $footerHasContactInfo}
+				<div class="contact-info">
+					<PortableText value={config.contactInfo} components={{}} />
+				</div>
+			{/if}
+			{#if $footerHasNewsletterForm}
+				<NewsletterSignup isOverLightBg={true} />
+			{/if}
 		</div>
 	{/if}
 	<div class="bottom-row">
@@ -44,6 +52,11 @@
 	}
 	.content {
 		padding-bottom: 48px;
+	}
+	.contact {
+		display: grid;
+		grid-template-rows: repeat(2, auto);
+		gap: 40px;
 	}
 	.content :global(p) {
 		margin: 0;
@@ -177,6 +190,13 @@
 		}
 		.credits {
 			gap: var(--32pt);
+		}
+	}
+	@media (min-width: 1024px) {
+		.contact {
+			grid-template-rows: auto;
+			grid-template-columns: repeat(2, 1fr);
+			gap: calc(var(--gutter-lg) * 2);
 		}
 	}
 </style>

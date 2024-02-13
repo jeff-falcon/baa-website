@@ -8,9 +8,8 @@ import type {
 	Page,
 	PageComponents,
 	ArtistHero,
-	ArtistMenuItem
 } from '$lib/types';
-import { type HttpError, error } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import {
 	parseArtistFromData,
 	parseCloudinaryImage,
@@ -45,6 +44,7 @@ export async function getPage(slug: string): Promise<Page | unknown> {
 		"bgColor": bg_color,
 		hero->,
 		footer_has_contact_info,
+		footer_has_contact_newsletter,
 		components[]{
 			_type == 'latest_projects_ref' => @->{
 				_type,
@@ -125,7 +125,8 @@ export async function getPage(slug: string): Promise<Page | unknown> {
 			metaDescription: pageData.description,
 			hero: parseHeroFromData(pageData.hero),
 			components: getComponents(pageData.components),
-			footerHasContactInfo: pageData.footer_has_contact_info ?? true
+			footerHasContactInfo: pageData.footer_has_contact_info ?? true,
+			footerHasNewsletterForm: pageData.footer_has_contact_newsletter ?? true
 		};
 
 		const latestProjects = page.components?.filter(

@@ -4,7 +4,7 @@
 	import type { Project, Artist } from '$lib/types';
 	import { getContrastYIQFromColor } from '$lib/color';
 	import { onMount } from 'svelte';
-	import { footerHasContactInfo } from '$lib/store';
+	import { footerHasContactInfo, footerHasNewsletterForm } from '$lib/store';
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 
@@ -30,6 +30,7 @@
 
 	onMount(() => {
 		footerHasContactInfo.set(true);
+		footerHasNewsletterForm.set(true);
 	});
 </script>
 

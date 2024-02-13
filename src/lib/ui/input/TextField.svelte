@@ -13,6 +13,7 @@
 	export let error: string = '';
 	export let allowSpaces: boolean | null = null;
 	export let readonly = false;
+	export let isOverLightBg = false;
 
 	let dispatch = createEventDispatcher<{ blur: string }>();
 
@@ -38,6 +39,7 @@
 	class:isFocused={readonly ? false : isFocused}
 	class:hasError
 	class:inputBorderIsRounded={$inputBorderIsRounded}
+	class:isOverLightBg
 >
 	<div class="textfield">
 		{#if label}
@@ -77,16 +79,23 @@
 		flex-direction: column;
 		gap: 4px;
 	}
+	.textfield-container.isOverLightBg {
+		--text-color: var(--text-dark);
+		--text-color-60: var(--text-dark-60);
+		--text-color-15: var(--text-dark-15);
+		--text-color-5: var(--text-dark-5);
+		--error-text: rgb(188, 41, 30);
+	}
 
 	.hint {
 		font-size: var(--12pt);
 		line-height: var(--16pt);
 		color: white;
 		margin: 0;
+		padding-left: 12px;
 	}
 	.hint.error {
 		color: var(--error-text);
-		text-align: right;
 	}
 	.textfield {
 		height: var(--button-height-large);
@@ -103,8 +112,7 @@
 		left: 0;
 		width: 100%;
 		height: calc(100% - 2px);
-		border: 1px solid var(--text-color-5);
-		border-bottom-color: var(--text-color-60);
+		border: 1px solid var(--text-color-60);
 		border-radius: var(--input-border-radius);
 		pointer-events: none;
 		transition: 180ms linear border-color;
@@ -127,7 +135,7 @@
 		transition: 180ms all var(--ease-in-out-cubic);
 		transform: translate3d(0, -50%, 0);
 		transform-origin: 0 50%;
-		opacity: 0.3;
+		opacity: 0.6;
 		color: var(--text-color);
 		line-height: 1.5;
 		z-index: 1;
@@ -147,7 +155,8 @@
 		--bg: var(--page-bg-color);
 		--text: var(--text-highlight);
 	}
-	:global(body.bg-is-light) input {
+	:global(body.bg-is-light) input,
+	.isOverLightBg input {
 		--text: var(--text-color);
 	}
 
@@ -173,5 +182,14 @@
 	.isFocused:not(.hasValue) label {
 		opacity: 1;
 		transform: translate(8px, -50%);
+	}
+
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus {
+		border: 0;
+		-webkit-text-fill-color: rgb(18, 96, 18);
+		-webkit-box-shadow: 0 0 0px 1000px transparent inset;
+		transition: background-color 5000s ease-in-out 0s;
 	}
 </style>

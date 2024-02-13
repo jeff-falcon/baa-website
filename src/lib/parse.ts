@@ -125,7 +125,7 @@ export function mergePortfolioIntoProjects(artist: Artist) {
 
 export function parseArtistProjectsFromData(artistSlug: string, data: any) {
 	const projects: Array<Project | ProjectPair | ProjectTrio> | undefined = data
-		?.map((p: any, index: number) => {
+		?.map((p: any) => {
 			if (p?._type === 'project_trio') {
 				const top = parseProjectFromData(p.top, false);
 				const bottom = parseProjectFromData(p.bottom, false);

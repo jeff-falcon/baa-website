@@ -151,6 +151,7 @@ export interface Page {
 	hero?: Hero;
 	components?: PageComponents;
 	footerHasContactInfo: boolean;
+	footerHasNewsletterForm: boolean;
 }
 
 export interface ProjectMedia {
@@ -202,6 +203,7 @@ export interface Config {
 	contactInfo: InputValue;
 	artistContactInfo: InputValue;
 	artistMenu: ArtistMenuItem[];
+	newsletterEnabled: boolean;
 }
 
 export interface LogoGrid {

@@ -31,7 +31,7 @@ export const actions: Actions = {
 					'',
 					'Newsletter Signup completed. Email added to Mailchimp list.',
 					{},
-					'BespokeDigital.com newsletter signup',
+					'BAA Gloabl newsletter signup',
 					false
 				);
 				return { message: `Thanks for signing up!` };
