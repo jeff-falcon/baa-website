@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isFooterLight, isMenuOpenComplete, footerHasContactInfo } from '$lib/store';
+	import { isMenuOpenComplete, footerHasContactInfo } from '$lib/store';
 	import type { Config } from '$lib/types';
 	import { PortableText } from '@portabletext/svelte';
 
@@ -10,7 +10,7 @@
 <footer class="isLight gutter" id="footer" class:hasDivider class:isDisabled={$isMenuOpenComplete}>
 	{#if $footerHasContactInfo}
 		<div class="content">
-			<PortableText value={config.contactInfo} />
+			<PortableText value={config.contactInfo} components={{}} />
 		</div>
 	{/if}
 	<div class="bottom-row">

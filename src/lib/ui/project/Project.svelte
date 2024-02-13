@@ -152,12 +152,12 @@
 			{/if}
 			{#if project.descriptionIntro}
 				<div class="description intro">
-					<PortableText value={project.descriptionIntro} />
+					<PortableText value={project.descriptionIntro} components={{}} />
 				</div>
 			{/if}
 			{#if project.description}
 				<div class="description extra">
-					<PortableText value={project.description} />
+					<PortableText value={project.description} components={{}} />
 				</div>
 			{/if}
 		</div>

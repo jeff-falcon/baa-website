@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Artist, ArtistHero, ArtistLink, CloudinaryImage, Project } from '$lib/types';
-	import { PortableText, type PortableTextComponents } from '@portabletext/svelte';
-	import type { InputValue } from '@portabletext/svelte/ptTypes';
+	import { PortableText } from '@portabletext/svelte';
 	import ProjectThumb from '../project/ProjectThumb.svelte';
 	import ArtistHeroComponent from './ArtistHero.svelte';
 	import { onMount } from 'svelte';
@@ -130,7 +129,7 @@
 	<div class="wrap">
 		{#if data.bio}
 			<div class="long-bio">
-				<PortableText value={data.bio} />
+				<PortableText value={data.bio} components={{}} />
 			</div>
 		{/if}
 		{#if data.clients}
@@ -153,7 +152,7 @@
 		{/if}
 		{#if replacedFooter}
 			<div class="contact">
-				<PortableText value={replacedFooter} />
+				<PortableText value={replacedFooter} components={{}} />
 			</div>
 		{/if}
 	</div>
