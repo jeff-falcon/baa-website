@@ -29,18 +29,18 @@ export interface Project {
 	description?: InputValue;
 	descriptionIntro?: InputValue;
 	client?: string;
-	credits?: Credit[],
+	credits?: Credit[];
 	image?: CloudinaryImage;
 	videoBgSrc?: string;
 	videoBgSrcHd?: string;
 	media?: Array<ProjectMedia | ProjectMediaPair | ProjectMediaTrio>;
-	bgColor?: string
+	bgColor?: string;
 	tags?: string[];
 	relatedProjects?: Project[];
 	showRelatedProjects?: boolean;
 	relatedProjectsBgColor?: string;
-	type: 'project' | 'portfolio',
-	artist?: Artist
+	type: 'project' | 'portfolio';
+	artist?: Artist;
 }
 export interface ProjectGrid {
 	_type: 'project_grid';
@@ -49,8 +49,8 @@ export interface ProjectGrid {
 	useFeature: boolean;
 	moreLink?: {
 		buttonTitle: string;
-		url: string
-	}
+		url: string;
+	};
 	projects: Project[];
 }
 export interface Artist {
@@ -70,14 +70,8 @@ export interface Artist {
 	projects: Array<ProjectTrio | ProjectPair | Project>;
 }
 
-
 export interface ArtistLink {
-	name: 'instagram' |
-	'behance' |
-	'linkedin' |
-	'facebook' |
-	'twitter' |
-	'website';
+	name: 'instagram' | 'behance' | 'linkedin' | 'facebook' | 'twitter' | 'website';
 	url?: string;
 	username?: string;
 }
@@ -86,6 +80,7 @@ export interface ArtistsGrid {
 	_type: 'artists_grid';
 	name: string;
 	artists: Artist[];
+	emptyColor?: string;
 }
 
 export interface ArtistHero {
@@ -138,7 +133,7 @@ export interface ArtistMenuItem {
 	url: string;
 }
 
-export type PageComponents = Array<ArtistsGrid | ColumnedText | LatestProjects>
+export type PageComponents = Array<ArtistsGrid | ColumnedText | LatestProjects>;
 
 export interface LatestProjects {
 	_type: 'latest_projects';
@@ -150,12 +145,12 @@ export interface Page {
 	_type: 'page';
 	_id: string;
 	name: string;
-	bgColor?: string,
+	bgColor?: string;
 	slug: string;
 	metaDescription?: string;
 	hero?: Hero;
 	components?: PageComponents;
-	footerHasContactInfo: boolean
+	footerHasContactInfo: boolean;
 }
 
 export interface ProjectMedia {
@@ -187,23 +182,23 @@ export interface ProjectMediaTrio {
 }
 
 export interface Social {
-	name: string
-	_type: 'social'
-	url: string
-	icon: string
+	name: string;
+	_type: 'social';
+	url: string;
+	icon: string;
 }
 
 export interface Location {
-	name: string
-	_type: 'location'
-	address: string
-	email: string
-	timezone: string
+	name: string;
+	_type: 'location';
+	address: string;
+	email: string;
+	timezone: string;
 }
 
 export interface Config {
 	_type: 'config';
-	socials: { name: string, links: Social[] };
+	socials: { name: string; links: Social[] };
 	contactInfo: InputValue;
 	artistContactInfo: InputValue;
 	artistMenu: ArtistMenuItem[];
@@ -215,15 +210,15 @@ export interface LogoGrid {
 	desktop: string;
 	mobile: string;
 	color: string;
-	mobileMaxWidth: number
-	desktopMaxWidth: number
+	mobileMaxWidth: number;
+	desktopMaxWidth: number;
 }
 
 export interface TextOnly {
 	_type: 'text_only';
 	title: string;
 	body: InputValue;
-	bgColor: SectionBackgroundColor
+	bgColor: SectionBackgroundColor;
 }
 
 export interface ColumnedText {
@@ -240,7 +235,7 @@ export interface ClientList {
 	_type: 'client_list';
 	title: string;
 	clients: string[];
-	bgColor: SectionBackgroundColor
+	bgColor: SectionBackgroundColor;
 }
 
 export interface Form {
@@ -249,8 +244,8 @@ export interface Form {
 	title: string;
 	body: InputValue;
 	form: FormType;
-	bgColor: SectionBackgroundColor
+	bgColor: SectionBackgroundColor;
 }
 
-export type FormType = 'contact' | 'job'
-export type SectionBackgroundColor = 'transparent' | 'dark' | 'darker'
+export type FormType = 'contact' | 'job';
+export type SectionBackgroundColor = 'transparent' | 'dark' | 'darker';

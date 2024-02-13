@@ -57,15 +57,14 @@ export const load: PageServerLoad = async ({ params }): Promise<{ artist?: Artis
 		}`;
 	const data = await client.fetch(groq);
 
-	if (!data) throw error(404, 'Artist not found');
+	if (!data) error(404, 'Artist not found');
 
 	const projectData = data[0];
-	const artist = parseArtistFromData(projectData)
+	const artist = parseArtistFromData(projectData);
 
 	if (artist) {
-		return { artist }
+		return { artist };
 	} else {
-		throw error(404, 'Artist not found');
+		error(404, 'Artist not found');
 	}
-
 };

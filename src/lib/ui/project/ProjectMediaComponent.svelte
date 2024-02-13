@@ -276,7 +276,9 @@
 	}
 	.media:not(.isBgVideo) img {
 		transform-origin: center top;
-		transition: 1.5s linear opacity, 5s transform var(--ease-out-cubic);
+		transition:
+			1.5s linear opacity,
+			5s transform var(--ease-out-cubic);
 	}
 	.media.fadeOnReveal:not(.isBgVideo) img {
 		opacity: 0;

@@ -1,13 +1,15 @@
 @font-face {
 	font-family: 'Ano-web';
-	src: url('/fonts/2466765/9b1d752a-575e-4d49-9cb7-db3223777f47.woff2') format('woff2'),
+	src:
+		url('/fonts/2466765/9b1d752a-575e-4d49-9cb7-db3223777f47.woff2') format('woff2'),
 		url('/fonts/2466765/b9eb9968-39c3-4d2d-882a-302cf860e114.woff') format('woff');
 	font-weight: bold;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Ano-web';
-	src: url('/fonts/2466777/2792b279-5b1b-47b6-839f-5bc9163b442c.woff2') format('woff2'),
+	src:
+		url('/fonts/2466777/2792b279-5b1b-47b6-839f-5bc9163b442c.woff2') format('woff2'),
 		url('/fonts/2466777/ae29d4a4-5f5c-4a66-b4fe-55286a973389.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;

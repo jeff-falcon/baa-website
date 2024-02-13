@@ -44,8 +44,8 @@ export function parseCloudinaryImage(
 			lg: useOriginalQuality
 				? originalUrl
 				: matches?.length
-				? url
-				: url.replace(/\/upload\/(.*?)\/v(\d+)/, `/upload/$1,w_${isSingle ? 32 : 16}00/v$2`)
+					? url
+					: url.replace(/\/upload\/(.*?)\/v(\d+)/, `/upload/$1,w_${isSingle ? 32 : 16}00/v$2`)
 		},
 		width: image.width,
 		height: image.height

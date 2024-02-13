@@ -26,7 +26,7 @@
 					videoBgSrc: featuredProject?.videoBgSrc,
 					videoBgSrcHd: featuredProject?.videoBgSrcHd,
 					project: featuredProject
-			  }
+				}
 			: undefined;
 	const projects = data.projects?.length ?? 0 > 1 ? data.projects.slice(1) ?? [] : [];
 	const nickname = data.nickname || data.name;
@@ -59,7 +59,7 @@
 					} else {
 						return prev;
 					}
-			  }, [] as any)
+				}, [] as any)
 			: null;
 
 	function uppercaseFirst(str: string) {

@@ -1,83 +1,14 @@
 import type { PageServerLoad } from './$types';
 import { getClient } from '$lib/sanity';
 import type { Artist, Project, ProjectMedia, ProjectMediaPair, ProjectMediaTrio } from '$lib/types';
-import { error } from '@sveltejs/kit';
-import {
-	parseCloudinaryImage,
-	parseProjectMediaFromData,
-	parseArtistFromData,
-	mergePortfolioIntoProjects
-} from '$lib/parse';
+import { parseCloudinaryImage, parseProjectMediaFromData, parseArtistFromData } from '$lib/parse';
 
 export const load: PageServerLoad = async ({
 	params
 }): Promise<{ project?: Project; artist?: Artist }> => {
 	const client = getClient();
-	const groqArtist = `*[_type == "artist" && slug.current == "${params.slug}"]{
-    ...,
-    "portfolio": portfolio->{..., "slug": slug.current},
-    "featured": null,
-    "slug": slug.current,
-    "tags": tags[]->prefLabel,
-    projects[]{
-      _type == 'project' => @->{
-        _type,
-        "slug": slug.current
-      },
-      _type == 'project_pair' => {
-        _type,
-        left->{
-          "slug": slug.current,
-        },
-        right->{
-          "slug": slug.current,
-        }
-      },
-      _type == 'project_trio' => {
-        _type,
-        top->{
-          "slug": slug.current,
-        },
-        bottom->{
-          "slug": slug.current,
-        },
-        side->{
-          "slug": slug.current,
-        },
-      },
-    },
-  }`;
-	let artistData = await client.fetch(groqArtist);
 
-	if (!artistData?.[0]) error(404, 'Artist not found');
-
-	artistData = artistData[0];
-	mergePortfolioIntoProjects(artistData);
-
-	const artistProjectsSlugs: string[] =
-		artistData.projects
-			?.flatMap((p: any) => {
-				if (p._type === 'project') {
-					return [p.slug];
-				} else if (p._type === 'project_pair') {
-					return [p.left?.slug, p.right?.slug];
-				} else if (p._type === 'project_trio') {
-					return [p.top?.slug, p.bottom?.slug, p.side?.slug];
-				}
-				return [];
-			})
-			.filter((slug: string) => Boolean(slug)) ?? [];
-
-	const foundProjectSlug = artistProjectsSlugs.find(
-		(slug) => slug === params.project || slug === `${params.slug}-${params.project}`
-	);
-	if (!foundProjectSlug) {
-		error(404, 'Project not found');
-	}
-
-	artistData.projects = [];
-
-	const groqProject = `*[_type == "project" && slug.current == "${foundProjectSlug}"]{
+	const groqProject = `*[_type == "project" && (slug.current == "${params.slug}")]{
 			...,
 			media[]{
 				_type == 'item' => @->,
@@ -139,15 +70,13 @@ export const load: PageServerLoad = async ({
 		}
 	}
 
-	const artist = parseArtistFromData(artistData);
-
 	const title = projectData.title || projectData.name;
 
 	const project: Project = {
 		_type: 'project',
 		_id: projectData._id,
 		type: projectData.type === 'portfolio' ? 'portfolio' : 'project',
-		pageTitle: `${title} | ${artist?.name ?? ''} | BAA Global`,
+		pageTitle: `${title} | BAA Global`,
 		name: projectData.name,
 		title,
 		metaDescription: projectData.meta_description,
@@ -167,5 +96,5 @@ export const load: PageServerLoad = async ({
 		tags: projectData.tags ?? []
 	};
 
-	return { project, artist };
+	return { project };
 };

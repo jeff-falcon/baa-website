@@ -33,8 +33,8 @@ export function getClient() {
 	return client;
 }
 
-export async function getPage(slug: string): Promise<Page | HttpError> {
-	if (!slug) throw error(404, 'Page not found');
+export async function getPage(slug: string): Promise<Page | unknown> {
+	if (!slug) error(404, 'Page not found');
 
 	const client = getClient();
 	const groq = `*[_type == "page" && slug.current == "${slug}"]{
@@ -59,6 +59,7 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 			_type == 'artists_grid_ref' => @->{
 				name,
 				_type,
+				empty_color,
 				show_all == false => {
 					"artists": artists[]->{
 						...,
@@ -113,7 +114,7 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 	}`;
 	try {
 		const result = await client.fetch(groq);
-		if (!result || !result.length) throw error(404, 'Page not found');
+		if (!result || !result.length) error(404, 'Page not found');
 		const pageData = result[0];
 		const page: Page = {
 			_type: 'page',
@@ -138,7 +139,7 @@ export async function getPage(slug: string): Promise<Page | HttpError> {
 		return page;
 	} catch (err) {
 		console.log('fetch error', (err as Error).message);
-		throw error(403, (err as Error).message);
+		error(403, (err as Error).message);
 	}
 }
 
@@ -230,8 +231,10 @@ function getComponents(components: any): PageComponents {
 			const grid: ArtistsGrid = {
 				_type: 'artists_grid',
 				name: component.name,
-				artists
+				artists,
+				emptyColor: component.empty_color?.value || 'transparent'
 			};
+			console.log('artist grid empty color', grid.emptyColor);
 			comps.push(grid);
 		} else if (component?._type === 'columned_text') {
 			comps.push(component as ColumnedText);
