@@ -14,6 +14,8 @@
 
 	let videoEl: HTMLVideoElement | null = null;
 
+	$: hasRedirect = src.includes('progressive_redirect');
+
 	$: if (isIntersecting || !isIntersecting) {
 		clearTimeout(playerTimeout);
 		if (isIntersecting && isReady && !isPlaying) {
@@ -38,11 +40,24 @@
 		isReady = true;
 	}
 
+	async function getRedirect() {
+		const res = await fetch(src, { method: 'HEAD' });
+		if (videoEl && res.url) {
+			videoEl.src = res.url;
+		}
+	}
+
 	onMount(() => {
-		videoEl?.addEventListener('playing', onPlaying);
-		videoEl?.addEventListener('pause', onPaused);
-		videoEl?.addEventListener('canplay', onReady);
-		videoEl!.src = src;
+		if (videoEl) {
+			videoEl.addEventListener('playing', onPlaying);
+			videoEl.addEventListener('pause', onPaused);
+			videoEl.addEventListener('canplay', onReady);
+			if (hasRedirect) {
+				getRedirect();
+			} else {
+				videoEl.src = src;
+			}
+		}
 		return () => {
 			videoEl?.removeEventListener('playing', onPlaying);
 			videoEl?.removeEventListener('pause', onPaused);
